@@ -10,7 +10,7 @@ Machines are still a core concept to Octopus server, but Deployment Target Types
 
 ### Deployment Target Type
 
-Some steps have already been taken to make the Deployment Target Type object extensible. It already lives in the Extensibility world and should require significant changes.
+Some steps have already been taken to make the DeploymentTargetType object extensible. It already lives in the Extensibility world and shouldn't require significant changes.
 
 ### CommunicationStyle
 
