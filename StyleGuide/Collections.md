@@ -5,7 +5,7 @@ See also  [performance of collections](https://www.c-sharpcorner.com/UploadFile/
 In general:
 - Default to using the collection interfaces, they support a wider variety of concrete collection types. Exception `ReferenceCollection`.
 - When handling a set of IDs, use `ReferenceCollection` and `ReferenceCollection<>`
-- When accepting a collection, use the most generic collection interface that still captures the 
+- When accepting a collection, use the most generic collection interface that still captures the intent
 - When returning a collection, use the most specific collection interface that matches the contract you wish to provide
 - Default to the `ReadOnly` collection types. They indicate that the method will not modify the collection during it's execution or after it returns.
 
