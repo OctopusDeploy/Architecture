@@ -29,3 +29,5 @@ In general:
 | Dictionary&lt;ProjectName, Project&gt; | **Map**ByName() | Dictionary keyed by a unique key with the value as the type |
 | Dictionary&lt;ProjectId, ProjectName&gt; | **Map**NameById() | Dictionary keyed by a unique key with property (or subset of properties) of the type |
 | WorkerPoolId? | **Resolve**Id(WorkerPoolIdOrName) | Look up a unique key based on another unique key. Returns null of there is no match is not found.
+
+Since `.NET` does not support overriding based on return type, methods such as `Map` need a postfix appended to differentiate them.
