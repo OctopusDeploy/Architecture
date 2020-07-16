@@ -10,15 +10,20 @@
 
 ## Decision
 
-Keep the logic in the server. 
+Keep the domain logic in the server. 
 
-If references to existing resources need to be passed to a command as one of its inputs then there should be a way to pass them either by `Id` or `Name`. Referring to resources by name might lead long term to a less stable solution but it helps our customers to get a working solution quickly.  
+The only logic clients should be responsible for is:
+- marshalling user provided parameters
+- allowing users to specify resource parameters by `Name` or `Id`
+  - Referring to resources by name might lead long term to a less stable solution but it helps our customers to get a working solution quickly.  
+- reporting errors
+  - Any errors should be reported back with enough details so the customer knows which inputs need to be modified.
 
-Any errors should be reported back with enough details so the customer knows which inputs need to be modified. 
+ 
 
 ## Options & Considerations: 
 
-### Keep the logic in the server
+### Keep the domain logic in the server
 
 
 Pros:
@@ -30,7 +35,7 @@ Cons:
 
 * Fixes to the logic require a new version of the server.
 
-### Keep the logic in the client
+### Keep the domain logic in the client
 
 Pros:
 
