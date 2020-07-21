@@ -2,7 +2,7 @@
 
 ## Overview
 
-This document describes how we version the Octopus Server API. It cons
+This document describes how we version the Octopus Server API.
 
 ## Chosen Approach
 
@@ -16,6 +16,25 @@ The scenarios are:
 - **Rename** - The property `NuGetFeedId` should be renamed to `FeedId` wherever it exists (e.g on the `DeploymentAction` resource of the `DeploymentProcess` API). 
 - **New Field** - An optional `Description` column is to be added
 - **New Type** - The `Feed` API will now return an additional feed type `AwsFeed` that contains a mandatory field `Region`
+
+### Out of scope
+
+For the purposes of this document, the following is out of scope:
+
+- Whether to make a change in the first place
+- Versioning of config as code documents
+- Versioning of step types
+- Policy and mechanics of the removal of old versions
+
+## SemVer
+
+We would use SemVer where applicable to version the API. A major increment indicates a breaking change in the contract (e.g. field removal, new type, rename), while a minor increment indicates an addition (e.g. new field). 
+
+Clients could choose how they handle a minor increment. e.g. The C# client can't roundtrip a minor change, so it would work for `get` but not for `update`. The javascript client can roundtrip, so would continue to work in a minor increment.
+
+## Community Library
+
+Community library steps would be treated the same as if they were posted via the API. We would need to update the library and sync process to indicate the `DeploymentProcess` API version targeted.
 
 ## Options
 
@@ -58,7 +77,7 @@ This client would still need another way to indicate the expected version on a `
 #### Conclusion
 This option would likely just be a complication on some sort of API versioning.
 
-### Per Route Hypermedia Versioning
+### Per Endpoint Hypermedia Versioning
 
 The API will be versioned per endpoint via hypermedia. The root document will contain additional links for each version. For example in addition to `DeploymentProcesses`, it will contain `DeploymentProcesses/v2`. 
 
@@ -66,9 +85,9 @@ The route itself will contain an additional version identifier after the resourc
 
 The client will pick the link knows about and wants to use. If the link is not available the client can fallback to a previous version, or present an informative error message. For clients not using the hypermedia, they will get a `404`.
 
-This option is as if we added a brand new route, allowing a total change of schema and behaviour. The `v1` API will retain it's behaviour, including limiting the records returned on a `list` to those previously understood (e.g. exclude `AwsFeed`). 
+This option is as if we added a brand new endpoint, allowing a total change of schema and behaviour. The `v1` API will retain it's behaviour, including limiting the records returned on a `list` to those previously understood (e.g. exclude `AwsFeed`). 
 
-The `v1` and `v2` schemas will be handled by different responders and different resource types. This will make it easy to remove `v1` when the time comes. Removal all also only affect those clients actively using that route.
+The `v1` and `v2` schemas will be handled by different responders and different resource types. This will make it easy to remove `v1` when the time comes. Removal all also only affect those clients actively using that endpoint.
 
 #### Other versioning schemes
 Passing the version via a query parameter (`&version=2.0.0`) or header (`X-Octopus-Api-Version: 2.0.0`) does not fit with the hypermedia link approach.
@@ -78,6 +97,21 @@ Adding the version before the resource in the route also does not make sense bec
 #### Conclusion
 
 **This is the recommended option**. The versioning is targeted to the API surface being changed and is the easiest to maintain and understand.
+
+### Per Endpoint Header Versioning
+
+The API will be versioned per endpoint `ContentType` and `Accept` headers. e.g:
+```
+ContentType: X-Octopus-DeploymentProcess-V2
+Accept: X-Octopus-DeploymentProcessResponse-V2
+```
+
+The correct handler will be picked based on the header value. If the server does not support the specified version, it should return `415 Unsupported Media Type` or `406 Not Acceptable`.
+
+The client would be able to determine the API version the server supports by [TBD].
+
+This will also allow total change of schema and behaviour.
+
 
 ### Whole of Hypermedia Versioning
 
