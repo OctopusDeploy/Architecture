@@ -142,7 +142,7 @@ ContentType: application/vnd.octopus.deploymentprocess.v2
 Accept: application/vnd.octopus.deploymentprocess.v3; q=1.0, application/vnd.octopus.deploymentprocess.v2; q=0.9
 ```
 
-The correct handler will be picked based on the header value. If the server does not support the specified version, it should return `415 Unsupported Media Type` or `406 Not Acceptable`.
+The correct handler will be picked based on the header value (in descending order of `q` value). If the server does not support any of the specified versions, it should return `415 Unsupported Media Type` or `406 Not Acceptable`.
 
 The client would tell the server all the versions it accepts.
 
@@ -177,5 +177,4 @@ The consumer would choose the method they prefer, header, URL or content type.
 #### Conclusion
 
 With some clever pipeline logic we could make this transparent to the developer. The appeal is in the flexibility. It's not clear how well it would work with per-api versioning.
-
 
