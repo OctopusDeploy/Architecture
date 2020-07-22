@@ -8,7 +8,7 @@
 
 # Executive Summary
 
-Octopus will maintain a revolving line of technical credit. We borrow against future earnings into order to move quicker. We will purposefully incur technical debt as well as pay it down. 
+Octopus will maintain a revolving line of technical credit. We borrow against future earnings into order to move quicker. We will purposefully incur technical debt as well as pay it down indefinitely. 
 
 # Background
 
