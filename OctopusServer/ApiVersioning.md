@@ -100,7 +100,7 @@ This does not suit our cadence or the desire for not breaking clients without re
 
 ### Per Endpoint
 
-The API will be versioned per endpoint. An endpoint being a group of routes (and method) that handle the same shapped data. Example `/api/Spaces-1/feeds/all` and `/api/Spaces-1/feeds/{id}` would be grouped, but `/api/Spaces-1/feeds/summary` would not.
+The API will be versioned per endpoint. Endpoints that use the same shaped data would often be versioned together, example `/api/Spaces-1/feeds/all` and `/api/Spaces-1/feeds/{id}` but `/api/Spaces-1/feeds/summary` may not be.
 
 The client can choose to use new APIs bit by bit. It can also fall back to a previous API if it knows how. 
 
