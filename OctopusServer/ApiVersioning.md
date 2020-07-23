@@ -178,3 +178,11 @@ The consumer would choose the method they prefer, header, URL or content type.
 
 With some clever pipeline logic we could make this transparent to the developer. The appeal is in the flexibility. It's not clear how well it would work with per-api versioning.
 
+## Options - version specifiers
+
+### No version
+
+If the client doesn't specify API version then we should fallback to the oldest supported version by the Server. This approach will keep existing clients as long operational as possible. There is a decent chance that the client won't be affected by the change. E.g. There is a new property in the property bag.
+
+Example. If the server supports `/api/Spaces-1/projects/v1` and `/api/Spaces-1/projects/v2` we should fallback to `/api/Spaces-1/projects/v1`. When the server moves on and only supports `/api/Spaces-1/projects/v2` and `/api/Spaces-1/projects/v3` we should fallback to ``/api/Spaces-1/projects/v2``.
+
