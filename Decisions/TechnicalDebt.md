@@ -62,7 +62,7 @@ Debt can be introduced a number of ways, not limited to:
 
 No. As with financial debt, businesses take on liabilities in order to make higher revenue. This can be healthy, as long as the increase in revenue exceeds the extra repayments on those liabilities. Businesses also often operate on a revolving line of credit, that is, they never intend to fully repay the principal.
 
-To apply this to code, a certain level of debt is desired. Paying it all down is counter productive as there is something more valuable that could have been done instead. If Octopus Server ever reaches it's end of life, the debt will evaporate.
+Applying this same logic to engineering implies that a certain level of debt is desired. Paying it all down is counterproductive when there is something more valuable that could have been done instead. If Octopus Server ever reaches its end of life, the debt will evaporate.
 
 ## How much technical debt should we have?
 
