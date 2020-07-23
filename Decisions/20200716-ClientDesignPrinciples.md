@@ -1,7 +1,7 @@
  - **Subject**: Design Principles For Octopus Server Clients
- - **Decision date**: TBD
+ - **Decision date**: 23/07/2020
  - **Decision contributors**: Pawel Pabich, Shannon Lewis, Rob Wagner, Mike Noonan
- - **Decision maker**: TBD
+ - **Decision maker**: School Of Architecture
  - **Decision owner**: School Of Architecture
 
 ## Executive Summary
