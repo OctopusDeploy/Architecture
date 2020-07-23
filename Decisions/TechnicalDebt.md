@@ -37,7 +37,7 @@ We will have an indefinite program of paying down technical debt. Currently ~30%
 - Code and designs that are bug prone
 - Monolithic spaghetti design
 - The UI, API and DB not agreeing on what a thing is called (ubiquitous language)
-- Architecture and designs that have we have outgrown
+- Architecture and designs that we have outgrown
 - Partially completed refactors
 - Multiple patterns for doing the same thing
 
