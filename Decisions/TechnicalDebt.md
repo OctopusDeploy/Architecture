@@ -107,7 +107,7 @@ This allows us to meet a customer requirement without planning too far into the 
 
 After consultation, an individual or team introduces a new architecture, pattern or design. 
 
-The limit it to one section of the application. This may be because they are not sure the pattern is useful, or because there is not enough time.
+They limit it to one section of the application. This may be because they are not sure the pattern is useful, or because there is not enough time.
 
 The code is left with two ways of doings things.
 
