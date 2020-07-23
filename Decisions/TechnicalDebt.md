@@ -42,7 +42,7 @@ We will have an indefinite program of paying down technical debt. Currently ~30%
 - Multiple patterns for doing the same thing
 
 `Technical Debt` is **not**:
-- Inconstancies in how features work
+- Inconsistencies in how features work
 - Missing features
 - Bad UX
 - Bugs (although it may cause bugs)
