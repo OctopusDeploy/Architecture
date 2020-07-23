@@ -100,7 +100,7 @@ This does not suit our cadence or the desire for not breaking clients without re
 
 ### Per Endpoint
 
-The API will be versioned per endpoint. An endpoint being a group of routes (and method) that handle the same shapped data. Example `/api/Spaces-1/feeds/all` and `/api/Spaces-1/feeds/{id}` would be grouped, but `/api/Spaces-1/feeds/summary` would not.
+The API will be versioned per endpoint. Endpoints that use the same shaped data would often be versioned together, example `/api/Spaces-1/feeds/all` and `/api/Spaces-1/feeds/{id}` but `/api/Spaces-1/feeds/summary` may not be.
 
 The client can choose to use new APIs bit by bit. It can also fall back to a previous API if it knows how. 
 
@@ -142,7 +142,7 @@ ContentType: application/vnd.octopus.deploymentprocess.v2
 Accept: application/vnd.octopus.deploymentprocess.v3; q=1.0, application/vnd.octopus.deploymentprocess.v2; q=0.9
 ```
 
-The correct handler will be picked based on the header value. If the server does not support the specified version, it should return `415 Unsupported Media Type` or `406 Not Acceptable`.
+The correct handler will be picked based on the header value (in descending order of `q` value). If the server does not support any of the specified versions, it should return `415 Unsupported Media Type` or `406 Not Acceptable`.
 
 The client would tell the server all the versions it accepts.
 
@@ -178,8 +178,6 @@ The consumer would choose the method they prefer, header, URL or content type.
 
 With some clever pipeline logic we could make this transparent to the developer. The appeal is in the flexibility. It's not clear how well it would work with per-api versioning.
 
-
-
 ## Options - version specifiers
 
 ### No version
@@ -187,5 +185,4 @@ With some clever pipeline logic we could make this transparent to the developer.
 If the client doesn't specify API version then we should fallback to the oldest supported version by the Server. This approach will keep existing clients as long operational as possible. There is a decent chance that the client won't be affected by the change. E.g. There is a new property in the property bag.
 
 Example. If the server supports `/api/Spaces-1/projects/v1` and `/api/Spaces-1/projects/v2` we should fallback to `/api/Spaces-1/projects/v1`. When the server moves on and only supports `/api/Spaces-1/projects/v2` and `/api/Spaces-1/projects/v3` we should fallback to ``/api/Spaces-1/projects/v2``.
-
 
