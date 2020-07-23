@@ -78,7 +78,7 @@ It is impossible to predict the future, but we can take an informed guess at it.
 
 We may never pay off low interest debt.
 
-## Which debt should be pay down?
+## Which debt should we pay down?
 
 We should be paying down the highest interest debt first. 
 
