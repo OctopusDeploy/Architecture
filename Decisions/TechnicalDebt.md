@@ -82,7 +82,7 @@ We may never pay off low interest debt.
 
 We should be paying down the highest interest debt first. 
 
-It is often not obvious what is the best way to pay down newly acquired debt. It is also not clear how much interest it will change. It's only after some time that the cost and the way forward becomes clearer.
+It is often not obvious what is the best way to pay down newly acquired debt. It is also not clear how much interest it will charge. It's only after some time that the cost and the way forward becomes clearer.
 
 By targeting well understood debt we can move faster as we won't be making speculative changes on things that may never occur (YAGNI).
 
