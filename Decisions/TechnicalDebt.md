@@ -115,7 +115,7 @@ Whether to remove it, gradually spread it, or undertake a pitch to complete it i
 
 ## Outgrown
 
-As the product grows and the userbase changes, previous assets may suddenly become liabilities. The incurred debt could not have reasonably forseen, or if it was it was very distant and nebulous. 
+As the product grows and the userbase changes, previous assets may suddenly become liabilities. The incurred debt could not have been reasonably foreseen or, if it was, it was very distant and nebulous. 
 
 This is unavoidable.
 
