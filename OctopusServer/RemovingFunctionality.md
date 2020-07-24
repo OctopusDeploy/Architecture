@@ -34,7 +34,7 @@ We have no set way to deprecate things in Octopus (and related products). We hav
 
 [Draft 1](https://docs.google.com/document/d/1JFgWg4T6yTjU1epz85bHHMaU73tQ43bggsq8tRFIaU8/edit#heading=h.b13zj4am1nqv) of this proposal with comments
 
-# Breaking Changes Policy
+# Approach
 
 ## Breaking Releases
 
