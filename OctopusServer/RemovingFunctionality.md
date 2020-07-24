@@ -130,6 +130,24 @@ The stepping stones would be minor releases 3 or less releases apart. Customers 
 | 2020.4.1 | 2022.1.0 | 12 months |
 | 2021.1.0 | 2022.1.0 | 6 months |
 
+### Option - Quick removal
+
+The rule changes so that we remove all deprecated features in the first release of the year (`.1.0`), regardless when they were introduced.
+
+Functionality would only stay deprecated for 2 to 10 months (12 if just missed).
+
+Only the last release of the year would contain all the deprecations, notifications and transitions.
+
+The stepping stone would be the last release of the year before upgrading the latest of the following year.
+
+This would allow quicker removal, but most customers who do not upgrade to the latest would need to do a two step upgrade.
+
+
+| Deprecated In | Removed In | Transition Period |
+| ------------- | ---------- | ----------------- |
+| 2020.4.0 | 2021.1.0 | 6 months |
+| 2020.6.9 | 2021.1.0 | 1 month |
+| 2021.1.1 | 2022.1.0 | 12 months |
 
 
 
