@@ -1,9 +1,7 @@
 # Overview
 
 - **Subject**: Public API Surface for Configuration As Code Feature
-- **Decision date**: [when was the decision made]
-- **Decision contributors**: Andrew Best, Paul Gradie, Adam McCoy, Matt Richardson, Andrew Moore, Rob Wagner
-- **Decision owner**: School Of Architecture
+- **Decision date**: 07/07/2020
 
 # Executive Summary
 
