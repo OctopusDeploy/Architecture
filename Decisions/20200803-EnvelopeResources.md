@@ -5,7 +5,7 @@
 
 # Executive Summary
 
-The Octopus API will leverage an _enveloped resource_ model for transferring resource and domain information to enable modelling of domain interactions.
+Octopus Server will leverage an _envelope resource_ model for transferring resource and domain information to enable the modelling of domain interactions on its API.
 
 # Detail
 
