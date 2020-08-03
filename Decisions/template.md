@@ -2,9 +2,6 @@
 
 - **Subject**: [explain what decision you are making]
 - **Decision date**: [when was the decision made]
-- **Decision contributors**: [list who was involved in the decision]
-- **Decision maker**: [who made the final decision]
-- **Decision owner**: [who executes on the final decision]
 
 # Executive Summary
 
