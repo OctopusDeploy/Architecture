@@ -4,110 +4,188 @@
 - **Decision date**: 2020-08-13
 
 # Executive Summary
-This document contains details of 3 decisions made about the Structured Configuration Variables feature:
+This record outlines 3 key technical decisions made in the implementation of the Configuration Features for Java pitch:
 
-- Why it reuses the existing JSON Configuration Variables properties/variables
-- Why it doesn't support file copying, as per the [pitch](https://docs.google.com/document/d/1c2FzUglohWoNSJycs8kCjeYhbFDSkz_vizNtwsbX3pc/edit)
-- Why it doesn't support specification of file formats
+- **Decision 1**: Whether to extend or deprecate the related, existing JSON Configuration Variables feature
+- **Decision 2**: How to support writing transformed configuration files to different paths
+- **Decision 3**: How to determine the format (JSON, vs YAML, vs XML, etc) of input configuration files
 
-# Detail
+# Decision 1: Extend or deprecate existing feature
+For context, the data in the existing property (`Octopus.Action.Package.JsonConfigurationVariablesTargets`) can contain multiple filenames, newline delimited, with globs and Octostache extended syntax. Examples:
 
-## Considerations
+```
+config.json
+```
 
-- The JSON Configuration Variables feature stored a newline delimited list of target files, with support for globs and Octostache extended syntax.
-  - Note: some of the characters in the glob syntax are valid characters in Linux filenames. This is an unlikely scenario, but possible. There is no syntax for escaping special characters.
-  - Note: Octostache extended syntax makes it impossible to reason reliably about target files outside of a deployment context.
-- Octopus Server has an existing means to move files, using [custom scripts](https://octopus.com/docs/deployment-examples/package-deployments/package-deployment-feature-ordering).
-- Octopus does not have tried and tested strategy for deprecating features and later removing them.
-  - When do we remove the old feature? Needs metrics.
-  - Customers don't always read the release notes. Can we help customers make early decisions whether to upgrade or not?
-  - We want to avoid deprecated things hanging around forever.
-- Octopus does not have API versioning.
-- Library step templates are not versioned - they must work against all versions of Octopus Server.
-- There are plans to overhaul 'features' in the future, so that a user can add a feature multiple times, and reorder them as required.
-  - In this context, adding a file copying feature to the Structured Configuration Variables feature may be less appealing - adding a generic 'file copy' feature is more flexible.
+```
+*.config
+**\*.json
+```
 
-## Options & Considerations
-These options aren't all mutually exclusive.
+```
+#{each configFile}
+#{configFile}
+#{/each}
+```
 
-### Option 1: Migrate existing data to a JSON format
-Example:
+
+## Option 1: Migrate data into new properties
+In this option, we would migrate data from the `Octopus.Action.Package.JsonConfigurationVariablesTargets` property into `Octopus.Action.StructuredConfigurationVariablesTargets`, and store the data in JSON.
+
+As an example, JSON configuration that looks like this:
+
+```
+config.json
+```
+
+Would get migrated to something like this:
 
 ```json
 {
-    "format": "xml",
-    "target": "config.prod.xml",
-    "destination": "config.xml"
+    "format": "json",
+    "target": "config.json",
+    "destination": null
 }
 ```
 
-Issues:
+Pros:
 
-- Library steps would have to stay in the old format in the library but be upgraded on ingestion
-  - Is this a good strategy going forward? Consider if there are dozens of these kind of modifications that have to happen. Needs consideration.
-- Not backwards compatible (assuming that properties in the property bag are considered part of the API - part of a bigger conversation around API versioning):
-  - 3rd party tools that try to `POST` deployment processes would break.
-  - The Terraform provider would break. It was only luck that someone told us about it. How many other cases like this are out there?
+- Migrating to a JSON structure gives us scope for future extension. 
+- The property/variable names more clearly reflect intent.
 
-### Option 2: As option 1, but with a new property
-Same as option 1, but don't reuse the existing properties/variables, and instead add new ones. Deprecate the old feature in the UI.
+Cons:
 
-Sidesteps lots of the issues in Option 1, but also presents some new ones.
+- Library steps are not versioned. There is no mechanism in Octopus to restrict library steps to certain versions of Octopus. Old versions of Octopus wouldn't understand this new property, so our only option would be to ensure that library steps support the lowest common denominator, and are migrated forwards upon ingestion.
+- Supporting 3rd party tooling is difficult. Without knowing whether a client posting a deployment process to Server knows about the new property, we can't reliably map data from the old structure to the new structure.
 
-Issues:
+## Option 2: Add a new property, deprecate the old one.
+Similar to option 1, but don't reuse the existing properties/variables, and instead add new ones. Deprecate the old feature in the UI.
+
+Pros:
+
+- Same as Option 1.
+
+Cons:
 
 - We can put a `deprecated` warning on a feature in the UI, but we don't have a good strategy for actually removing the feature later.
   - Risk of the deprecated feature hanging around for years.
 - Library steps are still an issue. Should we accept library step submissions that use the new property/variable?
   - The step won't work correctly on older versions of Octopus Server, and the users will get no warning/explanation as to why. The step will just silently misbehave or fail late.
 
-### Option 3: Implement file copying using a teamcity like syntax
-Unlike options 1 and 2, this doesn't try to use a JSON format, but instead extends the existing syntax.
+## Option 3: Keep existing format and properties
+In this option, we keep the existing property, and keep the same format.
 
-Example:
+Pros:
+
+- 3rd party tools (and our own, like the Terraform provider) continue to work as normal.
+- Library step templates continue to work as normal.
+
+Cons:
+
+- Limits how we can add capabilities to the feature (e.g. file copying, format specification discussed below)
+
+## Decision
+We have gone with option 3. Without API versioning, a deprecation strategy, or a strategy for library step template versioning, the other 2 options impose are high risk.
+
+# Decision 2: File copying
+One of the goals of the Configuration Features for Java pitch was to enable not just the replacement of variables in a file, but also the (optional) copying of the file (post-replacement) to a new path.
+
+## Option 1: Implement a new syntax for file destinations
+This was the idea proposed in the pitch. It would like look this:
 
 ```
-config.prod.xml => config.xml
+logging.json
+config.prod.json => config.json
 ```
 
-Issues:
+Pros:
 
-1. '`=`', '` `', and '`>`' are all valid characters in Linux filenames.
-2. Given that we would be mixing the globbing syntax in with a custom '`=>`' syntax, we would create an implicit relationship between the globbing syntax and the arrow syntax. This would potentially cause problems for future work on the globbing syntax.
-3. This only solves file copying for this feature. Given the future of features, we can do better.
+- The syntax is simple to parse
 
-### Option 4: Implement file copying using custom scripts
-Use the existing custom script functionality.
+Cons:
 
-Issues:
+- '`=`', '`>`' and '` `' are all valid characters in Linux filenames. Unlikely to interfere with customers, but possible.
+- '`=`' and '` `' are both valid characters in Windows filenames. Unlikely to interfere with customers, but possible.
+- The globbing syntax is used by other components in Calamari. This new syntax would effectively be mixing Octostache, globbing and our new custom syntax into one string. There is a risk that future work on any of these individual syntaxes could result in ambiguous parses that wouldn't be discovered until late in development.
+- File copying is a common requirement. This option only solves it in one context. It would be nice if we had something reusable.
+- Library step templates aren't versioned, so this field would be misinterpreted by old versions of Octopus.
+
+## Option 2: Use custom scripts
+Octopus already provides a way to copy files, using [custom scripts](https://octopus.com/docs/deployment-examples/package-deployments/package-deployment-feature-ordering). Using this, a user can write some bash/powershell to copy a file.
+
+Pros:
+
+- The functionality already exists in Octopus.
+
+Cons:
 
 - The UX isn't as friendly. The fact that we only discovered this weeks into the project is a testament to the fact that it's kind of "out of sight, out of mind".
 
-### Option 5: Implement file format specification using a `<$format$>`-like syntax
-
-Example:
-
-```
-<xml> application.config
-<yaml> web.conf
-```
-
-### Option 6: Auto detect file formats based on file name/extension
-Issues:
-
-1. Always has a fallback to JSON, for backwards compatibility
-2. Doesn't support unrecognised file extensions
-
 ## Decision
-We have gone with a combination of options 4 and 6.
+We have gone with option 2. 
 
-- This provides the easiest path to future enhancements once API versioning and/or deprecation strategy pieces are in place.
-- No interplay between globbing syntax and file format/file copying syntax.
+- No interplay between globbing syntax, Octostache and file format/file copying syntax.
 - No impact on library steps/3rd party tools.
 
-## Data Sources
+# Decision 3: How to determine file formats
+Structured Variable Replacement now supports JSON, XML, YAML and .properties files. It is easy to create files that can parse in multiple formats (YAML is a superset of JSON, and some files can parse as both YAML and .properties), so we need a way to determine file types.
+
+## Option 1: Allow user to specify file formats
+In this option, we would extend the target file syntax to something like this:
+
+```
+<yaml> app.conf
+<xml> logging.configuration
+```
+
+Pros:
+
+- Users get absolute control over their file formats.
+
+Cons:
+
+- '`<`', '`>`' and '` `' are all valid characters in Linux filenames.
+- '` `' is a valid character in Windows filenames.
+- As in Decision 2 (file copying), there is an interplay between the globbing, Octostache and file format syntaxes. Were we to adopt the `=>` syntax in Decision 2, there would be another interplay.
+- Library step templates aren't versioned, so this field would be misinterpreted by old versions of Octopus.
+
+## Option 2: Try all parsers
+In this option, for each file, we would try all the parsers and see which one worked.
+
+Pros:
+
+- Can be backwards compatible by always trying JSON first.
+- Doesn't require users to specify a file format.
+
+Cons:
+
+- Error reporting is difficult. If the file is invalid in all formats, which parser errors should you show? If we end up supporting 20 formats, showing 20 errors to the user would be overwhelming.
+- Some formats are extremely permissive. The only way to make an invalid .properties file is a bad unicode escape (e.g. `\u000`). As we add more formats it will become harder to determine what the file format is.
+- If it's "first valid parse wins", the order in which we try parsing is critical, and there might not be an order that satisfies everyone. Furthermore, adding a new parser in a future version of Octopus might break existing deployment processes unless it's added as the last parser.
+
+## Option 3: Rely on well known file extensions
+In this option, we only support well known file extensions. e.g. `.xml`, `.yaml`, `.yml`, `.json`, and `.properties`.
+
+Pros:
+
+- Unlike option 2, we don't have to try all parsers.
+- Can be backwards compatible by always trying JSON first.
+- Doesn't require users to specify a file format.
+- No surprising positive parses.
+
+Cons:
+
+- We won't support different file names. If you need a different file name, you'll have to rename the file in your package, or use custom scripts to rename the file, let it be transformed, and then rename it again.
+
+## Decision
+We have gone with option 3.
+
+# Data Sources
 
 Source listed below might provide additional context but keep in mind that they can disappear at any time.
 
 - [Pitch](https://docs.google.com/document/d/1c2FzUglohWoNSJycs8kCjeYhbFDSkz_vizNtwsbX3pc/edit)
 - [Slack](https://octopusdeploy.slack.com/archives/C016F9TQESH)
+- [Deprecation pitch](https://docs.google.com/document/d/1Jo8cxYoqiNK1HqgO4jayUTHcXs4etWbunQPA_faSkPw/edit)
+- [API Versioning proposal](https://github.com/OctopusDeploy/Architecture/pull/11)
+- [Deprecation strategy proposal](https://github.com/OctopusDeploy/Architecture/pull/18)
