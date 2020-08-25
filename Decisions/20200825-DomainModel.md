@@ -25,6 +25,9 @@ New components introduced in the worked example provided in this document sit on
 **Resource Mapping**
 This document sees us move from utilising the ResourceMapper to directly facilitating Resource to Domain Model mapping, but it does not directly address moving away from the mapper, or moving away from it when mapping from Domain Model => Resource when translating back to wire format on "the way out". This will be the focus of [another decision record]() TBA.
 
+**Domain Events**
+Domain event infrastructure helps us create rich, decoupled domain models that can evolve and scale in healthy ways. This PR does not introduce any new domain event infrastructure or considerations, although it is a topic we want to tackle soon after agreeing on the core domain approach and abstractions.
+
 ## Considerations
 
 [This PR](https://github.com/OctopusDeploy/OctopusDeploy/pull/6834) works through an end-to-end example of refactoring the `Tenants` `PUT` and `POST` endpoints to use new commponents that align with the above principals.
