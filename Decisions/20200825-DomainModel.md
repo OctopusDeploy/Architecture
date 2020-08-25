@@ -11,8 +11,6 @@ TBA
 
 ## Principals
 
----
-
 - We want our core model to be simpler to reason about
 - We want our core model to be safer to interact with
 - We want less bugs that were caused by misunderstanding of what state the core model might be in
@@ -21,8 +19,6 @@ TBA
 
 ## Exclusions
 
----
-
 **ASP.NET Core**
 New components introduced in the worked example provided in this document sit on new ASP.NET Core infrastructure. Specifics around the best abstractions for controllers, or other ASP.NET Core pipeline specific considerations, are outside of the scope of this document.
 
@@ -30,8 +26,6 @@ New components introduced in the worked example provided in this document sit on
 This document sees us move from utilising the ResourceMapper to directly facilitating Resource to Domain Model mapping, but it does not directly address moving away from the mapper, or moving away from it when mapping from Domain Model => Resource when translating back to wire format on "the way out". This will be the focus of [another decision record]() TBA.
 
 ## Considerations
-
----
 
 [This PR](https://github.com/OctopusDeploy/OctopusDeploy/pull/6834) works through an end-to-end example of refactoring the `Tenants` `PUT` and `POST` endpoints to use new commponents that align with the above principals.
 
@@ -75,8 +69,6 @@ To achieve this, we use:
 - Encapsulation within our core models, to ensure they remain internally consistent.
 
 ## Options
-
----
 
 ### Resource Validation
 
@@ -142,13 +134,9 @@ Feedback will be provided by two mechanisms:
 
 ## Decision
 
----
-
 TBA
 
 ## Data Sources
-
----
 
 Source listed below might provide additional context but keep in mind that they can disappear at any time.
 
