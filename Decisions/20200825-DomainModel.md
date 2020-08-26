@@ -28,7 +28,7 @@ This document sees us move from utilising the ResourceMapper to directly facilit
 **Domain Events**
 Domain event infrastructure helps us create rich, decoupled domain models that can evolve and scale in healthy ways. This PR does not introduce any new domain event infrastructure or considerations, although it is a topic we want to tackle soon after agreeing on the core domain approach and abstractions.
 
-## Considerations
+## Overview
 
 [This PR](https://github.com/OctopusDeploy/OctopusDeploy/pull/6834) works through an end-to-end example of refactoring the `Tenants` `PUT` and `POST` endpoints to use new commponents that align with the above principals.
 
@@ -71,7 +71,7 @@ To achieve this, we use:
 
 - Encapsulation within our core models, to ensure they remain internally consistent.
 
-## Options
+## Considerations
 
 ### Resource Validation
 
