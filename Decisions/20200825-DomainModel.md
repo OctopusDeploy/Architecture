@@ -9,6 +9,10 @@ TBA
 
 # Detail
 
+## Assumptions
+
+- all new endpoints created in Octopus Server will be ASP.NET Core controllers, and we will be actively migrating away from our legacy Nancy responder infrastructure. Nancy is no longer actively maintained, so this is a desirable direction for Octopus Server to take.
+
 ## Principals
 
 - We want our core model to be simpler to reason about
@@ -20,7 +24,7 @@ TBA
 ## Exclusions
 
 **ASP.NET Core**
-New components introduced in the worked example provided in this document sit on new ASP.NET Core infrastructure. Specifics around the best abstractions for controllers, or other ASP.NET Core pipeline specific considerations, are outside of the scope of this document.
+New components introduced in the worked example provided in this document sit on new ASP.NET Core infrastructure. Specifics around the best abstractions for controllers, the migration strategy from Nancy to ASP.NET Core, or other ASP.NET Core pipeline specific considerations, are outside of the scope of this document.
 
 **Resource Mapping**
 This document sees us move from utilising the ResourceMapper to directly facilitating Resource to Domain Model mapping, but it does not directly address moving away from the mapper, or moving away from it when mapping from Domain Model => Resource when translating back to wire format on "the way out". This will be the focus of [another decision record]() TBA.
@@ -78,8 +82,8 @@ To achieve this, we use:
 A number of options for resource validation were considered, considering the following constraints:
 
 - We want to use nullable reference types and TinyTypes throughout Octopus Server
-- We need to work with ASP.NET model binding
-- We use JSON.NET for serialization
+- We want to work with ASP.NET Core model binding, as we will be working with ASP.NET Core controllers
+- We want to keep using JSON.NET for serialization
 - We want our resource types to reflect the data we _expect_ them to contain so that we can confidently utilize them as soon as they are available to our endpoints
 
 The options considered are [documented here](https://docs.google.com/document/d/1JVrLNPUf9h5TK9L6jxbL5KaoY3gGWUqp-flycQCFDsY/edit).
