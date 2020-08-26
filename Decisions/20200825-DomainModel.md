@@ -107,7 +107,7 @@ We have broken the resource model for `Tenant` into two components:
 - `TenantResource` is used to create or update tenants, and does not contain Id or SpaceId properties (as these are available as query parameters), or hypermedia links
 - `TenantReadResource` is used to provide tenant information to clients - it contains all tenant information, along with identifiers and hypermedia links
 
-[Example](https://github.com/OctopusDeploy/OctopusDeploy/pull/6834/files#diff-51caff6d0c4dcb6968bdcf3f0ea615dd).
+Example: [TenantResource](https://github.com/OctopusDeploy/OctopusDeploy/blob/0047fb8c59f47c9661c911329fbbdd624f7cc026/source/Octopus.Core/Resources/TenantResource.cs#L14-L36) vs [TenantReadResource](https://github.com/OctopusDeploy/OctopusDeploy/blob/0047fb8c59f47c9661c911329fbbdd624f7cc026/source/Octopus.Core/Resources/TenantResource.cs#L38-L76).
 
 This aligns with the direction our web client is taking, which has the idea of a `TNewResource` which uses typescript's `Omit` to remove Id and Links properties from the full resource definition.
 
