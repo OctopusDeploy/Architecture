@@ -38,7 +38,7 @@ We have no set way to deprecate things in Octopus (and related products). We hav
 
 ## Breaking Releases
 
-We designate certain releases to be breaking releases well in advance. All planned breaking changes are made in this release.
+We designate certain releases to be breaking releases well in advance, according to our agreed schedule. All planned breaking changes are made in this release.
 
 ## Transition Period
 
@@ -148,6 +148,5 @@ This would allow quicker removal, but most customers who do not upgrade to the l
 | 2020.4.0 | 2021.1.0 | 6 months |
 | 2020.6.9 | 2021.1.0 | 1 month |
 | 2021.1.1 | 2022.1.0 | 12 months |
-
 
 
