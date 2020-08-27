@@ -137,6 +137,13 @@ Feedback will be provided by two mechanisms:
 
 - _Domain Exceptions_ - when a domain invariant is unsatisfied, an exception will be thrown immediately, and processing of the given request will cease. This will mean these types of errors will be revealed "one per request". Typically we would not expect sets of this type of error. The client will have to correct the invariant, and then can attempt to process their request again.
 
+_Client Feedback and User Experience_
+There is an implication on user experience here if field names within our domain diverge from those in our resource model - exceptions thrown from the domain may contain information regarding fields that does not line up with resource field names. We anticipate most field-specific validation should be taken care of in the _Model Binding_ mechanism, meaning most exceptions thrown from the domain should not be about specific fields, but about rule violations of various kinds. Hopefully this means the impact on user experience should be minimal.
+
+There is also a strong likelihood that at some point we may want to evaluate a set of invariants all at once, so that we can provide more information back to a user as to what might need to be corrected for an operation to proceed. Throwing exceptions means our core domain model will only ever reveal the first unsatisfied invariant, but also gives us strong guarantees that it will never be persisted in an incorrect state.
+
+If we do want to evaluate a set of invariants for an operation, we will create coordinator domain services that have the responsibility for evaluating the invariants across a set of domain models for an operation - much like our `ExecutionFactory` class does at the moment - that will provide feedback back to the user and prevent domain operations proceeding if they are not satisfied.. This does not mean the core domain models that are being coordinated for the operation will not enforce their own invariants too, they will - by throwing exceptions to ensure no invalid state can be persisted.
+
 **FEEDBACK WANTED** do we think this will provide an adequate client experience? Are there areas of the application where there could be a series of domain invariants that would be unsatisifed where this approach would not be sufficient?
 
 ## Decision
