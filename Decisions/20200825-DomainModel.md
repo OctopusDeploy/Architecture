@@ -104,12 +104,14 @@ Given our ideal approach to resource modelling uses nullable reference types and
 
 We have broken the resource model for `Tenant` into two components:
 
-- `TenantResource` is used to create or update tenants, and does not contain Id or SpaceId properties (as these are available as query parameters), or hypermedia links
+- `TenantWriteResource` is used to create or update tenants, and does not contain Id or SpaceId properties (as these are available as query parameters), or hypermedia links
 - `TenantReadResource` is used to provide tenant information to clients - it contains all tenant information, along with identifiers and hypermedia links
 
 Example: [TenantResource](https://github.com/OctopusDeploy/OctopusDeploy/blob/0047fb8c59f47c9661c911329fbbdd624f7cc026/source/Octopus.Core/Resources/TenantResource.cs#L14-L36) vs [TenantReadResource](https://github.com/OctopusDeploy/OctopusDeploy/blob/0047fb8c59f47c9661c911329fbbdd624f7cc026/source/Octopus.Core/Resources/TenantResource.cs#L38-L76).
 
-This aligns with the direction our web client is taking, which has the idea of a `TNewResource` which uses typescript's `Omit` to remove Id and Links properties from the full resource definition.
+There are some basic convention tests established in server within `ResourceConventionsFixture` to ensure `WriteResource`s remain true subsets of `ReadResource`s.
+
+This aligns with the direction our web client is taking, which currently has the concept of a `TNewResource`. This uses typescript's `Omit` to remove properties from the full resource definition that are not needed when creating resources. We could align our client resources by providing changing `TNewResource` to `TWriteResource`. Modify methods could accept `TWriteResource & TLinks`, which read resources retrieved from the server should match anyway thanks to the ✨of duck-typing, making round-tripping resource changes simple.
 
 **FEEDBACK WANTED** is this a sensible first step, or should we jump in with both feet and introduce seperate models for each endpoint to completely decouple their concerns?
 
