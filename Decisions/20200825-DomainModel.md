@@ -109,9 +109,11 @@ We have broken the resource model for `Tenant` into two components:
 
 Example: [TenantResource](https://github.com/OctopusDeploy/OctopusDeploy/blob/0047fb8c59f47c9661c911329fbbdd624f7cc026/source/Octopus.Core/Resources/TenantResource.cs#L14-L36) vs [TenantReadResource](https://github.com/OctopusDeploy/OctopusDeploy/blob/0047fb8c59f47c9661c911329fbbdd624f7cc026/source/Octopus.Core/Resources/TenantResource.cs#L38-L76).
 
-There are some basic convention tests established in server within `ResourceConventionsFixture` to ensure `WriteResource`s remain true subsets of `ReadResource`s.
+There are some basic convention tests established in server within `ResourceConventionsFixture` to ensure `WriteResource`s remain true subsets of `ReadResource`s, to ensure the common simple integration pattern of GET an octpus resource, modify it, PUT it back\_ will still be valid.
 
-This aligns with the direction our web client is taking, which currently has the concept of a `TNewResource`. This uses typescript's `Omit` to remove properties from the full resource definition that are not needed when creating resources. We could align our client resources by providing changing `TNewResource` to `TWriteResource`. Modify methods could accept `TWriteResource & TLinks`, which read resources retrieved from the server should match anyway thanks to the ✨of duck-typing, making round-tripping resource changes simple.
+Separating our resource model between read and write resources aligns with the direction our web client is taking, which currently has the concept of a `TNewResource`. `TNewResource` implementations use typescript's `Omit` to remove properties from the full resource definition that are not needed when creating resources.
+
+We could align our web client resources by providing changing `TNewResource` to `TWriteResource`. Modify methods could accept `TWriteResource & TLinks`, which read resources retrieved from the server should match thanks to the ✨of duck-typing, ensuring round-tripping resource changes in our web client remains straightforward.
 
 **FEEDBACK WANTED** is this a sensible first step, or should we jump in with both feet and introduce seperate models for each endpoint to completely decouple their concerns?
 
