@@ -125,6 +125,8 @@ This means we are not militant in applying precondition checks to incoming infor
 
 The other type of precondition check we are typically required to do relates to enforcing relational consistency when linking documents to other documents, which is still a necessary requirement in the new world.
 
+To fulfill this type of precondition, we will use a simple `Func of IO` approach as demonstrated [here](https://github.com/OctopusDeploy/OctopusDeploy/pull/6834/files#r479883974), passing the domain model a function which it can invoke to retrieve the information it needs to inspect and satisfy it's own invariants.
+
 When interacting with the domain, if a domain invariant is unsatisifed [example](https://github.com/OctopusDeploy/OctopusDeploy/pull/6834/files#diff-29fae3c0e603cce39e381b742617dc85R120), we will throw a domain exception from the domain model, which can be captured and handled centrally in our `ErrorHandlingMiddleware`.
 
 **FEEDBACK WANTED** are we going to get an acceptable amount of correctness with this approach? What could bite us if we aren't applying precondition checks like `!= null` and `string.isNullOrEmpty` within our domain model?
