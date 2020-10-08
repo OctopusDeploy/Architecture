@@ -1,11 +1,11 @@
 # Overview
 
 - **Subject**: Implementing A Strict Domain Model (and related concerns)
-- **Decision date**: [when was the decision made]
+- **Decision date**: 1/09/2020
 
 # Executive Summary
 
-TBA
+To make Octopus's core functionality and model easier to reason about, Octopus Server will leverage a combination of C#8 Nullable Reference Types, Tiny Types, Fluent Validation, and Domain Driven Design. These tools will allow us to express correctness, centralise and make explicit invariants, make testing critical functionality simpler, and ultimately reduce the number of bugs that arise from not being able to easily reason about core processes and application state.
 
 # Detail
 
@@ -90,8 +90,6 @@ The options considered are [documented here](https://docs.google.com/document/d/
 
 We settled on the approach detailed above in **Verifying correctness of client payloads**, which leverages ASP.NET's awareness of nullable reference types, tiny types, and fluent validation to ensure resources can be validated to a point that any consumption of them once they are presented to an endpoint is safe.
 
-**FEEDBACK WANTED** are there scenarios in which the data may "pass the keeper" and we end up with a resource that has data that isn't congruent with the defined type (i.e. nulls in non-nullable fields)?
-
 ### Resource and Endpoint Modelling
 
 Our existing resource model lends itself to being "progressively enhanced" with data within our Nancy request responders.
@@ -115,8 +113,6 @@ Separating our resource model between read and write resources aligns with the d
 
 We could align our web client resources by providing changing `TNewResource` to `TWriteResource`. Modify methods could accept `TWriteResource & TLinks`, which read resources retrieved from the server should match thanks to the ✨of duck-typing, ensuring round-tripping resource changes in our web client remains straightforward.
 
-**FEEDBACK WANTED** is this a sensible first step, or should we jump in with both feet and introduce seperate models for each endpoint to completely decouple their concerns?
-
 ### Domain Modelling
 
 We have taken the approach of attempting to use the compiler and type system as much as possible to enforce correctness, leaving the domain to focus on domain invariants (business rules!).
@@ -128,8 +124,6 @@ The other type of precondition check we are typically required to do relates to 
 To fulfill this type of precondition, we will use a simple `Func of IO` approach as demonstrated [here](https://github.com/OctopusDeploy/OctopusDeploy/pull/6834/files#r479883974), passing the domain model a function which it can invoke to retrieve the information it needs to inspect and satisfy it's own invariants.
 
 When interacting with the domain, if a domain invariant is unsatisifed [example](https://github.com/OctopusDeploy/OctopusDeploy/pull/6834/files#diff-29fae3c0e603cce39e381b742617dc85R120), we will throw a domain exception from the domain model, which can be captured and handled centrally in our `ErrorHandlingMiddleware`.
-
-**FEEDBACK WANTED** are we going to get an acceptable amount of correctness with this approach? What could bite us if we aren't applying precondition checks like `!= null` and `string.isNullOrEmpty` within our domain model?
 
 ### Client Feedback
 
@@ -148,11 +142,9 @@ There is also a strong likelihood that at some point we may want to evaluate a s
 
 If we do want to evaluate a set of invariants for an operation, we will create coordinator domain services that have the responsibility for evaluating the invariants across a set of domain models for an operation - much like our `ExecutionFactory` class does at the moment - that will provide feedback back to the user and prevent domain operations proceeding if they are not satisfied.. This does not mean the core domain models that are being coordinated for the operation will not enforce their own invariants too, they will - by throwing exceptions to ensure no invalid state can be persisted.
 
-**FEEDBACK WANTED** do we think this will provide an adequate client experience? Are there areas of the application where there could be a series of domain invariants that would be unsatisifed where this approach would not be sufficient?
-
 ## Decision
 
-TBA
+To make Octopus's core functionality and model easier to reason about, Octopus Server will leverage a combination of C#8 Nullable Reference Types, Tiny Types, Fluent Validation, and Domain Driven Design.
 
 ## Data Sources
 
