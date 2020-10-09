@@ -1,0 +1,13 @@
+# Runbook ids
+
+**Version controlled runbooks are identified by their file name. If two runbooks on different branches have the same file name, then they have the same identity.**
+
+Users want to change the runbook name that appears in the UI, but still want to keep its identity. This allows them to correlate the runs before and after the name change, and switch between branches before and after the name change to compare other changes to the runbook.
+
+Having the file name be the identity for the runbook allows users to achieve this rename without affecting its identity, provided that the filename remains the same.
+
+## References
+- [Slack discussion](https://octopusdeploy.slack.com/archives/C01A1E8K9J5/p1599535985120300)
+- [Slack summary of decision](https://octopusdeploy.slack.com/archives/C01A1E8K9J5/p1599541752127300)
+- [Discussion document, showing some other options](https://docs.google.com/document/d/1PKPCrkcIjWsFywDsbKIvsvEtAbmEPatpAbhEv8zl1PY/edit?usp=drive_web)
+- [Zoom recording of discussion](https://octopus.zoom.us/rec/share/jsXmvkBwoTNPgsHVqdR1K95aaOmcEFdWTdwEuyPB5PaU04FONu8_PVOMg1yA6DE-.M3itLGGF1DzIRbRk) Password: `HcNk!3%0`
