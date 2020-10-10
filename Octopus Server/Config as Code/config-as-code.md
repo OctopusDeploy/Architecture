@@ -29,3 +29,11 @@ It is currently unclear the best path forward to consolidate these two types of 
 These VCS document stores are the place where we should apply permission checks.
 
 - [Decision in Slack](https://octopusdeploy.slack.com/archives/C01AJE4K3T2/p1600058089113200?thread_ts=1600051433.112900&cid=C01AJE4K3T2)
+
+## Project Cloning
+
+**Project cloning is not yet supported for VCS projects, but may be in future**
+
+In part, cloning/copying/templating is what CaC is supposed to solve, but within Git rather than within Octopus. In future there is potential for new features here, such as cloning a project into a new repo, cloning into a new project from an existing repo, etc.
+
+- [Decision in Slack](https://octopusdeploy.slack.com/archives/C01A1E8K9J5/p1599463673108000?thread_ts=1599458934.107900&cid=C01A1E8K9J5)
