@@ -8,7 +8,7 @@ Target retention is designed to clean up old files from deployment targets (Tent
 
 Retention is only run on successful deployments as we:
  - Want failed deployments to finish as soon possible. 
- - Don't don't want to cleanup the successful deployment that is currently being used. On successful deployment we know which is the currently in use directory.
+ - Don't want to cleanup the successful deployment that is currently being used. On successful deployment we know which is the currently in use directory.
 
 We also want to keep some failed deployments as the user may:
 - Want to inspect the files to figure out what went wrong

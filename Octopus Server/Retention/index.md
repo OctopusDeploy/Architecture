@@ -3,7 +3,7 @@
 Retention is an overloaded term in Octopus. There are several features called retention that do to quite different things and run at different times:
 
 - [Target (Tentacle) Retention](TargetRetention.md). Runs at the end of a deployment.
-- Release Retention.
+- Release Retention
 - (Built-in) Package Retention
 - Runbook Snapshot Retention
 - Package Metadata Retention
