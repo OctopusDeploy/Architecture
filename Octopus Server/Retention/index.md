@@ -1,6 +1,6 @@
 # Retention
 
-Retention is an overloaded term in Octopus. There are several features called retention that do to quite different things and run at different times:
+Retention is an overloaded term in Octopus. There are several features called retention that do quite different things and run at different times:
 
 - [Target (Tentacle) Retention](TargetRetention.md). Runs at the end of a deployment.
 - Release Retention
