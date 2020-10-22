@@ -27,5 +27,6 @@ This ensures that:
 ## Data Sources
 
 This is an example of when a bug fix didn't add migration scripts:
-
 https://github.com/OctopusDeploy/OctopusDeploy/pull/6449 ([Trello](https://trello.com/c/F0vpvQr6/3495-enabled-features-and-importing-step-templates))
+and the fix for it
+https://github.com/OctopusDeploy/OctopusDeploy/pull/7318 ([Trello](https://trello.com/c/Z5SnrNid/3764-variable-substitution-broken-for-steps-based-on-a-template))
