@@ -24,7 +24,7 @@ The retention can be configured as all, a number of days, or a number of "releas
 
 ## Package Cache
 
-There is a package cache on the target so that the package does not need to be re-acquired on each deployment. This applies to both directly acquired from a feed or via the Octopus Server. This cache is also used to calculated delta compression diffs and reconstruct packages.
+There is a package cache on the target so that the package does not need to be re-acquired on each deployment. This applies to both directly acquired from a feed or via the Octopus Server. This cache is also used to calculate delta compression diffs and reconstruct packages.
 
 *Note*: The [server file (package) cache](..\FileCache.md) cleanup works differently.
 
