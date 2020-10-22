@@ -6,7 +6,7 @@ The retention runs as part of the `Apply Retention Policies` server task.
 
 The retention policy is defined on the lifecycle and is either a number of days, or a number of releases. 
 
-A release is kept if any of these conditions is met:
+A release is kept if any of these conditions are met:
 - It is on the project's dashboard
 - It is in use by another release (via a deploy release step)
 - It falls within the policy days or count
