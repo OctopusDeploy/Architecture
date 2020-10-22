@@ -2,7 +2,7 @@
 
 aka `Tentacle Retention`
 
-Target retention is designed to clean up old files from deployment targets (Tentacle, SSH) in order to preserve space. The fil
+Target retention is designed to clean up old files from deployment targets (Tentacle, SSH) in order to preserve space.
 
 ## Timing
 
