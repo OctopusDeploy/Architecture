@@ -1,6 +1,6 @@
 # Release Retention
 
-Release retention is intended to remove any releases that are no longer relevant so that the list does not get too long. It also removes `Deployments` and `Artifacts` clearing up space. [Package Retention](PackageRetention.md) looks at releases to determine which packages are still in use by releases, and therefor can't clean up if no releases are removed.
+Release retention is intended to remove any releases that are no longer relevant so that the list does not get too long. It also removes `Deployments` and `Artifacts` clearing up space. [Package Retention](PackageRetention.md) looks at releases to determine which packages are still in use by releases, and therefore can't clean up if no releases are removed.
 
 The retention runs as part of the `Apply Retention Policies` server task.
 
