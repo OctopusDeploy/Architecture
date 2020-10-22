@@ -21,7 +21,7 @@ If objects created/manipulated before and after the change look different when p
 This ensures that:
 - Objects created/manipulated before and after the change look identical
 - We're not relying on mainline code to fill in missing property values (That code might be removed in a future release which will cause a lot of confusion)
-  - Remove any mainline patching code - as it only delays the bug hitting us. The more time that passes the more chance for the data to drift even further (subsequent patches may miss it if it's not recognisable).
+  - **Avoid adding (and remove any) mainline patching code** - as it only delays the bug hitting us. The more time that passes the more chance for the data to drift even further (subsequent patches may miss it if it's not recognisable).
 - There's no confusion about whether a property exists in a future migration script (whether a removed property got cleared from the JSON on the next save etc.)
 
 
