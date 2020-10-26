@@ -7,3 +7,9 @@ You can use this repository to record decisions and guidance about the architect
 2. If you're proposing something new, or want to record a decision made at a particular point in time, you can raise a PR with a new [Architecture Decision Record](https://github.com/OctopusDeploy/Architecture/tree/master/Decisions).
 
 Invite feedback via Slack channels like [#topic-architecture](https://octopusdeploy.slack.com/archives/CTZT49JFJ), and use PRs to reach consensus before merging.
+
+## Structure
+
+ADRs should be organized by product, then feature. Or a top level folder if it's cross-product.
+
+Pascal casing should be used for file and folder names.
