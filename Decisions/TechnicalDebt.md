@@ -1,11 +1,3 @@
-# Overview
-
-- **Subject**: Whether and how much technical debt we take on and how we pay it back
-- **Decision date**: [when was the decision made]
-- **Decision contributors**: [list who was involved in the decision]
-- **Decision maker**: Engineering Managers
-- **Decision owner**: [who executes on the final decision]
-
 # Executive Summary
 
 Octopus will maintain a revolving line of technical credit. We borrow against future earnings into order to move quicker. We will purposefully incur technical debt as well as pay it down indefinitely. 
@@ -19,7 +11,7 @@ As the company and it's install base has grown the technical debt is starting to
 
 # Approach
 
-We accept that we will have an ongoing level of technical debt. The level will shift as the priorities of the product change. The engineering managers are responsible for monitoring this.
+We accept that we will have an ongoing level of technical debt. The level will shift as the priorities of the product change. The L5s in engineering with the help of L4 are responsible for monitoring this.
 
 Engineers are empowered to incur debt in order to ship features. They should do so deliberately and thoughtfully.
 
