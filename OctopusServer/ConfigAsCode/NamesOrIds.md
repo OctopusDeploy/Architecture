@@ -6,6 +6,8 @@ This document is an attempt to capture all of this information to make sure weâ€
 
 Note: This was converted from a [Google Doc discussion](https://docs.google.com/document/d/1J_Vjw1pH5t9ptUI2F6NLyAlSn7WvGBh9LeL1HrUUPdQ/edit).
 
+Discussion: [See Slack thread](https://octopusdeploy.slack.com/archives/C01AJE4K3T2/p1605061937151100)
+
 ---
 ## Current Approach
 - We store Names in OCL to make things human-friendly
