@@ -1,10 +1,14 @@
-# Overview
+# Structured Configuration Variables
 
-- **Subject**: Decisions regarding Structured Variable Configuration
-- **Decision date**: 2020-08-13
+Structured Configuration Variables are a feature of Octopus Server and Calamari that allow for values in files to be replaced with values from Octopus variables/Calamari properties.
 
-# Executive Summary
-This record outlines 3 key technical decisions made in the implementation of the Configuration Features for Java pitch:
+- Supports XML, JSON, YAML and .properties files.
+- Uses the `Octopus.Action.Package.JsonConfigurationVariablesTargets` property for reasons discussed below.
+- Determines file format based on file extension, for reasons discussed below.
+
+# History/decisions
+
+The rest of this documents outlines 3 key technical decisions made in the implementation of the Configuration Features for Java pitch:
 
 - **Decision 1**: Whether to extend or deprecate the related, existing JSON Configuration Variables feature
 - **Decision 2**: How to support writing transformed configuration files to different paths
