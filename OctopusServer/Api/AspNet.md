@@ -54,7 +54,7 @@ These attributes are **mandatory**, as they help our API be a first-class produc
 
 ## Guiderails
 
-To help developers remember the parts they need to put in place for each Controller, we have established a suite of [Controller Conventions](TODO) that inspect all Controllers created and will not pass unless the required structures and attributes are in place.
+To help developers remember the parts they need to put in place for each Controller, we have established a suite of [Controller Conventions](https://github.com/OctopusDeploy/OctopusDeploy/blob/master/source/Octopus.Tests/Server/Web/Controllers/ControllerConventionsFixture.cs) that inspect all Controllers created and will not pass unless the required structures and attributes are in place.
 
 # Developing
 
@@ -62,7 +62,7 @@ To help developers remember the parts they need to put in place for each Control
 
 Creating a new ASP.NET Controller should be straight-forward.
 
-Add a new Controller class under the appropriate namespace, derive from `SpaceScopedApiController` to ensure your request is established in an appropriate Space Partition, and ensure you add the required attributes to the Controller endpoint and any incoming parameters. Running the [Controller Conventions](TODO) will help you discover anything you may have missed.
+Add a new Controller class under the appropriate namespace. Most endpoints will need to be space-scoped, so derive from `SpaceScopedApiController` to ensure your request is established in an appropriate Space Partition. Ensure you add the required ASP.NET and Swashbuckle attributes to the Controller endpoint and any incoming parameters. Running the [Controller Conventions](https://github.com/OctopusDeploy/OctopusDeploy/blob/master/source/Octopus.Tests/Server/Web/Controllers/ControllerConventionsFixture.cs) will help you discover anything you may have missed.
 
 When in doubt, the [Tenant Controllers](https://github.com/OctopusDeploy/OctopusDeploy/tree/master/source/Octopus.Server/Web/Controllers/Tenants) were migrated to act as _Lighthouse implementations_, and should be used as references when creating new Controllers if required.
 
@@ -83,15 +83,13 @@ For future migrations, implementors may want to consider the risk / complexity i
 - Existing E2E test coverage that exercises the endpoint(s) in question
 - Whether additional coverage utilizing [AssentTestScript] within the [Performance Test Suite](https://github.com/OctopusDeploy/OctopusDeploy/blob/master/source/Octopus.E2ETests.Performance/Readme.md) would provide additional confidence
 
-We don't think additional performance testing for regression is required given our observed results during the Tenants migration, unless there is a particular reason to suspect performance might change as a result of the migratino.
+We don't think additional performance testing for regression is required given our observed results during the Tenants migration, unless there is a particular reason to suspect performance might change as a result of the migration.
 
 ### Legacy Responders (Legacy Nancy Request Processing)
 
 Will use one of the Responder registration methods declared on `OctopusNancyModule` (like `Load`, `Create`, or `Modify`), with responders implementing [Responder](https://github.com/OctopusDeploy/OctopusDeploy/blob/master/source/Octopus.Server/Web/Infrastructure/Api/Responder.cs), and may use `PersistenceRule`s to enforce validation or create other side-effects.
 
-To migrate legacy responders, all `PersistenceRule` code should be re-implemented within the Controller or domain model, and the existing rules deleted. It is important to consider where in the Responder lifecycle the rules were applied, so that the behaviour can be accurately replicated within the Controller.
-
-See the [ModifyTenantController](https://github.com/OctopusDeploy/OctopusDeploy/blob/master/source/Octopus.Server/Web/Controllers/Tenants/ModifyTenantController.cs)
+To migrate legacy responders, all `PersistenceRule` code should be re-implemented within the Controller or domain model, and the existing rules deleted ([Example PR](https://github.com/OctopusDeploy/OctopusDeploy/pull/7668)). It is important to consider where in the Responder lifecycle the rules were applied, so that the behaviour can be accurately replicated within the Controller.
 
 ### Custom Responders (Newer Nancy Request Processing)
 
