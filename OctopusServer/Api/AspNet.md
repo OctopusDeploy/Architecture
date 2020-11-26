@@ -16,15 +16,17 @@ This document provides an _Overview_ of the new API's behaviour and architecture
 
 The ASP.NET request processing pipeline (build via ASP.NET's `IHostBuilder`) was introduced in 2020.5, with initial ground broken in [this PR](https://github.com/OctopusDeploy/OctopusDeploy/pull/6288).
 
-Incoming requests are either served by HTTP.Sys if on Windows, or Kestrel if on Linux. They are processed through the middleware pipeline declared in `WebServerInitializer`, and proceed to a fork at the end of the pipeline.
+Incoming requests are either served by `HTTP.Sys` if on Windows, or `Kestrel` if on Linux.
 
-If an ASP.NET Controller endpoint exists for the route + HTTP method pair coming in, the request will be sent to the Controller to handle. If an ASP.NET Controller endpoint does not exist, the request will be served by Nancy - this is also where unmatched routes will end up.
+They are processed through the middleware pipeline declared in the [WebServerInitializer](https://github.com/OctopusDeploy/OctopusDeploy/blob/master/source/Octopus.Server/Web/WebServerInitializer.cs), and proceed to a fork at the end of the pipeline.
+
+If an ASP.NET Controller endpoint exists for the HTTP Route + Verb pair coming in, the request will be sent to the Controller to handle. If an ASP.NET Controller endpoint does not exist, the request will be served by Nancy - this is also where unmatched routes will end up.
 
 ## Architecture
 
 We have opted for a **One Controller Per Endpoint** structure, meaning for each HTTP Route + Verb, a Controller is created to serve that request.
 
-There are only a couple of non-conforming controllers (See `SetTenantLogoController` for an example), in which `PUT` and `POST` implementations are identical, and so are served within the same Controller.
+There are only a couple of non-conforming controllers (See [SetTenantLogoController](https://github.com/OctopusDeploy/OctopusDeploy/blob/master/source/Octopus.Server/Web/Controllers/Tenants/SetTenantLogoController.cs) for an example), in which `PUT` and `POST` implementations are identical, and so are served within the same Controller.
 
 Controllers are located under the `Octopus.Server.Web.Controllers.` namespace, collected in sub-directories based on the primary domain model they serve interactions for - for example, Tenant related Controllers are collected under `Octopus.Server.Web.Controllers.Tenants`.
 
@@ -36,9 +38,7 @@ We rely on [ASP.NET Model Binding](https://docs.microsoft.com/en-us/aspnet/core/
 
 [ASP.NET Model Validation](https://docs.microsoft.com/en-us/aspnet/core/mvc/models/validation?view=aspnetcore-5.0) is _disabled_ (applied in [this PR](https://github.com/OctopusDeploy/OctopusDeploy/pull/7627)), as we are relying on existing [mapping](https://github.com/OctopusDeploy/OctopusDeploy/blob/master/source/Octopus.Server/Web/Mapping/ResourceMapper.cs) and [validation](https://github.com/OctopusDeploy/OctopusDeploy/blob/master/source/Octopus.Core/Validation/IDocumentValidator.cs) mechanisms within Octopus to validate our resources and models.
 
-_TODO: Complete paragraph on incoming resource validation once an opinion is formed._
-
-Domain model validation was previously performed with a combination of `Rules`, `DocumentValidators`, and code within `Responders`. This validation should now be centralized and exercised within domain models themselves, see [Tenant's Validate](https://github.com/OctopusDeploy/OctopusDeploy/blob/master/source/Octopus.Core/Model/Tenants/Tenant.cs) for an example.
+Domain model validation was previously performed with a combination of `Rules`, `DocumentValidators`, and code within `Responders`. This validation should now be centralized and exercised within domain models themselves, see [Tenant's Validate method](https://github.com/OctopusDeploy/OctopusDeploy/blob/master/source/Octopus.Core/Model/Tenants/Tenant.cs) for an example.
 
 We anticipate how we shape and validate resources will continue to change, informed by our opinions on [Domain Modelling](https://github.com/OctopusDeploy/Architecture/blob/master/OctopusServer/DomainModel.md) and the progression of our API.
 
@@ -60,7 +60,7 @@ To help developers remember the parts they need to put in place for each Control
 
 ## Creating New ASP.NET Controllers
 
-Creating a new ASP.NET Controller should be straight-forward.
+Creating a new ASP.NET Controller is straight-forward.
 
 Add a new Controller class under the appropriate namespace. Most endpoints will need to be space-scoped, so derive from `SpaceScopedApiController` to ensure your request is established in an appropriate Space Partition. Ensure you add the required ASP.NET and Swashbuckle attributes to the Controller endpoint and any incoming parameters. Running the [Controller Conventions](https://github.com/OctopusDeploy/OctopusDeploy/blob/master/source/Octopus.Tests/Server/Web/Controllers/ControllerConventionsFixture.cs) will help you discover anything you may have missed.
 
@@ -70,7 +70,7 @@ When in doubt, the [Tenant Controllers](https://github.com/OctopusDeploy/Octopus
 
 ### Safety Nets
 
-During the migration of the Tenants Nancy Module, performance, wire-compatibility, and swagger-compatibility safety nets were used to ensure our new ASP.NET infrastructure performed as well or better than our existing Nancy infrastructure. We refurbished part of the [Performance Test Suite](https://github.com/OctopusDeploy/OctopusDeploy/blob/master/source/Octopus.E2ETests.Performance/Readme.md) to accomplish this testing.
+During the migration of the Tenants Nancy Module, performance, wire-compatibility, and swagger-compatibility safety nets were used to ensure our new ASP.NET infrastructure performed as well or better than our existing Nancy infrastructure. We refurbished part of the [Performance Test Suite](https://github.com/OctopusDeploy/OctopusDeploy/blob/master/source/Octopus.E2ETests.Performance/Readme.md) to accomplish this testing, along with leveraging the existing [Swagger Fixture](https://github.com/OctopusDeploy/OctopusDeploy/blob/master/source/Octopus.IntegrationTests/Server/Web/Api/Swagger/SwaggerFixture.cs).
 
 We found:
 
@@ -85,15 +85,15 @@ For future migrations, implementors may want to consider the risk / complexity i
 
 We don't think additional performance testing for regression is required given our observed results during the Tenants migration, unless there is a particular reason to suspect performance might change as a result of the migration.
 
-### Legacy Responders (Legacy Nancy Request Processing)
+### Migrating Legacy Responders (Legacy Nancy Request Processing)
 
-Will use one of the Responder registration methods declared on `OctopusNancyModule` (like `Load`, `Create`, or `Modify`), with responders implementing [Responder](https://github.com/OctopusDeploy/OctopusDeploy/blob/master/source/Octopus.Server/Web/Infrastructure/Api/Responder.cs), and may use `PersistenceRule`s to enforce validation or create other side-effects.
+Legacy Responders will use one of the Responder registration methods declared on `OctopusNancyModule` (like `Load`, `Create`, or `Modify`), with responders implementing [Responder](https://github.com/OctopusDeploy/OctopusDeploy/blob/master/source/Octopus.Server/Web/Infrastructure/Api/Responder.cs), and may use `PersistenceRule`s to enforce validation or create other side-effects.
 
 To migrate legacy responders, all `PersistenceRule` code should be re-implemented within the Controller or domain model, and the existing rules deleted ([Example PR](https://github.com/OctopusDeploy/OctopusDeploy/pull/7668)). It is important to consider where in the Responder lifecycle the rules were applied, so that the behaviour can be accurately replicated within the Controller.
 
-### Custom Responders (Newer Nancy Request Processing)
+### Migrating Custom Responders (Newer Nancy Request Processing)
 
-Will use the `CustomAction` registration method on `OctopusNancyModule` and implement `Custom{Action/Create/Modify}Responder`. Rules utilized will implement `IResponderStep`, with a simple 'veto' pattern used for rule enforcement directly from the responder.
+Custom Responders will use the `CustomAction` registration method on `OctopusNancyModule` and implement `Custom{Action/Create/Modify}Responder`. Rules utilized will implement `IResponderStep`, with a simple 'veto' pattern used for rule enforcement directly from the responder.
 
 To migrate Custom Responders, the default recommendation is taking the `IResponderStep` rules as dependencies to the Controller, and exercising them within the new Controller created.
 
