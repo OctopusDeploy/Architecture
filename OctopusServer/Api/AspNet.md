@@ -12,7 +12,7 @@ This document provides an _Overview_ of the new API's behaviour and architecture
 
 ## How Requests Are Served
 
-![Octopus Request Pipeline](....\assets\OctopusWebServer.png)
+![Octopus Request Pipeline](https://github.com/OctopusDeploy/Architecture/blob/master/assets/OctopusWebServer.png)
 
 The ASP.NET request processing pipeline (build via ASP.NET's `IHostBuilder`) was introduced in 2020.5, with initial ground broken in [this PR](https://github.com/OctopusDeploy/OctopusDeploy/pull/6288).
 
