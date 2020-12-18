@@ -166,6 +166,7 @@ Cons:
 - Error reporting is difficult. If the file is invalid in all formats, which parser errors should you show? If we end up supporting 20 formats, showing 20 errors to the user would be overwhelming.
 - Some formats are extremely permissive. The only way to make an invalid .properties file is a bad unicode escape (e.g. `\u000`). As we add more formats it will become harder to determine what the file format is.
 - If it's "first valid parse wins", the order in which we try parsing is critical, and there might not be an order that satisfies everyone. Furthermore, adding a new parser in a future version of Octopus might break existing deployment processes unless it's added as the last parser.
+- For a well-known file extension (like a `.yml` file), it may be unexpected for a user to see that we first tried to parse it as a `.xml` file.
 
 ## Option 3: Rely on well known file extensions
 In this option, we only support well known file extensions. e.g. `.xml`, `.yaml`, `.yml`, `.json`, and `.properties`.
@@ -181,8 +182,31 @@ Cons:
 
 - We won't support different file names. If you need a different file name, you'll have to rename the file in your package, or use custom scripts to rename the file, let it be transformed, and then rename it again.
 
+## Option 4: Rely on well known file extensions, and fall back to trying all parsers
+
+This option uses the strategy in Option 3 first, and if that fails to match a file extension, it fals back to the strategy in Option 2.
+
+The algorithm works like this:
+
+- If a file matches a well known file extension (e.g. `.xml`, `.yaml`, `.yml`, `.json`, and `.properties`), we will only try to use the parser for that file type (after trying JSON first for backwards compatibility).
+- If a file does not match a well known file extension (e.g. a `.config` file), we will try all parsers in a hand-crafted order which tries the most restrictive formats first, and the most permissive formats last.
+
+Pros:
+
+- Unlike option 2, the behavior is very predictable for well known file extensions. e.g. It will never try to parse a `.yml` file as a `.xml` file.
+- It can work with files of any type without workarounds. A common use case is `.config` files. These tend to be XML files, but this is not guaranteed.
+- Can be backwards compatible by always trying JSON first.
+- Doesn't require users to specify a file format.
+
+Cons:
+
+- Error reporting is difficult. If the file is invalid in all formats, which parser errors should you show? If we end up supporting 20 formats, showing 20 errors to the user would be overwhelming.
+- Some formats are extremely permissive. The only way to make an invalid .properties file is a bad unicode escape (e.g. `\u000`). As we add more formats it will become harder to determine what the file format is.
+- If it's "first valid parse wins", the order in which we try parsing is critical, and there might not be an order that satisfies everyone. Furthermore, adding a new parser in a future version of Octopus might break existing deployment processes unless it's added as the last parser.
+- There may be edge cases where it parses a file as the wrong type. For example, there may be properties files that sometimes get parsed as yaml files.
+
 ## Decision
-We have gone with option 3.
+We have gone with option 4.
 
 # Data Sources
 
