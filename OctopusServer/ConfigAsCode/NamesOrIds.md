@@ -24,6 +24,10 @@ Discussion: [See Slack thread](https://octopusdeploy.slack.com/archives/C01AJE4K
 - Consumers of the API generally work in terms of names (be it from the command line, or a script or Hosted configuration). Using names means they don’t have to look up IDs.
 - We don’t pay any conversion-cost of Name-Ids until we’re ready to snapshot
 - You can provide a Name that doesn’t yet exist (but you know _will_ exist when you go to snapshot things)
+- For EAP we want to see what a name based API could look like and our customers reactions to that
+- We are already well down this road and have it working
+- If we were designing the API today, this might be way we would have chosen to do it
+- It makes the API more approachable and easier to consume
 
 ### Disadvantages
 - Any software-clients that call our API need to be updated to send Names. E.g.
@@ -61,6 +65,9 @@ Discussion: [See Slack thread](https://octopusdeploy.slack.com/archives/C01AJE4K
 - The conversion work will happen every time you hit Commit
   - Are we concerned about the performance hit?
   - ^ If we measured this and had happy-results, would this concern be squashed?
+- Side by side editing of OCL/UI would be harder to implement
+- We will have to make sure the customer doesn't use anything that looks like an id, or might ever possibly be an id
+   - How do we handle customers who currently have names that look like IDs? (thought he possibility is slim)
 
 ---
 ## Proposed Alternative 2
