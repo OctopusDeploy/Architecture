@@ -22,12 +22,20 @@ When you navigate into a project and are in the mindset of creating a release, w
 
 ## Alternative Approach #1 - Move the branch selector into the sidebar
 
+When you load a project (E.g. just going to the Overview project page), there are various things that still need to know which branch you're working on.
+
+For example:
+- The sidebar links will need to embed the branch into their routes
+- There are network requests to the deployment process to decide whether we even show the `Create Release` button. So knowing which branch you're on is important to the _whole_ project, not just select screens where version-control applies.
+
+Moving the branch selector up into a central place may simplify a lot of things and is actually consistent with what the user is seeing as a whole.
+
 ### Advantages
 
-- it's a single and consistent place for the user to learn where branch selecting/switching occurs = less to think about
-- it would simplify the GitRef field in the Create Release process (turns it into a read-only field where we tell the user which GitRef branch they're currently on, rather than a selection) = less to test
-- it's less maintenance in our codebase (rather than scattering the branch selector throughout various components) = less to test and arguably less risk
+- It's a single and consistent place for the user to learn where branch selecting/switching occurs = less to think about
+- It's less maintenance in our codebase (rather than scattering the branch selector throughout various components) = less to test and arguably less risk
 
 ### Disadvantages
 
-- the user may be confused about which things are version controlled in the project
+- The user may be confused about which things are version controlled in the project
+- It may get confusing when creating a release. E.g. You're on a given branch, but then you see a GitRef selection when creating a release. We want to support selecting more than just branches when creating releases. We will supports tags and commits also.
