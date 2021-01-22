@@ -24,10 +24,10 @@ When you navigate into a project and are in the mindset of creating a release, w
 
 ### Advantages
 
-- it's a single and consistent place for the user to learn where branch selecting/switching occurs
-- it removes the need for the GitRef field in the Create Release process (one less field to think about)
+- it's a single and consistent place for the user to learn where branch selecting/switching occurs = less to think about
+- it would simplify the GitRef field in the Create Release process (turns it into a read-only field where we tell the user which GitRef branch they're currently on, rather than a selection) = less to test
 - it's less maintenance in our codebase (rather than scattering the branch selector throughout various components) = less to test and arguably less risk
 
 ### Disadvantages
 
-- the user may be confused about which things are version controlled in the project. The current design is very clear on which things are version-controlled
+- the user may be confused about which things are version controlled in the project
