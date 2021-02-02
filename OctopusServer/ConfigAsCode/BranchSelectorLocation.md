@@ -34,8 +34,22 @@ Moving the Branch Selector up into a central place may simplify a lot of things 
 
 - It's a single and consistent place for the user to learn where branch selecting/switching occurs = less to think about
 - It's less maintenance in our codebase (rather than scattering the Branch Selector throughout various components) = less to test and arguably less risk
+- The branch selector is a global concept within a project, it would be nice to have it in a consistent place. Having the selector on individual pages make it looks like an independent idea. Let’s not chop the concept into pieces; it’s good for our user to see the project as a whole.
+- Having the selector on mutiple pages may give the impression that they are independent controls, when really they are both representing the same value; this could be unexpected for the user - if they are the same control then that implies that they should be in a single consistent location.
+- Users do not have to navigate to a page that contains a branch selector to confirm which branch they are currently working on.
+- Having a control in a common area might not be ideal in the immediate term (as we have very few things is version-controlled). But, ideally, we want to design a solution for the ultimate goal when more things are under version control. It would be good to choose a reasonable solution from EAP and all the way through, and not moving it around. Re-educated users about a new UI might cost more confusion down the track.
+- Moving the branch selector to a central area in the early stage also minimises the changes we need to make later on the project.
+- Let’s not move their cheese; design for where we want to be in the future rather than where we are now
 
 ### Disadvantages
 
 - The user may be confused about which things are version-controlled in the project
 - It may get confusing when creating a release. E.g. You're on a given branch, but then you see a GitRef selection when creating a release. We want to support selecting more than just branches when creating releases. We will supports tags and commits also.
+- The selector is less noticeable sitting in the sidebar. As the user's focus would always be on the paper form, unless they need to navigate to the other area in a project using the sidebar menu.
+
+
+**Propose solution to the disadvantages:**
+
+- Show the branch selector in an enabled/ disabled state, depending on whether the current page is under version control.
+- If a page is version-controlled (process editor page, and soon the deployment settings page) visually enable the branch selector.
+- If a page is not version-controlled, visually disable the branch selector. When users hover on the selector, have a tooltip to explain which area is currently version controlled, and highlight those pages on the sidebar nav.
