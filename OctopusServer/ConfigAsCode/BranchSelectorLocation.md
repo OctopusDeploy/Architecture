@@ -22,6 +22,7 @@ When you navigate into a project and are in the mindset of creating a release, w
 
 
 ## Alternative Approach #1 - Move the Branch Selector into the sidebar
+[Alternative #1 Mockup - Sidebar (draft)](https://www.figma.com/proto/B2Fiev9lGG3isIRwEvwqKm/2021-Pitch-CAC?node-id=94%3A1536&scaling=min-zoom)
 
 When you load a project (E.g. just going to the Overview project page), there are various things that still need to know which branch you're working on.
 
@@ -58,6 +59,10 @@ Moving the Branch Selector up into a central place may simplify a lot of things 
 
 
 ## Alternative Approach #2 - Move the Branch Selector to the top of the paper element
+[Alternative #2 Mockup - Paper element slim (draft)](https://www.figma.com/proto/B2Fiev9lGG3isIRwEvwqKm/2021-Pitch-CAC?node-id=166%3A3919&scaling=min-zoom)
+<br>
+[Alternative #2 Mockup - Paper element regular (draft)](https://www.figma.com/proto/B2Fiev9lGG3isIRwEvwqKm/2021-Pitch-CAC?node-id=154%3A3158&scaling=min-zoom)
+
 Wrapping the Branch Selector with component Branch Selector Banner (e.g.) and put this component on the top of the paper element.
 The banner will be displayed on every page in a project area.  
 
