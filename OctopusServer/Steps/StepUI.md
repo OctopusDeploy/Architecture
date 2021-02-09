@@ -26,13 +26,31 @@ The Step UI API should contain high level concepts (sections, code editors, radi
 
 ## Other solutions
 
-An alternative solution is to allow the Step UI to be written in react, as react components.
+### React
 
-The key distinction between these two options is that
+The Step UI could be written in react, as react components.
+
+The key distinction between this option and the selected solution is that
  - React components would give our Step UIs the flexibility to define any type of custom UI component that has not already been defined in the Step UI API
  - A Step UI Framework would strictly constrain the types of components that can be composed together into a Step UI, allowing the Octopus Server portal to cheaply change its design over time without risk of regression or inconsistencies.
 
 We deem the benefit of being able to *cheaply* change the design of the Octopus Server portal (i.e. without changing hundreds of steps) much more valuable than Step UIs being able to define their own custom UI components.
+
+### Declarative Document (e.g. JSON)
+
+The Step UI could be declared in a document format, such as a JSON document.
+
+This option does not seem viable because there are many places within the Step UI where we would need to encode some logic. These include
+
+- Validation
+- Dynamic form content
+- Importing/exporting properties (e.g. as a yaml file)
+- Showing or hide form elements based on the state of the action properties
+- Setting multiple properties when a field value changes
+
+Given this requirement, we would need either:
+-  a DSL embedded within the JSON document to represent the required logic. This option is far too complex and can be easily ruled out compared to the alternatives.
+-  a way to reference typescript code that can implement the required logic. At this point, the declarative JSON document has no value over the proposed framework solution.
 
 ## References
 
