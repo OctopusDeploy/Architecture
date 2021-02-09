@@ -32,7 +32,7 @@ The key distinction between these two options is that
  - React components would give our Step UIs the flexibility to define any type of custom UI component that has not already been defined in the Step UI API
  - A Step UI Framework would strictly constrain the types of components that can be composed together into a Step UI, allowing the Octopus Server portal to cheaply change its design over time without risk of regression or inconsistencies.
 
-We deem the benefit of being able to change the design of portal cheaply change the design of the Octopus Server portal (i.e. without changing hundreds of steps) much more valuable than Step UIs being able to define their own custom UI components.
+We deem the benefit of being able to *cheaply* change the design of the Octopus Server portal (i.e. without changing hundreds of steps) much more valuable than Step UIs being able to define their own custom UI components.
 
 ## References
 
