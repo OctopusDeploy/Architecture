@@ -1,22 +1,9 @@
 # Step Templates in Configuration as Code
 
 ## Problem
-Previously, when actions based on Action Templates (refferred to as Step Templates in the UI) were serialized (both in the database, and in version control), all properties defined in the template would be inserted directly into the action, along with a reference to the original template.
+Previously, when actions based on Action Templates (refferred to as Step Templates in the UI) were serialized as OCL for version controlled projects, all properties defined in the template would be inserted directly into the action, along with a reference to the original template.
 
 Example:
-```json
-{
-    "ActionType": "Script",
-    "Properties": {
-        "Octopus.Action.Template.Id": "MyTemplate-1",
-        "Octopus.Action.Template.Version": "1"
-
-        // Properties by Template
-
-        // Properties defined by user
-    }
-}
-```
 ```hcl
 action_type = "Script"
 properties = {
@@ -29,25 +16,15 @@ properties = {
 }
 ```
 
-Now that actions can be stored in version control systems, this exposes the pre-defined properties from the template, and allows for them to be edited by the user. This has the potential to cause unintended/undocumented behaviour when using templated deployment actions.
+This exposes the pre-defined properties from the template, and allows for them to be edited by the user. This has the potential to cause unintended/undocumented behaviour when using templated deployment actions.
 
 ---
 
 ## Chosen Solution
-Octopus Server now **only** serializes the **user defined parameters** along with a **reference to the template**.
+Octopus Server now **only** serializes the **user defined parameters** along with a **reference to the template** for version controlled projects.
 Octopus Server will resolve this reference at runtime.
 
 Example:
-```json
-{
-    "Properties": {
-        "Octopus.Action.Template.Id": "MyTemplate-1",
-        "Octopus.Action.Template.Version": "1"
-
-        // Properties defined by user
-    }
-}
-```
 ```hcl
 properties = {
     Octopus.Action.Template.Id = "ActionTemplates-1"
@@ -57,21 +34,15 @@ properties = {
 }
 ```
 
-- After fetching the deployment process using the `DeploymentProcessDocumentStore`, Octopus Server will fetch any templates referenced by the deployment actions and insert their pre-defined values
+- After fetching the deployment process using the `CurrentDeploymentProcessVersionControlDocumentStore`, Octopus Server will fetch any templates referenced by the deployment actions and insert their pre-defined values
 - If any value has been defined in both the action and it's template, the templates values will overwrite the ones already defined
 
 ### Pros
-- Properties and packages defined in the template are no longer serialised in the database or version control
+- Properties and packages defined in the template are no longer serialised
 - Users cannot unintentionally modify the behavour of a templated deployment action
 
 ### Cons
-- `deploymentProcess.HydrateDeploymentActions(actionTemplateStore)` must always be invoked before using a templated deployment action and `deploymentProcess.DehydrateDeploymentActions(actionTemplateStore)` before storing
-  - This is done automatically in the following places:
-    - `SnapshotDeploymentProcessDocumentStore`
-    - `CurrentDeploymentProcessDatabaseDocumentStore`
-    - `CurrentDeploymentProcessVersionControlDocumentStore`
-  - Calls to `IReadTransaction.Load<TDocument>(string)` or any variations of this call **will not** automatically (de)hydrate the deployment actions
-
+- The structure of deployment actions is now inconsistent with what may be seen in the database
 ### Todos
 - Once the generic `IDocumentStore<TDocument>` has been merged, the logic for hydrating and dehydrating deployment actions can be moved into there.
 
@@ -105,7 +76,7 @@ Unfortunately, the current architecture of Octopus Server is not ready for such 
 ---
 
 ## Considered Solution
-Custom JSON and OCL converters
+Custom OCL converter
 
 ### Pros
 - No additions to existing pipeline
