@@ -60,7 +60,7 @@ These behaviours consist of:
 - Shared behaviours that are configured via the UI, like package manipulation, powershell version setting, and deployment scripts (currently called "Features" in our UI)
 - Handlers that do the work of the steps
 
-Implicit and Shared behaviours largely fall under the banner of "Package acquisition and manipulation". **Assumption:** behaviours outside of Package acquisition and manipulation will not be required in new steps. There is no evidence to support the need for Custom Deployment Scripts within new steps. Our proposed Conceptual Model will provide users the flexibility and control they require of new steps.
+Implicit and Shared behaviours largely fall under the banner of "Package acquisition and manipulation". Behaviours outside of Package acquisition and manipulation will not be required in new steps. There is no evidence to support the need for Custom Deployment Scripts within new steps. Our proposed Conceptual Model will provide users the flexibility and control they require of new steps.
 
 ## Problem
 
