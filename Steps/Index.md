@@ -93,7 +93,7 @@ Some nice side-benefits we get by taking this approach:
 
 [Further Discussion](https://docs.google.com/document/d/1E5u3BnYlLzXQ4kwbQVb6XY9TmSFegxtAnwBi_A77WAE)
 
-# Inputs And Outputs
+# Inputs and Outputs
 
 Octopus currently provides no explicit schema definition for the inputs a given action needs defined to do its job.
 
