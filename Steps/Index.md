@@ -127,7 +127,7 @@ We think a combination of https://json-schema.org/ for Schema definition, and Ty
 
 See [Step Packages](https://github.com/OctopusDeploy/Architecture/blob/master/Steps/StepPackages.md)
 
-# Step UI
+# Step UI Framework
 
 See [Step UI](https://github.com/OctopusDeploy/Architecture/blob/master/Steps/StepUI.md)
 
