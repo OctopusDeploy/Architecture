@@ -16,9 +16,9 @@
 
 # Overview
 
-At the start of 2021, the Steps team was established within Octopus.
+At the start of 2021, the Steps Team was established within Octopus.
 
-The initial responsibility of the team was to establish _Concensus_ and _Clarity_ on how Steps should be developed going forward, to ensure we were confident the model and architecture would support Octopus over the next five years.
+The initial responsibility of the team was to build _Concensus_ and _Clarity_ on how Steps should be developed going forward, to ensure we were confident the model and architecture would support Octopus over the next five years.
 
 This document summarises the initial discovery and decision making.
 
