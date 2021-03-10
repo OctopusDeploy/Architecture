@@ -60,7 +60,7 @@ These behaviours consist of:
 - Shared behaviours that are configured via the UI, like package manipulation, powershell version setting, and deployment scripts (currently called "Features" in our UI)
 - Handlers that do the work of the steps
 
-Implicit and Shared behaviours largely fall under the banner of "Package acquisition and manipulation". Behaviours outside of Package acquisition and manipulation will not be required in new steps. There is no evidence to support the need for Custom Deployment Scripts within new steps. Our proposed Conceptual Model will provide users the flexibility and control they require of new steps.
+The only shared functionality that is provided by Octopus Server is "Package acquisition and manipulation". No shared functionality outside of Package acquisition and manipulation will be required in new steps. There is no evidence to support the need for Custom Deployment Scripts within new steps. Our proposed Conceptual Model will provide users the flexibility and control they require of new steps.
 
 ## Problem
 
