@@ -52,7 +52,7 @@ Composite tasks (tasks represented as a set of finer-grained functions or tasks 
 
 # Composition and Coordination
 
-In Octopus, a deployment process consists of a set of steps. The code that makes up steps expresses both behaviours and UI.
+In Octopus, a deployment process consists of a set of steps. The code that makes up steps expresses both the execution-time functionality and the UI.
 
 These behaviours consist of:
 
