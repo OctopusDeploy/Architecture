@@ -20,7 +20,7 @@ At the start of 2021, the Steps Team was established within Octopus.
 
 The initial responsibility of the team was to build _Concensus_ and _Clarity_ on how Steps should be developed going forward, to ensure we were confident the model and architecture would support Octopus over the next five years.
 
-This document summarises the initial discovery and decision making.
+This document presents the key architectural design decisions for our modular step infrastructure.
 
 # Key Constraints
 
