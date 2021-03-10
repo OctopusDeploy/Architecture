@@ -114,10 +114,12 @@ The DotNet Step Package Bootstrapper is TBA.
 
 [Community Step Templates](https://github.com/OctopusDeploy/Library) are another mechanism that allows people to develop custom steps that can then be surfaced within Octopus.
 
-They are expressed entirely within Json, and are limited in what parameters they can express, and can only be written in a supported script syntax.
+They are expressed entirely within Json, are limited in what parameters they can express, and can only be written in a supported script syntax.
 
 They are well-suited for creating small tasks that can then be shared between projects in Octopus.
 
 They are not suited for more complex tasks - their UI cannot express logic, they can only be developed in a supported scripting language, they are not easily tested, and they cannot contribute some of the additional infrastructure often required by steps (validation, accounts, deployment targets, etc).
 
-At this point, it is our opinion that Step Packages and Community Step Templates serve different purposes, and will likely _not converge_.
+At this point, it is our opinion that Step Packages and Community Step Templates serve different purposes, and will likely _not converge_. Community Step Templates support simple reuse scenarios, where Step Packages provide a development model for more sophisticated functionality, composition, and integration within Octopus Server.
+
+Both models allow third parties to develop custom steps for Octopus. Eventually, Step Packages will also be offered from an online marketplace, in a similar fashion to Community Step Templates.
