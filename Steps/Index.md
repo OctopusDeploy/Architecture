@@ -54,10 +54,10 @@ Composite tasks (tasks represented as a set of finer-grained functions or tasks 
 
 In Octopus, a deployment process consists of a set of steps. The code that makes up steps expresses both the execution-time functionality and the UI.
 
-These behaviours consist of:
+This functionality consist of:
 
-- Implicit behaviours that may be triggered, like package acquisition
-- Shared behaviours that are configured via the UI, like package manipulation, powershell version setting, and deployment scripts (currently called "Features" in our UI)
+- Implicit functions that may be triggered, like package acquisition
+- Shared functions that are configured via the UI, like package manipulation, powershell version setting, and deployment scripts (currently called "Features" in our UI)
 - Handlers that do the work of the steps
 
 The only shared functionality that is provided by Octopus Server is "Package acquisition and manipulation". No shared functionality outside of Package acquisition and manipulation will be required in new steps. There is no evidence to support the need for Custom Deployment Scripts within new steps. Our proposed Conceptual Model will provide users the flexibility and control they require of new steps.
@@ -82,12 +82,12 @@ Problems we avoid by taking this approach:
 
 - We remove the need for the declarative step manifest to attempt to describe what functions should be run prior to the step handler running.
 - We remove the need for handlers to call other functions that may be written in another language (i.e. trying to call the variable substitution code, currently written in .NET, from a nodejs handler)
-- We avoid having to develop a number of implicit behaviours that would be required to support composing arbitrary functionality and its supporting UI.
+- We avoid needing potentially complex code within Server to deal with potential order-of-execution problems
 
 Some nice side-benefits we get by taking this approach:
 
 - Given Octopus Server can now produce an **Execution Manifest** that describes what functions will be invoked, and the inputs supplied to those functions, we take a step towards being able to "preview" a deployment to an environment.
-- Since behaviours become independent, and are coordinated by Octopus Server, shared behaviours can be updated independently of Step Packages. With this we avoid the current pain we experience with Sashimi where all Sashimi’s need to be updated when shared behaviours are updated.
+- Since functions become independent, and are coordinated by Octopus Server, shared functions can be updated independently of Step Packages. With this we avoid the current pain we experience with Sashimi where all Sashimi’s need to be updated when shared functions are updated.
 
 [Execution Manifest Diagram](https://whimsical.com/steps-execution-manifest-N74pfHgDoLXNK8ck1UJmb9)
 
