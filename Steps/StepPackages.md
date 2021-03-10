@@ -1,6 +1,6 @@
 # Overview
 
-** Step Packages ** are Octopus Server's extensibility model for creating new Steps - the things that do the work of deployment!
+**Step Packages** are Octopus Server's extensibility model for creating new Steps - the things that do the work of deployment!
 
 A Step Package is a zip file. It contains all of the things Octopus Server needs to use the Step in a Deployment Process.
 
