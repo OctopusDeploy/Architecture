@@ -42,6 +42,12 @@ All foreseeable future targets will have CLI or templating tooling available, an
 
 Our ideal model will provide opinionated deployment tasks first and foremost. If users find their use case is not satisfied by the opinionated task, there will be a graduated path either to finer-grained deployment tasks they can compose their process of, or to script or template tasks that allow the customer to drive the CLI or templating tooling to accomplish their goals.
 
+> **Example: AWS Lambda Deployments**
+> With lambda deployments, we will offer three steps:
+> The **opinionated step**, in which we will set up all of the things needed to establish a self-contained Lambda application - API Gateway, Lambdas, IAM roles, etc
+> More **granular steps**, that allow the API Gateway and Lambdas to be established independently, which is important for some team scenarios
+> Finally, all of these steps will be able to be decomposed to a **CloudFormation step**, should our users need ultimate control over the process
+
 We will ensure the path between opinionated tasks to flexible tasks has a great user experience, allowing users to transition between seamlessly.
 
 Composite tasks (tasks represented as a set of finer-grained functions or tasks that can be reordered / recomposed) have been considered, but ultimately could never provide the flexibility users would be seeking. The development cost and additional UX complexity they would introduce, when weighed up with the marginal benefits we would get, give a clear indication that they are not a viable model.
