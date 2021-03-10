@@ -9,7 +9,7 @@ Step Packages are named in the format `Octopus.MyStepPackage.1.0.0.zip`, and are
 A Step Package has the following content structure:
 
 ```
-|-- manifest.json
+|-- metadata.json
   |-- src/index.ts
   |-- src/inputs.ts
   |-- src/outputs.ts
@@ -22,13 +22,13 @@ Node.js will be our default choice for developing Step Packages.
 
 DotNet will only be used for migrating existing Sashimi-based steps into Step Packages.
 
-TODO: Update when DotNet step packages are a thing.
+![Step Packages](https://github.com/OctopusDeploy/Architecture/blob/master/Steps/assets/building_blocks.png)
 
-## Manifest
+## Metadata
 
-At the top level, the Step Package has a Manifest, captured within `manifest.json`.
+At the top level, the Step Package has Metadata, captured within `metadata.json`.
 
-The manifest has the following contents:
+The metadata has the following contents:
 
 ```jsonc
 {
