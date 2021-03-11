@@ -56,6 +56,18 @@ These attributes are **mandatory**, as they help our API be a first-class produc
 
 To help developers remember the parts they need to put in place for each Controller, we have established a suite of [Controller Conventions](https://github.com/OctopusDeploy/OctopusDeploy/blob/master/source/Octopus.Tests/Server/Web/Controllers/ControllerConventionsFixture.cs) that inspect all Controllers created and will not pass unless the required structures and attributes are in place.
 
+# Testing
+
+Before migrating an endpoint, we create Integration Tests that exercise the endpoint, using [Assent](https://www.nuget.org/packages/Assent/) to assert on the output.
+
+## Scrubbing
+
+Because certain values in an endpoint response (GUIDs, timestamps etc.) can change per invocation we scrub these values automatically before the output is checked.
+
+## Header Testing
+
+Our Assent-based testing approach by default includes HTTP headers. While our tests are not specifically concerned with headers, we've chosen to leave these in, scrubbing values as appropriate.
+
 # Developing
 
 ## Creating New ASP.NET Controllers
