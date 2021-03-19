@@ -1,18 +1,19 @@
 # Index
 
+- [Index](#index)
 - [Overview](#overview)
 - [Key Constraints](#key-constraints)
 - [Conceptual Model](#conceptual-model)
 - [Composition and Coordination](#composition-and-coordination)
+  - [Problem](#problem)
+  - [Solution: The Execution Manifest](#solution-the-execution-manifest)
 - [Inputs and Outputs](#inputs-and-outputs)
+  - [Problem](#problem-1)
+  - [Solution: Input and Output Schemas](#solution-input-and-output-schemas)
 - [Step Packages](#step-packages)
 - [Step UI Framework](#step-ui-framework)
-- [Validation](#tba)
-- [Bound Variables](#tba)
-- [Versioning and Upgrading](#tba)
-- [Infrastructure](#tba)
-- [Build](#tba)
-- [Packaging](#tba)
+- [Bound Variables](#bound-variables)
+- [TBA](#tba)
 
 # Overview
 
@@ -141,6 +142,15 @@ See [Step Packages](https://github.com/OctopusDeploy/Architecture/blob/master/St
 
 See [Step UI](https://github.com/OctopusDeploy/Architecture/blob/master/Steps/StepUI.md)
 
+# Bound Variables
+
+See [Bound Variables](https://github.com/OctopusDeploy/Architecture/blob/master/Steps/BoundVariables.md)
+
 # TBA
 
-Many things are still evolving, and will appear in due course!
+Many things are still evolving, and will appear in due course, including
+- Validation
+- Versioning and Upgrading
+- Infrastructure
+- Build
+- Packaging
