@@ -58,15 +58,15 @@ To help developers remember the parts they need to put in place for each Control
 
 # Testing
 
-Before migrating an endpoint, we create Integration Tests that exercise the endpoint, using [Assent](https://www.nuget.org/packages/Assent/) to assert on the output.
+Before migrating an endpoint, we create Integration Tests that exercise the endpoint, using [Assent](https://www.nuget.org/packages/Assent/) to assert on the output. These have been shown to force us to do the (sometimes time-consuming) analysis of endpoints which is necessary for correct migration to ASP.NET. [dotCover](https://www.jetbrains.com/dotcover/) should be used to verify that the test cover all appropriate code paths in the relevant Nancy responder, rules and other related code.
 
 ## Scrubbing
 
-Because certain values in an endpoint response (GUIDs, timestamps etc.) can change per invocation we scrub these values automatically before the output is checked.
+Because certain values in an endpoint response (GUIDs, timestamps etc.) can change per invocation we scrub these values automatically before the output is checked. The scruber methods are all in [`ApprovalTestExtensions`](https://github.com/OctopusDeploy/OctopusDeploy/blob/master/source/Octopus.Tests.Common/Support/ApprovalTestExtensions.cs).
 
 ## Header Testing
 
-Our Assent-based testing approach by default includes HTTP headers. While our tests are not specifically concerned with headers, we've chosen to leave these in, scrubbing values as appropriate.
+Our Assent-based testing approach by default includes HTTP headers. While our tests are not specifically concerned with headers, we've chosen to leave these in, scrubbing values as appropriate. We may in the future want to remove all of the headers from our tests, and extend [`HeadersFixture`](https://github.com/OctopusDeploy/OctopusDeploy/blob/master/source/Octopus.IntegrationTests/Server/Web/HeadersFixture.cs) to test all headers.
 
 # Developing
 
@@ -108,6 +108,13 @@ To migrate legacy responders, all `PersistenceRule` code should be re-implemente
 Custom Responders will use the `CustomAction` registration method on `OctopusNancyModule` and implement `Custom{Action/Create/Modify}Responder`. Rules utilized will implement `IResponderStep`, with a simple 'veto' pattern used for rule enforcement directly from the responder.
 
 To migrate Custom Responders, the default recommendation is taking the `IResponderStep` rules as dependencies to the Controller, and exercising them within the new Controller created.
+
+### Considerations around `ResourceMapper`
+
+TODO
+
+
+include ExcludeValuesRouteConstraint in docs
 
 ## Data Sources
 
