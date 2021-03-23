@@ -32,7 +32,7 @@ We have found many benefits of this approach (when compared to resource-centric 
 * Better dependency graph for endpoints, as there are fewer per controller
 * Potentially testable endpoints (if we want them) thanks to fewer dependencies per-controller.
 
-Because we are making controllers more explicit and flattening that inheritance heirarchy, it allows them to contain more code without losing clarity. Things would get messy quickly if we had many endpoints per controller, each incliding some additional amount of code.
+Because we are making controllers more explicit and flattening that inheritance heirarchy, it allows them to contain more code without losing clarity. Things would get messy quickly if we had many endpoints per controller, each including some additional amount of code.
 
 There are only a couple of non-conforming controllers (See [SetTenantLogoController](https://github.com/OctopusDeploy/OctopusDeploy/blob/master/source/Octopus.Server/Web/Controllers/Tenants/SetTenantLogoController.cs) for an example), in which `PUT` and `POST` implementations are identical, and so are served within the same Controller.
 
