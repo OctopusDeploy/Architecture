@@ -24,7 +24,7 @@ If an ASP.NET Controller endpoint exists for the HTTP Route + Verb pair coming i
 
 ## Architecture
 
-We have opted for a **One Controller Per Endpoint** structure, meaning for each HTTP Route + Verb, a Controller is created to serve that request.
+We have opted for a **One Controller Per Endpoint** structure, meaning for each HTTP Route + Verb, a Controller is created to serve that request. The name of the controller should contain the name of the resource concerned, with a verb that explains what is being done to it (e.g. `Get`, `Create`, `Update`, `Delete`). The public action method on the controller should be named using this same verb.
 
 We have found many benefits of this approach (when compared to resource-centric controllers containing methods for many endpoints). Specifically:
 
@@ -33,6 +33,8 @@ We have found many benefits of this approach (when compared to resource-centric 
 * Potentially testable endpoints (if we want them) thanks to fewer dependencies per-controller.
 
 Because we are making controllers more explicit and flattening that inheritance heirarchy, it allows them to contain more code without losing clarity. Things would get messy quickly if we had many endpoints per controller, each including some additional amount of code.
+
+Lastly, we feel that this approach aligns well with the **S** in **SOLID** - the Single Repsonsibility Principle - where each controller is responsible for a single thing: servicing a single endpoint.
 
 There are only a couple of non-conforming controllers (See [SetTenantLogoController](https://github.com/OctopusDeploy/OctopusDeploy/blob/master/source/Octopus.Server/Web/Controllers/Tenants/SetTenantLogoController.cs) for an example), in which `PUT` and `POST` implementations are identical, and so are served within the same Controller.
 
