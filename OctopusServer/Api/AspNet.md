@@ -28,7 +28,7 @@ We have opted for a **One Controller Per Endpoint** structure, meaning for each 
 
 We have found many benefits of this approach (when compared to resource-centric controllers containing methods for many endpoints). Specifically:
 
-* Smaller code
+* Controllers do only one thing each
 * Better dependency graph for endpoints, as there are fewer per controller
 * Potentially unit testable endpoints (if we want them) thanks to fewer dependencies per-controller.
 
