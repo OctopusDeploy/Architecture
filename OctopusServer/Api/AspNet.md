@@ -30,7 +30,7 @@ We have found many benefits of this approach (when compared to resource-centric 
 
 * Smaller code
 * Better dependency graph for endpoints, as there are fewer per controller
-* Potentially testable endpoints (if we want them) thanks to fewer dependencies per-controller.
+* Potentially unit testable endpoints (if we want them) thanks to fewer dependencies per-controller.
 
 Because we are making controllers more explicit and flattening that inheritance heirarchy, it allows them to contain more code without losing clarity. Things would get messy quickly if we had many endpoints per controller, each including some additional amount of code.
 
