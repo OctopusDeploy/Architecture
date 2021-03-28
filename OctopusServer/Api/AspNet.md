@@ -127,6 +127,14 @@ TODO
 
 include ExcludeValuesRouteConstraint in docs
 
+### Use of CancellationToken
+
+[TODO: clean up] Pass in to controllers, for ease of future unit testins
+
+### Design of builders
+
+[TODO: clean up] Tests should own their field values, and any default values should be random. This means that the tests have control over their data.
+
 ## Data Sources
 
 Source listed below might provide additional context but keep in mind that they can disappear at any time.
