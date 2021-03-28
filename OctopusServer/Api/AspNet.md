@@ -31,6 +31,7 @@ We have found many benefits of this approach (when compared to resource-centric 
 * Controllers do only one thing each
 * Better dependency graph for endpoints, as there are fewer per controller
 * Potentially unit testable endpoints (if we want them) thanks to fewer dependencies per-controller.
+* We make a deliberate break away from controllers _having_ to be resource-aligned, giving more flexibility for controllers to exist that might model aggregate domain operations
 
 Because we are making controllers more explicit and flattening that inheritance heirarchy, it allows them to contain more code without losing clarity. Things would get messy quickly if we had many endpoints per controller, each including some additional amount of code.
 
