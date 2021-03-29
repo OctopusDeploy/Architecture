@@ -127,13 +127,24 @@ TODO
 
 include ExcludeValuesRouteConstraint in docs
 
-### Use of CancellationToken
+### Use of `CancellationToken` in ASP.NET Controllers
 
-[TODO: clean up] Pass in to controllers, for ease of future unit testins
+There are two ways to get hold of a `CancellationToken` in an ASP.NET Core controller.
+
+* Via the static `HttpContext.RequestAborted` property
+* By adding a `CancellationToken` argument to your async public action method(s).
+
+These are [functionally identical](https://odetocode.com/blogs/scott/archive/2018/09/12/cancellationtokens-and-aborted-asp-net-core-requests.aspx), but we decided to mandate use of the `CancellationToken` parameter approach as this leads to easier unit testing of controllers in the future.
+
+A convention test - [`ControllerConventionsFixture.AllAsyncEndpointsMustTakeACancellationToken`](https://github.com/OctopusDeploy/OctopusDeploy/blob/master/source/Octopus.Tests/Server/Web/Controllers/ControllerConventionsFixture.cs#L86) - has been added to enforce this.
 
 ### Design of builders
 
-[TODO: clean up] Tests should own their field values, and any default values should be random. This means that the tests have control over their data.
+To support the creation of test data for our endpoint Assent tests we have created a suite of **resource builders**. These live in the [`Octopus.IntegrationTests.Helpers.ResourceBuilders`](https://github.com/OctopusDeploy/OctopusDeploy/tree/master/source/Octopus.IntegrationTests/Helpers/ResourceBuilders) namespace.
+
+The resource builders are build on the principle that tests should own their own test data, which is set on a builder using `With...` methods. We have created just the methods we need for our tests, with the expectation that future developers can extend the builders as they see fit. If property value is not specified using a `With...` method then the builder will create a random (wherever possible) value for the property.
+
+All builders should have a `Build()` method which returns the resource, and also stores it in the appropriate context. Builders should be designed so that the `Build()` method can be called on a new builder, and a valid resource will be saved and returned.
 
 ## Data Sources
 
