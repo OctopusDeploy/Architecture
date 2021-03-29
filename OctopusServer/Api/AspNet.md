@@ -145,9 +145,9 @@ A usage example would be:
 [HttpGet("workers/{id:excludevalues(all, discover)}")]
 ```
 
-This means that while `GET /workers/foo` would be handled by this endpoint, `GET /workers/all` and `GET /workers/discover` would not be, and would instead fall through to Nancy for handling.
+This means that while `GET /workers/foo` would be handled by this endpoint, `GET /workers/all` and `GET /workers/discover` would not be, and would instead fall through to Nancy for handling. As these routes are migrated to ASP.NET, the values `all` and `discover` should be removed from the attribute, and once both route are migrated to ASP.NET the `excludevalues` part should be removed altogether.
 
-include ExcludeValuesRouteConstraint in docs
+Once the migration to ASP.NET is complete, the `ExcludeValuesRouteConstraint` will no longer be needed, and should be deleted.
 
 ### Use of `CancellationToken` in ASP.NET Controllers
 
