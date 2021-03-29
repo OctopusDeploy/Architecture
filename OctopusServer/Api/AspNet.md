@@ -124,6 +124,28 @@ To migrate Custom Responders, the default recommendation is taking the `IRespond
 
 TODO
 
+### Routing Table Risks
+
+Nancy and ASP.NET have separate routing tables, and incoming requests are handed to ASP.NET first, and then to Nancy if ASP.NET decides it did not have a route that could handle the request.
+
+This presents the opportunity for a bug, in the following scenario.
+
+```
+GET /resource/{id} // migrated to ASP.NET
+GET /resource/all // still in Nancy
+```
+
+A request to `GET /resource/all` would be mistakenly handled by ASP.NET, as this matches the pattern `GET /resource/all`.
+
+To workaround this issue, we created a custom ASP.NET [route constraint](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/routing?view=aspnetcore-5.0#route-constraint-reference), named [`ExcludeValuesRouteConstraint`](https://github.com/OctopusDeploy/OctopusDeploy/blob/master/source/Octopus.Server/Web/RouteConstraints/ExcludeValuesRouteConstraint.cs). This is used in the `HttpGet` (for example) attribute for an ASP.NET endpoint to let us specify values to "exclude" from handling by that ASP.NET endpoint.
+
+A usage example would be:
+
+```
+[HttpGet("workers/{id:excludevalues(all, discover)}")]
+```
+
+This means that while `GET /workers/foo` would be handled by this endpoint, `GET /workers/all` and `GET /workers/discover` would not be, and would instead fall through to Nancy for handling.
 
 include ExcludeValuesRouteConstraint in docs
 
