@@ -18,7 +18,7 @@ The ASP.NET request processing pipeline (build via ASP.NET's `IHostBuilder`) was
 
 Incoming requests are either served by `HTTP.Sys` if on Windows, or `Kestrel` if on Linux.
 
-They are processed through the middleware pipeline declared in the [WebServerInitializer](https://github.com/OctopusDeploy/OctopusDeploy/blob/master/source/Octopus.Server/Web/WebServerInitializer.cs), and proceed to a fork at the end of the pipeline.
+They are processed through the middleware pipeline declared in the [WebServerInitializer](https://github.com/OctopusDeploy/OctopusDeploy/blob/master/source/Octopus.Server/Web/WebServerInitializer.cs) and [Startup](https://github.com/OctopusDeploy/OctopusDeploy/blob/master/source/Octopus.Server/Web/Startup.cs) classes, and proceed to a fork at the end of the pipeline.
 
 If an ASP.NET Controller endpoint exists for the HTTP Route + Verb pair coming in, the request will be sent to the Controller to handle. If an ASP.NET Controller endpoint does not exist, the request will be served by Nancy - this is also where unmatched routes will end up.
 
@@ -45,9 +45,7 @@ We exclusively use [Attribute Routing](https://docs.microsoft.com/en-us/aspnet/c
 
 ## Mapping and Validation
 
-We rely on [ASP.NET Model Binding](https://docs.microsoft.com/en-us/aspnet/core/mvc/models/model-binding?view=aspnetcore-5.0) to map incoming request payloads to parameters and models we work with in Controllers. We have created a custom [MultiSource Model Binder](https://github.com/OctopusDeploy/OctopusDeploy/blob/master/source/Octopus.Server/Web/Infrastructure/Binders/MultiSourceModelBinder.cs) to allow binding a single model from various request sources (Route, query, headers, body).
-
-[ASP.NET Model Validation](https://docs.microsoft.com/en-us/aspnet/core/mvc/models/validation?view=aspnetcore-5.0) is _disabled_ (applied in [this PR](https://github.com/OctopusDeploy/OctopusDeploy/pull/7627)), as we are relying on existing [mapping](https://github.com/OctopusDeploy/OctopusDeploy/blob/master/source/Octopus.Server/Web/Mapping/ResourceMapper.cs) and [validation](https://github.com/OctopusDeploy/OctopusDeploy/blob/master/source/Octopus.Core/Validation/IDocumentValidator.cs) mechanisms within Octopus to validate our resources and models.
+We rely on [ASP.NET Model Binding](https://docs.microsoft.com/en-us/aspnet/core/mvc/models/model-binding?view=aspnetcore-5.0) to map incoming request payloads to parameters and models we work with in Controllers. We have created a custom [Composite Binding Source Attribute](https://github.com/OctopusDeploy/OctopusDeploy/blob/master/source/Octopus.Server/Web/Infrastructure/Binders/FromCompositeAttribute.cs) to allow binding a single model from various request sources (route and query string).
 
 Domain model validation was previously performed with a combination of `Rules`, `DocumentValidators`, and code within `Responders`. This validation should now be centralized and exercised within domain models themselves, see [Tenant's Validate method](https://github.com/OctopusDeploy/OctopusDeploy/blob/master/source/Octopus.Core/Model/Tenants/Tenant.cs) for an example.
 
