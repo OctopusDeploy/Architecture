@@ -4,16 +4,8 @@
 - [Overview](#overview)
 - [Key Constraints](#key-constraints)
 - [Conceptual Model](#conceptual-model)
-- [Composition and Coordination](#composition-and-coordination)
-  - [Problem](#problem)
-  - [Solution: The Execution Manifest](#solution-the-execution-manifest)
-- [Inputs and Outputs](#inputs-and-outputs)
-  - [Problem](#problem-1)
-  - [Solution: Input and Output Schemas](#solution-input-and-output-schemas)
-- [Step Packages](#step-packages)
-- [Step UI Framework](#step-ui-framework)
-- [Bound Variables](#bound-variables)
-- [TBA](#tba)
+- [Components](#components)
+- [Concepts](#concepts)
 
 # Overview
 
@@ -61,120 +53,14 @@ Composite tasks (tasks represented as a set of finer-grained functions or tasks 
 
 [Further Discussion](https://docs.google.com/document/d/1fvB1FWEO9QBLqzAys6DmDryB4PlRYC5T0Pp2XbU8Vm8)
 
-# Composition and Coordination
+# Components
 
-In Octopus, a deployment process consists of a set of steps. The code that makes up steps expresses both the execution-time functionality and the UI.
+- [Step Packages](https://github.com/OctopusDeploy/Architecture/blob/master/Steps/Components/StepPackages.md)
+- [Step UI](https://github.com/OctopusDeploy/Architecture/blob/master/Steps/Components/StepUI.md)
 
-This functionality consist of:
+# Concepts
 
-- Implicit functions that may be triggered, like package acquisition
-- Shared functions that are configured via the UI, like package manipulation, powershell version setting, and deployment scripts (currently grouped under "Features" in our UI)
-- Handlers that do the work of the steps
-
-The only shared functionality that is provided by Octopus Server is "Package acquisition and manipulation". No shared functions outside of Package acquisition and manipulation will be required in new steps. There is no evidence to support the need for Custom Deployment Scripts within new steps. Our proposed Conceptual Model will provide users the flexibility and control they require of new steps.
-
-With that in mind, Step Packages will need to support the composition and coordination of:
-
-- Implicit functions that may be triggered, like package acquisition
-- Handlers that do the work of the steps
-
-## Problem
-
-If we have a step that involves invoking multiple pieces of functionality that are implemented in different languages (like C# and typescript) and have a different release cadence (like being shipped with Octopus Server or as part of a Step Package), how do we compose them together to form a single cohesive step?
-
-Let's take the following contrived process example:
-
-```
-Acquire Package X
-Substitute Variables in Files on Package X
-Upload Package X contents to Azure Blob Storage
-```
-
-There are a few ways we might model this.
-
-We could take a delcarative approach, where `Acquire Package` and `Substitute Variables` are declared in the Step Package `manifest.json`. It is left to Server and other framework components to show the right UI to enable these, and ensure they are enacted at execution time.
-
-Another option would be to coordinate this functionality within the step handler code. The Step Executor would be supplied some sort of function it could call to acquire the package and substitute variables:
-
-```
-var files = stepPackages.acquirePackage(packageName, packageVersion, feedId);
-stepPackages.substituteVariables(files, patterns, exclusions);
-azure.uploadToBlobStorage(files);
-```
-
-There are several options, including the above two, for composing arbitrary functionality together. All have their own complexities and limitations, and enforcing contracts across boundaries becomes difficult in all of them.
-
-## Solution: The Execution Manifest
-
-The only functionality that needs to be composed with step functionality is package acquisition and manipulation. If we promote this to a first class feature set, we no longer need a generic way of plugging arbitrary units of functionality together.
-
-We will develop UI elements that can be _Composed_ into steps for configuring package acquisition and manipulation.
-
-Octopus Server will know how to interrogate that configuration, and will _Coordinate_ the appropriate functionality by building up an **Execution Manifest** for the step's execution, that it will send to Calamari to enact.
-
-Problems we avoid by taking this approach:
-
-- We remove the need for the declarative step manifest to attempt to describe what functions should be run prior to the step handler running.
-- We remove the need for handlers to call other functions that may be written in another language (i.e. trying to call the variable substitution code, currently written in .NET, from a nodejs handler)
-- We avoid needing potentially complex code within Server to deal with potential order-of-execution problems
-
-Some nice side-benefits we get by taking this approach:
-
-- Given Octopus Server can now produce an **Execution Manifest** that describes what functions will be invoked, and the inputs supplied to those functions, we take a step towards being able to "preview" a deployment to an environment.
-- Since functions become independent, and are coordinated by Octopus Server, shared functions can be updated independently of Step Packages. With this we avoid the current pain we experience with Sashimi where all Sashimi’s need to be updated when shared functions are updated.
-
-[Execution Manifest Diagram](https://whimsical.com/steps-execution-manifest-N74pfHgDoLXNK8ck1UJmb9)
-
-[Further Discussion](https://docs.google.com/document/d/1E5u3BnYlLzXQ4kwbQVb6XY9TmSFegxtAnwBi_A77WAE)
-
-# Inputs and Outputs
-
-Octopus currently provides no explicit schema definition for the inputs a given step needs defined to do its job.
-
-The current model for inputs for Octopus Steps uses a Namespace-keyed state bag approach.
-
-Keys for inputs are currently defined and redefined in several places.
-
-## Problem
-
-- It is difficult to find what inputs an step expects (currently convention based)
-- It is difficult to tell what type of information each input should capture (i.e. number, string, complex type) - at the moment the only place we enforce the type of info is within validators (example)
-- Complex types can only be expressed as flat sets of keys
-- Input keys are redefined in up to three places for certain steps
-- It is difficult to determine what keys within the state bag a given step might care about
-
-## Solution: Input and Output Schemas
-
-Steps will express a Schema that defines what inputs it expects to receive, and potentially one for what Outputs it may emit too.
-
-The Schema for inputs will be described in a Language Agnostic way, so that the schema can be leveraged in Server, and from within Step components (UI, handlers, validators, etc).
-
-Validation for inputs will be expressed in a Language Specific way, so that developers can develop validation procedures without the pain of learning a new language / specification.
-
-We think a combination of https://json-schema.org/ for Schema definition, and TypeScript functions for validation that can be run via https://github.com/sebastienros/jint (or similar) in Server provides the best balance of tradeoffs for product requirements and developer requirements.
-
-[Inputs Map](https://whimsical.com/steps-inputs-map-QyP5kQgsTtXSSStdDTAGVZ)
-
-[Further Discussion](https://docs.google.com/document/d/19qz4U33sK_xwGJATBxJ52CdYNQM-hzSbULX2H8mxbBA)
-
-# Step Packages
-
-See [Step Packages](https://github.com/OctopusDeploy/Architecture/blob/master/Steps/StepPackages.md)
-
-# Step UI Framework
-
-See [Step UI](https://github.com/OctopusDeploy/Architecture/blob/master/Steps/StepUI.md)
-
-# Bound Variables
-
-See [Bound Variables](https://github.com/OctopusDeploy/Architecture/blob/master/Steps/BoundVariables.md)
-
-# TBA
-
-Many things are still evolving, and will appear in due course, including
-
-- Validation
-- Versioning and Upgrading
-- Infrastructure
-- Build
-- Packaging
+- [Inputs and Outputs](https://github.com/OctopusDeploy/Architecture/blob/master/Steps/Concepts/InputsAndOutputs.md)
+- [Execution](https://github.com/OctopusDeploy/Architecture/blob/master/Steps/Concepts/Execution.md)
+- [Building and Packaging](https://github.com/OctopusDeploy/Architecture/blob/master/Steps/Concepts/BuildingAndPackaging.md)
+- [Versioning](https://github.com/OctopusDeploy/Architecture/blob/master/Steps/Concepts/Versioning.md)

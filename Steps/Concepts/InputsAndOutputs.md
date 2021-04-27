@@ -1,6 +1,47 @@
+# Index
+
+- [Inputs and Outputs](#inputs-and-outputs)
+  - [Problem](#problem)
+  - [Solution: Input and Output Schemas](#solution-input-and-output-schemas)
+- [Bound Variables](#bound-variables)
+  - [Problem](#problem-1)
+  - [Constraints](#constraints)
+  - [Design](#design)
+- [Validation](#validation)
+
+# Inputs and Outputs
+
+Octopus currently provides no explicit schema definition for the inputs a given step needs defined to do its job.
+
+The current model for inputs for Octopus Steps uses a Namespace-keyed state bag approach.
+
+Keys for inputs are currently defined and redefined in several places.
+
+## Problem
+
+- It is difficult to find what inputs an step expects (currently convention based)
+- It is difficult to tell what type of information each input should capture (i.e. number, string, complex type) - at the moment the only place we enforce the type of info is within validators (example)
+- Complex types can only be expressed as flat sets of keys
+- Input keys are redefined in up to three places for certain steps
+- It is difficult to determine what keys within the state bag a given step might care about
+
+## Solution: Input and Output Schemas
+
+Steps will express a Schema that defines what inputs it expects to receive, and potentially one for what Outputs it may emit too.
+
+The Schema for inputs will be described in a Language Agnostic way, so that the schema can be leveraged in Server, and from within Step components (UI, handlers, validators, etc).
+
+Validation for inputs will be expressed in a Language Specific way, so that developers can develop validation procedures without the pain of learning a new language / specification.
+
+We think a combination of https://json-schema.org/ for Schema definition, and TypeScript functions for validation that can be run via https://github.com/sebastienros/jint (or similar) in Server provides the best balance of tradeoffs for product requirements and developer requirements.
+
+[Inputs Map](https://whimsical.com/steps-inputs-map-QyP5kQgsTtXSSStdDTAGVZ)
+
+[Further Discussion](https://docs.google.com/document/d/19qz4U33sK_xwGJATBxJ52CdYNQM-hzSbULX2H8mxbBA)
+
 # Bound Variables
 
-## Background
+## Problem
 
 The Step Inputs collection contains various properties that can be configured. These properties are often primitive values like strings or booleans.
 
@@ -11,7 +52,7 @@ Users can bind any of these values to variables, such that the value of these pr
 The following constraints will apply to steps
 
 - Variable binding should be disabled for properties that branches the form or control flow of the step.
-  - If these properties could be bound, it would be difficult to 
+  - If these properties could be bound, it would be difficult to
     - reason about what the step UI should look like when it was bound
     - use Union types to represent valid states of properties
   - Customers that want to vary this property can duplicate the step with each configuration they want.
@@ -58,3 +99,7 @@ The next best thing we can do is remove knowledge of bound variables from the pl
 ## Resources
 
 - [Decision document](https://docs.google.com/document/d/17TZBRvoIp9gHPvipdQSWQnSHtNHuFN6CpcOjzDeJRyo/edit?usp=sharing)
+
+# Validation
+
+TBA
