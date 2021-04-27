@@ -31,7 +31,7 @@ Development of our steps should be a value stream that is independent of our cor
 
 **Simple**
 
-We should build steps that are simple and easy to maintain. As development of actions scales up, we may end up with hundreds of actions. Every small unnecessary development cost also scales up with the number of actions, so minimising these costs is critical.
+We should build steps that are simple and easy to maintain. As development of steps scales up, we may end up with hundreds of steps. Every small unnecessary development cost also scales up with the number of steps, so minimising these costs is critical.
 
 # Conceptual Model
 
@@ -106,19 +106,19 @@ Some nice side-benefits we get by taking this approach:
 
 # Inputs and Outputs
 
-Octopus currently provides no explicit schema definition for the inputs a given action needs defined to do its job.
+Octopus currently provides no explicit schema definition for the inputs a given step needs defined to do its job.
 
-The current model for inputs for Octopus Actions uses a Namespace-keyed state bag approach.
+The current model for inputs for Octopus Steps uses a Namespace-keyed state bag approach.
 
 Keys for inputs are currently defined and redefined in several places.
 
 ## Problem
 
-- It is difficult to find what inputs an action expects (currently convention based)
+- It is difficult to find what inputs an step expects (currently convention based)
 - It is difficult to tell what type of information each input should capture (i.e. number, string, complex type) - at the moment the only place we enforce the type of info is within validators (example)
 - Complex types can only be expressed as flat sets of keys
-- Input keys are redefined in up to three places for certain actions
-- It is difficult to determine what keys within the state bag a given action might care about
+- Input keys are redefined in up to three places for certain steps
+- It is difficult to determine what keys within the state bag a given step might care about
 
 ## Solution: Input and Output Schemas
 
@@ -149,6 +149,7 @@ See [Bound Variables](https://github.com/OctopusDeploy/Architecture/blob/master/
 # TBA
 
 Many things are still evolving, and will appear in due course, including
+
 - Validation
 - Versioning and Upgrading
 - Infrastructure
