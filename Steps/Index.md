@@ -68,22 +68,45 @@ In Octopus, a deployment process consists of a set of steps. The code that makes
 This functionality consist of:
 
 - Implicit functions that may be triggered, like package acquisition
-- Shared functions that are configured via the UI, like package manipulation, powershell version setting, and deployment scripts (currently called "Features" in our UI)
+- Shared functions that are configured via the UI, like package manipulation, powershell version setting, and deployment scripts (currently grouped under "Features" in our UI)
 - Handlers that do the work of the steps
 
-The only shared functionality that is provided by Octopus Server is "Package acquisition and manipulation". No shared functionality outside of Package acquisition and manipulation will be required in new steps. There is no evidence to support the need for Custom Deployment Scripts within new steps. Our proposed Conceptual Model will provide users the flexibility and control they require of new steps.
+The only shared functionality that is provided by Octopus Server is "Package acquisition and manipulation". No shared functions outside of Package acquisition and manipulation will be required in new steps. There is no evidence to support the need for Custom Deployment Scripts within new steps. Our proposed Conceptual Model will provide users the flexibility and control they require of new steps.
+
+With that in mind, Step Packages will need to support the composition and coordination of:
+
+- Implicit functions that may be triggered, like package acquisition
+- Handlers that do the work of the steps
 
 ## Problem
 
 If we have a step that involves invoking multiple pieces of functionality that are implemented in different languages (like C# and typescript) and have a different release cadence (like being shipped with Octopus Server or as part of a Step Package), how do we compose them together to form a single cohesive step?
 
-Do we need a step to declare what pieces of functionality should be invoked? Should the step coordinate this functionality itself, within its own handler code?
+Let's take the following contrived process example:
 
-There are several options for composing arbitrary functionality together, but all have their own complexities and limitations, and enforcing contracts across boundaries becomes difficult.
+```
+Acquire Package X
+Substitute Variables in Files on Package X
+Upload Package X contents to Azure Blob Storage
+```
+
+There are a few ways we might model this.
+
+We could take a delcarative approach, where `Acquire Package` and `Substitute Variables` are declared in the Step Package `manifest.json`. It is left to Server and other framework components to show the right UI to enable these, and ensure they are enacted at execution time.
+
+Another option would be to coordinate this functionality within the step handler code. The Step Executor would be supplied some sort of function it could call to acquire the package and substitute variables:
+
+```
+var files = stepPackages.acquirePackage(packageName, packageVersion, feedId);
+stepPackages.substituteVariables(files, patterns, exclusions);
+azure.uploadToBlobStorage(files);
+```
+
+There are several options, including the above two, for composing arbitrary functionality together. All have their own complexities and limitations, and enforcing contracts across boundaries becomes difficult in all of them.
 
 ## Solution: The Execution Manifest
 
-The only "shared" functionality that needs to be composed with step functionality is package acquisition and manipulation. If we promote this to a first class feature set, we no longer need a generic way of plugging arbitrary units of functionality together.
+The only functionality that needs to be composed with step functionality is package acquisition and manipulation. If we promote this to a first class feature set, we no longer need a generic way of plugging arbitrary units of functionality together.
 
 We will develop UI elements that can be _Composed_ into steps for configuring package acquisition and manipulation.
 
