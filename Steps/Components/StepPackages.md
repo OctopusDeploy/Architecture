@@ -61,7 +61,7 @@ The metadata has the following contents:
 }
 ```
 
-Step metadata influences the behaviours Octopus Server will present when presenting and executing the Step.
+Step metadata influences the behaviour of Octopus Server when presenting and executing the Step.
 
 ### Properties
 
