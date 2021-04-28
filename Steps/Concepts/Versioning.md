@@ -1,7 +1,7 @@
 # Index
 
 - [Overview](#overview)
-  - [Tl;Dr:](#tl-dr)
+  - [Tl;Dr:](#tldr)
   - [Examples](#examples)
 - [Versioning](#versioning)
 - [Compatibility](#compatibility)

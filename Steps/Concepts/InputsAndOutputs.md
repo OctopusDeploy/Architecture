@@ -1,6 +1,6 @@
 # Index
 
-- [Inputs](#input)
+- [Inputs](#inputs)
   - [Problem](#problem)
   - [Solution: Input and Output Schemas](#solution-structured-inputs-and-input-schemas)
 - [Bounded Contexts](#bounded-contexts)

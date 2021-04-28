@@ -35,7 +35,7 @@ Example Step Package structure:
   |-- stepB/...
 ```
 
-Step Packages can contain multiple steps. Each step's code should live in its own seperate folder. By convention, each logitcal step is identified by locating it's `metadata.json` file, and then finding the required sibling code files alongside it within the same folder.
+Step Packages can contain multiple steps. Each step's code should live in its own seperate folder. By convention, each logical step is identified by locating it's `metadata.json` file, and then finding the required sibling code files alongside it within the same folder.
 
 Each Step within a package must declare the following code files: `executor.ts`, `inputs.ts`, `logo.svg`, `metadata.json`, `validation.ts`, and `ui.ts`.
 
