@@ -6,13 +6,13 @@
 
 A Step Package is a `zip` file. It contains all of the things Octopus Server needs to use the Step in a Deployment Process.
 
-Step Packages are named in the format `Octopus.MyStepPackage.1.0.0.zip`, and are located under `%OctopusServerRoot%\bin\steps`
+Step Packages are named in the format `Octopus.MyStepPackage.1.0.0.zip`, and are located under `%OctopusServerRoot%/bin/steps`
 
-Step packages have been designed to allow using different technologies to develop the Step Function they contain. Currently we support writing Step Packages in Node.js, and will soon support writing them in DotNet.
+Step packages have been designed to allow using different technologies to develop the Step Executor they contain. Currently we support writing Step Packages in node, and will soon support writing them in dotnet.
 
-Node.js will be our default choice for developing Step Packages.
+Node will be our default choice for developing Step Packages.
 
-DotNet will only be used for migrating existing Sashimi-based steps into Step Packages.
+Dotnet will only be used for migrating existing Sashimi-based steps into Step Packages.
 
 ![Step Packages](https://github.com/OctopusDeploy/Architecture/blob/master/Steps/assets/building_blocks.png)
 
