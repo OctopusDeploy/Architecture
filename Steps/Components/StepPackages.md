@@ -43,7 +43,7 @@ The [Step Package CLI](https://github.com/OctopusDeploy/Architecture/blob/master
 
 ## Metadata
 
-At the top level, the Step Package has Metadata, captured within `metadata.json`.
+At the top level, each Step within a Step Package has metadata, captured within `metadata.json`.
 
 The metadata has the following contents:
 
@@ -61,9 +61,11 @@ The metadata has the following contents:
 }
 ```
 
+Step metadata influences the behaviours Octopus Server will present when presenting and executing the Step.
+
 ### Properties
 
-**Version:** the version of the Step Package metadata schema and convention structure this package conforms to.
+**Version:** the version of the Step metadata schema and convention structure this step conforms to.
 
 **Type:** Step Packages contain steps, and deployment targets. The type field indicates which type of entity the metadata is describing.
 
@@ -83,7 +85,7 @@ The metadata has the following contents:
 
 ## Step API
 
-> Note: this section details our intentions for the Step API and monorepo / package structure. WIP.
+> The Step API is a WIP, and is likely to change as we find an optimal shape for its repository and packaging
 
 The [Step API](https://github.com/OctopusDeploy/step-api) is a npm package that contains a set of types that Step Packages must implement in order to present a conforming step.
 
