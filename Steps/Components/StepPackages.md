@@ -1,28 +1,47 @@
-# Overview
+# Step Packages
+
+## Overview
 
 **Step Packages** are Octopus Server's extensibility model for creating new Steps - the things that do the work of deployment!
 
-A Step Package is a zip file. It contains all of the things Octopus Server needs to use the Step in a Deployment Process.
+A Step Package is a `zip` file. It contains all of the things Octopus Server needs to use the Step in a Deployment Process.
 
 Step Packages are named in the format `Octopus.MyStepPackage.1.0.0.zip`, and are located under `%OctopusServerRoot%\bin\steps`
 
-A Step Package has the following content structure:
-
-```
-|-- metadata.json
-  |-- src/index.ts
-  |-- src/inputs.ts
-  |-- src/outputs.ts
-  |-- src/ui-definition.ts
-```
-
-Step packages have been designed to allow using different technologies to develop the Step Function they contain. Currently we support writing step packages in Node.js, and will soon support writing them in DotNet.
+Step packages have been designed to allow using different technologies to develop the Step Function they contain. Currently we support writing Step Packages in Node.js, and will soon support writing them in DotNet.
 
 Node.js will be our default choice for developing Step Packages.
 
 DotNet will only be used for migrating existing Sashimi-based steps into Step Packages.
 
 ![Step Packages](https://github.com/OctopusDeploy/Architecture/blob/master/Steps/assets/building_blocks.png)
+
+## Conventions
+
+Step packages use a convention-based structure. This structure, along with the structure of the `metadata.json` file, is encoded within the metadata `version` property.
+
+A Step Package has the following content structure:
+
+```
+  |-- package.json
+  |-- other node tooling configuration files
+  |-- stepA/executor.ts
+  |-- stepA/inputs.ts
+  |-- stepA/logo.svg
+  |-- stepA/metadata.json
+  |-- stepA/validation.ts
+  |-- stepA/ui.ts
+  |-- stepA/step-package.json <== OPTIONAL
+  |-- stepB/...
+```
+
+Step Packages can contain multiple steps. Each step's code should live in its own seperate folder. Each step is identified by locating it's `metadata.json` file, and then finding the required sibling files alongside it within the same folder.
+
+Each Step within a package must declare an `executor.ts`, `inputs.ts`, `logo.svg`, `metadata.json`, `validation.ts`, and `ui.ts`.
+
+Steps are free to then arbitrarily break down their code beyond those files however suits the step developers, but the root files, and their expected `default exports`, must be in place.
+
+The [Step Package CLI](https://github.com/OctopusDeploy/Architecture/blob/master/Steps/Components/StepPackageCLI.md) will look for these files and expect them to exist to build a conformant Step Package
 
 ## Metadata
 
@@ -32,61 +51,104 @@ The metadata has the following contents:
 
 ```jsonc
 {
-  "categories": [],
-  "description": null,
-  "name": null,
+  "type": "step",
   "id": null,
-  "launcher": null,
-  "entryPoint": null,
-  "keywords": null,
+  "name": null,
+  "description" null,
+  "categories": [],
   "canRunOnDeploymentTarget": false,
   "stepBasedVariableNameForAccountIds": [],
-  "whenInAChildStepRunInTheContextOfTheTargetMachine": false,
-  "inputs": {
-    // Input JsonSchema
-  },
-  "outputs": {
-    // Output JsonSchema
-  }
+  "launcher": "node"
 }
 ```
-
-TODO: Update with a better example once we develop some real step packages.
 
 ### Properties
 
-**Launcher:** describes the Calamari LaunchTool that will coordinate the execution of this step package. This can currently be either _Node_ for Node step packages, or _DotNet_ for dotnet based step packages.
+**Type:** step packages contain steps, and deployment targets. The type field indicates which type of entity the metadata is describing.
 
-**EntryPoint:** the file within the package that will be used as the entrypoint, invoked by the Bootstrapper owned by the indicated LaunchTool.
+**Id:** a unique identifier for this step. This must be unique across all steps that may be used by Octopus Server.
 
-**Inputs and Outputs:** JsonSchema objects that represent the structure the step package expects to work with for its inputs and outputs. See the [Index](https://github.com/OctopusDeploy/Architecture/blob/master/Steps/Index.md) for further information on Step Package inputs and outputs.
+**Name:** the name of the step, which will be used in the Octopus Server UI when displaying it to a user.
 
-TODO: Think about what the official doco looks like for this, consider linking to that from the architecture repo.
+**Description:** a description of what the step does, also presented to the user in the Octopus Server UI.
 
-## Step Function
+**Categories:** the categories a step may be presented within. Must be one of **TODO**
 
-This is the part of the step package that does the work. It will consume the inputs configured by the Step UI, and do the work of the Step (i.e, deploy an application, upload a file, etc).
+**CanRunOnDeploymentTarget:** a flag that controls whether this step can run on deployment targets via a role designation, or if it must run on Server or a Worker.
+
+**StepBasedVariableNameForAccountIds:** **TODO:** validate whether this is required or not
+
+**Launcher:** describes the Calamari LaunchTool that will coordinate the execution of this Step Package. This can currently be either _node_ for Node Step Packages, or _dotnet_ for dotnet based Step Packages.
+
+## Step API
+
+> Note: this section details our intentions for the Step API and monorepo / package structure. This is still a WIP.
+
+The [Step API](https://github.com/OctopusDeploy/step-api) is a npm package that contains a set of types that Step Packages must implement in order to present a conforming step.
+
+> npm -i --save-dev @octopus/step-api
+
+These types cover the `executor`, `validation`, and `ui` concerns.
+
+These types form the API surface between Steps and Octopus Server. If your Step implements these types, it will be guaranteed to work with Octopus Server.
+
+## Executor
+
+The Executor is the part of the Step Package that does the work. It will consume the inputs configured by the Step UI, and do the work of the Step (i.e, deploy an application, upload a file, etc).
 
 The step function is a simple function that accepts a defined input type and an OctopusContext instance.
 
-By convention, the step function will be named **main**. The bootstrapper relies on this convention to execute the function.
+```ts
+const BlobStorageStepExecutor: Handler<BlobStorageStepInputs> = async (
+  inputs: ExecutionInputs<BlobStorageStepInputs>,
+  context: OctopusContext
+) => {
+  /*Do the work*/
+};
+```
 
-A trivial Node.js step function may look like:
+By convention, the Executor should `export default` the `Handler` function. The bootstrapper relies on this convention to execute the function.
 
 ```ts
-export function main(inputs: MyStepInput, context: OctopusContext) {
-  console.log("Hello World!");
-  console.log(`Your inputs are: ${inputs}`);
-  console.log(`Your context is: ${JSON.stringify(context)}`);
-  console.log(context.getOctopusVariable("Octopus.WorkerPool.Name"));
+export default BlobStorageStepExecutor;
+```
+
+## UI
+
+The [Step UI](https://github.com/OctopusDeploy/Architecture/blob/master/Steps/StepUI.md) within a Step Package is an object model that Octopus Server will consume to render our Step's UI.
+
+```ts
+export const BlobStorageStepUI: StepUI<BlobStorageStepInputs> = {
+  /*Define UI*/
+};
+```
+
+By convention, the UI should `export default` the `StepUI` object.
+
+```ts
+export default BlobStorageStepUI;
+```
+
+## Inputs
+
+Step Packages define [Structured Inputs](https://github.com/OctopusDeploy/Architecture/blob/master/Steps/Concepts/InputsAndOutputs.md) that the Step's UI, Validator, and Executor will work with.
+
+By convention, the Inputs should `export default` the root input type that we expect the UI, validator, and executor to consume.
+
+```ts
+export default interface BlobStorageStepInputs {
+    ...
+    containerName: string;
+    package: PackageReference;
+    accountName: string;
 }
 ```
 
-## Step UI
+## Validation
 
-See [Step UI](https://github.com/OctopusDeploy/Architecture/blob/master/Steps/StepUI.md)
+TODO
 
-## Execution
+# Step Execution
 
 Step Packages are executed by [Calamari](https://github.com/octopusdeploy/Calamari).
 
@@ -94,14 +156,14 @@ Calamari, upon recieving an `execute-manifest` command with an accompanying Exec
 
 It does this by retrieving the correct LaunchTool specified within the Execution Manifest (which in turn was built from the manifest.json expressed by the Step Package), and running the correct Bootstrapper for the specified LaunchTool [example](https://github.com/OctopusDeploy/Calamari/blob/master/source/Calamari/Commands/ExecuteManifestCommand.cs).
 
-### Node.js
+## Bootstrapper
 
 The Node Step Package Bootstrapper can be found in the [Octopus.StepPackages.Node](https://github.com/OctopusDeploy/Octopus.StepPackages.Node/) repository.
 
 It is responsible for:
 
-- Launching the step package function and providing it with its inputs
-- Providing an `OctopusContext` to the step package function as an additional input that provides ambient context about the deployment
+- Launching the Step Package function and providing it with its inputs
+- Providing an `OctopusContext` to the Step Package function as an additional input that provides ambient context about the deployment
 - Providing common step functions to read and set variables, to send messages back to Octopus Server, etc
 
 Each LaunchTool requires its own Bootstrapper.

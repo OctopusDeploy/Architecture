@@ -57,10 +57,10 @@ Composite tasks (tasks represented as a set of finer-grained functions or tasks 
 
 - [Step Packages](https://github.com/OctopusDeploy/Architecture/blob/master/Steps/Components/StepPackages.md)
 - [Step UI](https://github.com/OctopusDeploy/Architecture/blob/master/Steps/Components/StepUI.md)
+- [Step Package CLI](https://github.com/OctopusDeploy/Architecture/blob/master/Steps/Components/StepPackageCLI.md)
 
 # Concepts
 
 - [Inputs and Outputs](https://github.com/OctopusDeploy/Architecture/blob/master/Steps/Concepts/InputsAndOutputs.md)
 - [Execution](https://github.com/OctopusDeploy/Architecture/blob/master/Steps/Concepts/Execution.md)
-- [Building and Packaging](https://github.com/OctopusDeploy/Architecture/blob/master/Steps/Concepts/BuildingAndPackaging.md)
 - [Versioning](https://github.com/OctopusDeploy/Architecture/blob/master/Steps/Concepts/Versioning.md)

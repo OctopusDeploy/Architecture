@@ -16,9 +16,9 @@ We should build steps that are simple and easy to maintain. As development of ac
 
 ## Solution
 
-We should have a *Step UI Framework* that decouples our Step UIs from the implementation details of our Portal UI (such as the fact that we use React).
+We should have a _Step UI Framework_ that decouples our Step UIs from the implementation details of our Portal UI (such as the fact that we use React).
 
-Step Packages implement the API exposed by the Step UI API package. Octopus Server includes these step packages, and expects the Step UI component to conform to the Step UI API that it references.
+Step Packages implement the API exposed by the Step UI API package. Octopus Server includes these Step Packages, and expects the Step UI component to conform to the Step UI API that it references.
 
 ![Step UI Architecture](https://user-images.githubusercontent.com/1892715/107308234-fcfcc600-6ad3-11eb-9416-1495cd203b80.png)
 
@@ -31,10 +31,11 @@ The Step UI API should contain high level concepts (sections, code editors, radi
 The Step UI could be written in react, as react components.
 
 The key distinction between this option and the selected solution is that
- - React components would give our Step UIs the flexibility to define any type of custom UI component that has not already been defined in the Step UI API
- - A Step UI Framework would strictly constrain the types of components that can be composed together into a Step UI, allowing the Octopus Server portal to cheaply change its design over time without risk of regression or inconsistencies.
 
-We deem the benefit of being able to *cheaply* change the design of the Octopus Server portal (i.e. without changing hundreds of steps) much more valuable than Step UIs being able to define their own custom UI components.
+- React components would give our Step UIs the flexibility to define any type of custom UI component that has not already been defined in the Step UI API
+- A Step UI Framework would strictly constrain the types of components that can be composed together into a Step UI, allowing the Octopus Server portal to cheaply change its design over time without risk of regression or inconsistencies.
+
+We deem the benefit of being able to _cheaply_ change the design of the Octopus Server portal (i.e. without changing hundreds of steps) much more valuable than Step UIs being able to define their own custom UI components.
 
 ### Declarative Document (e.g. JSON)
 
@@ -49,8 +50,9 @@ This option does not seem viable because there are many places within the Step U
 - Setting multiple properties when a field value changes
 
 Given this requirement, we would need either:
--  a DSL embedded within the JSON document to represent the required logic. This option is far too complex and can be easily ruled out compared to the alternatives.
--  a way to reference typescript code that can implement the required logic. At this point, the declarative JSON document has no value over the proposed framework solution.
+
+- a DSL embedded within the JSON document to represent the required logic. This option is far too complex and can be easily ruled out compared to the alternatives.
+- a way to reference typescript code that can implement the required logic. At this point, the declarative JSON document has no value over the proposed framework solution.
 
 ## References
 

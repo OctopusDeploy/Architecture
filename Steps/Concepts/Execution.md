@@ -1,11 +1,12 @@
 # Index
 
 - [Composition and Coordination](#composition-and-coordination)
-
   - [Problem](#problem)
   - [Solution: The Execution Manifest](#solution-the-execution-manifest)
+- [Step Execution](#step-execution)
+  - [Bootstrapper](#bootstrapper)
 
-  # Composition and Coordination
+# Composition and Coordination
 
 In Octopus, a deployment process consists of a set of steps. The code that makes up steps expresses both the execution-time functionality and the UI.
 
@@ -70,3 +71,33 @@ Some nice side-benefits we get by taking this approach:
 [Execution Manifest Diagram](https://whimsical.com/steps-execution-manifest-N74pfHgDoLXNK8ck1UJmb9)
 
 [Further Discussion](https://docs.google.com/document/d/1E5u3BnYlLzXQ4kwbQVb6XY9TmSFegxtAnwBi_A77WAE)
+
+# Step Execution
+
+Steps from Step Packages are executed by [Calamari](https://github.com/octopusdeploy/Calamari).
+
+Calamari, upon recieving an `execute-manifest` command with an accompanying Execution Manifest and variables, will do the work of marshalling the execution of the step.
+
+It does this by retrieving the correct `LaunchTool` specified within the supplied Execution Manifest (which in turn was built from the `manifest.json` expressed by the Step Package), and running the correct `Bootstrapper` for the specified `LaunchTool` [example](https://github.com/OctopusDeploy/Calamari/blob/master/source/Calamari/Commands/ExecuteManifestCommand.cs).
+
+## Bootstrapper
+
+The Step Bootstrapper can be found in the [step-bootstrapper](https://github.com/OctopusDeploy/step-bootstrapper) repository.
+
+It is responsible for:
+
+- Launching the Step Package function and providing it with its inputs
+- Providing an `OctopusContext` to the Step Package function as an additional input that provides ambient context about the deployment
+- Providing common step functions to read and set variables, to send messages back to Octopus Server, etc.
+
+The bootstrapper is coupled to the `LaunchTool` within Calamari - each tool knows the specific bootstrapper it requires to launch a step.
+
+Each platform we plan to support for steps will require a bootstrapper. As of now that is `node`, and `dotnet`.
+
+### Node.Js
+
+The [step-bootstrapper](https://github.com/OctopusDeploy/step-bootstrapper) repository build produces a`node.bootstrapper` package, which is then embedded in server within the `/bin/tools` folder.
+
+### DotNet
+
+TODO
