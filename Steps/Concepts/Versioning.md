@@ -93,10 +93,10 @@ TBA: how we will accomplish this.
 
 # Developer Experience
 
-To ensure a simple experience for Step Package developers, we will produce a _meta-package_ that they can install via `npm i --save-dev @octopus/step-api`. We don't want them to have to worry about what version they should use.
+To ensure a simple experience for Step Package developers, we will produce a _meta-package_ that they can install via `npm i --save-dev @octopus/step-api`. We don't want developers to have to worry about what version of individual Step Package dependencies they should use.
 
-This will include all of the Step Package APIs required to build a Step Package.
+The meta-package will include all of the Step Package APIs required to build a Step Package.
 
-We do not need all of these APIs in Server though, so we will produce separate API packages that server can use: `npm i --save-dev @octopus/step-ui-api`
+We do not need all of these APIs in Server, so we will produce separate API packages that server can use, to minimise the need to change Server if and when they change: `npm i --save-dev @octopus/step-ui-api`
 
-To make it simpler to build both the individual packages and the meta-package, we will use a _monorepo_ for these API codebases (TODO)
+To make it simpler to build both the individual packages and the meta-package, we will use a _monorepo_ for these API codebases **TODO**

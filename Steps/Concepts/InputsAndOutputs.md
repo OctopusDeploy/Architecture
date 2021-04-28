@@ -61,15 +61,17 @@ The `Step UI API` enables Step Package authors to be able to specify an input pr
 
 To the Step UI, the `PackageReference` type looks like so:
 
-```
-export type PackageReference = { readonly __packageReferenceBrand: unique symbol };
+```ts
+export type PackageReference = {
+  readonly __packageReferenceBrand: unique symbol;
+};
 ```
 
 Octopus Server is responsible for managing package references - it is both responsible for providing the UI framework components that capture package reference details, and is responsible for coordinating package-related features, as described in the [Execution](https://github.com/OctopusDeploy/Architecture/blob/master/Steps/Concepts/Execution.md) documentation.
 
 To Octopus Server, the `PackageReference` type looks like so:
 
-```
+```c#
 public class PackageReference
 {
   ...
@@ -91,9 +93,9 @@ Finally, at execution time, our Step Executor is interested in package informati
 
 To the Step Executor, the `PackageReference` type looks like so:
 
-```
+```ts
 export type PackageReference = {
-    extractedToPath: string;
+  extractedToPath: string;
 };
 ```
 
@@ -117,16 +119,18 @@ For the Step Executor, we use a Mapped Type, and a corresponding Input Processor
 
 [Mapped Types](https://www.typescriptlang.org/docs/handbook/2/mapped-types.html) are a typescript capability that allow us to emit a type that is based on another type. In this case, we can create a type mapping that takes the UI representation of a PackageReference, and substitute it for an Execution representation of it:
 
-```
+```ts
 export type RuntimePackageReference = {
-    extractedToPath: string;
+  extractedToPath: string;
 };
 
 export type ExecutionInputs<Properties> = {
-    [Property in keyof Properties]:
-        Properties[Property] extends PackageReference ? RuntimePackageReference :
-            // eslint-disable-next-line @typescript-eslint/ban-types
-            Properties[Property] extends object ? ExecutionInputs<Properties[Property]> : Properties[Property];
+  [Property in keyof Properties]: Properties[Property] extends PackageReference
+    ? RuntimePackageReference
+    : // eslint-disable-next-line @typescript-eslint/ban-types
+    Properties[Property] extends object
+    ? ExecutionInputs<Properties[Property]>
+    : Properties[Property];
 };
 ```
 
