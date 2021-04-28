@@ -1,6 +1,5 @@
 # Index
 
-- [Index](#index)
 - [Overview](#overview)
 - [Key Constraints](#key-constraints)
 - [Conceptual Model](#conceptual-model)
