@@ -18,9 +18,7 @@ Dotnet will only be used for migrating existing Sashimi-based steps into Step Pa
 
 ## Conventions
 
-Step Packages use a convention-based structure. This structure, along with the structure of the `metadata.json` file, is [versioned](https://github.com/OctopusDeploy/Architecture/blob/master/Steps/Concepts/Versioning.md) by the metadata's `version` property.
-
-Example Step Package structure:
+Step Packages use a convention-based structure:
 
 ```
   |-- package.json
@@ -65,9 +63,9 @@ The metadata has the following contents:
 
 ### Properties
 
-**Version:** the version of the step package metadata schema and convention structure this package conforms to.
+**Version:** the version of the Step Package metadata schema and convention structure this package conforms to.
 
-**Type:** step packages contain steps, and deployment targets. The type field indicates which type of entity the metadata is describing.
+**Type:** Step Packages contain steps, and deployment targets. The type field indicates which type of entity the metadata is describing.
 
 **Id:** a unique identifier for this step. This must be unique across all steps that may be used by Octopus Server.
 

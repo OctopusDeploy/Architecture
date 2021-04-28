@@ -17,7 +17,7 @@ Step Packages are written in TypeScript, and run in nodejs.
 
 Ensure you have the [latest LTS version](https://nodejs.org/en/download/) of node installed.
 
-[Step API](https://github.com/OctopusDeploy/step-api) and [Step Package CLI](https://github.com/OctopusDeploy/step-package-cli) npm packages are published to a private feed in Github. To access these feeds from your local environment so that you can `npm install` these dependencies within your step package, you will need to create a Github [Personal Access Token](https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token) and set up an [.npmrc](https://docs.npmjs.com/cli/v7/configuring-npm/npmrc) file like so:
+[Step API](https://github.com/OctopusDeploy/step-api) and [Step Package CLI](https://github.com/OctopusDeploy/step-package-cli) npm packages are published to a private feed in Github. To access these feeds from your local environment so that you can `npm install` these dependencies within your Step Package, you will need to create a Github [Personal Access Token](https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token) and set up an [.npmrc](https://docs.npmjs.com/cli/v7/configuring-npm/npmrc) file like so:
 
 ```
 @octopusdeploy:registry=https://npm.pkg.github.com
