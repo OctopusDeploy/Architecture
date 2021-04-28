@@ -78,7 +78,7 @@ Steps from Step Packages are executed by [Calamari](https://github.com/octopusde
 
 Calamari, upon recieving an `execute-manifest` command with an accompanying Execution Manifest and variables, will do the work of marshalling the execution of the step.
 
-It does this by retrieving the correct `LaunchTool` specified within the supplied Execution Manifest (which in turn was built from the `manifest.json` expressed by the Step Package), and running the correct `Bootstrapper` for the specified `LaunchTool` [example](https://github.com/OctopusDeploy/Calamari/blob/master/source/Calamari/Commands/ExecuteManifestCommand.cs).
+It does this by retrieving the correct `LaunchTool` specified within the supplied Execution Manifest (which in turn was built from the `manifest.json` expressed by the Step Package), and invoking this tool with any instructions supplied on the Execution Manifest [example](https://github.com/OctopusDeploy/Calamari/blob/master/source/Calamari/Commands/ExecuteManifestCommand.cs).
 
 ## Bootstrapper
 
@@ -90,13 +90,13 @@ It is responsible for:
 - Providing an `OctopusContext` to the Step Package function as an additional input that provides ambient context about the deployment
 - Providing common step functions to read and set variables, to send messages back to Octopus Server, etc.
 
-The bootstrapper is coupled to the `LaunchTool` within Calamari - each tool knows the specific bootstrapper it requires to launch a step.
+The bootstrapper is coupled to the `LaunchTool` within Calamari - each tool knows which bootstrapper it requires to launch a step, and how to invoke that bootstrapper correctly.
 
 Each platform we plan to support for steps will require a bootstrapper. As of now that is `node`, and `dotnet`.
 
 ### Node.Js
 
-The [step-bootstrapper](https://github.com/OctopusDeploy/step-bootstrapper) repository build produces a`node.bootstrapper` package, which is then embedded in server within the `/bin/tools` folder.
+The [step-bootstrapper](https://github.com/OctopusDeploy/step-bootstrapper) repository build produces the `node.bootstrapper` package, which is then embedded in server within the `/bin/tools` folder.
 
 ### DotNet
 

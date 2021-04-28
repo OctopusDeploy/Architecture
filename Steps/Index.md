@@ -11,9 +11,24 @@
 
 At the start of 2021, the Steps Team was established within Octopus.
 
-The initial responsibility of the team was to build _Concensus_ and _Clarity_ on how Steps should be developed going forward, to ensure we were confident the model and architecture would support Octopus over the next five years.
+The goals set out for the Steps Team are:
 
-This document presents the key architectural design decisions for our modular step infrastructure.
+- Steps can be delivered out of band of Octopus Server, creating an independent value stream
+- Steps are simple and easy to develop.
+- Steps can be developed in a language other than C#/.NET
+
+Step Packages are Octopus Server's new development model for Steps, and are an integral part in helping the Steps Team achieve the above goals.
+
+Documentation for Step Packages has been broken down into four key areas:
+
+- Key Constraints
+- The Conceptual Model
+- Components
+- Concepts
+
+If you want to learn about Step Packages, and the _why_ behind their design, this is the place for you!
+
+If you want to develop a new Step Package, you should head over to [Getting Started](https://github.com/OctopusDeploy/Architecture/blob/master/Steps/GettingStarted.md).
 
 # Key Constraints
 

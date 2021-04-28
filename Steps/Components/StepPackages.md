@@ -18,7 +18,7 @@ DotNet will only be used for migrating existing Sashimi-based steps into Step Pa
 
 ## Conventions
 
-Step Packages use a convention-based structure. This structure, along with the structure of the `metadata.json` file, is [versioned](https://github.com/OctopusDeploy/Architecture/blob/master/Steps/Concepts/Versioning.md) by the metadata `version` property.
+Step Packages use a convention-based structure. This structure, along with the structure of the `metadata.json` file, is [versioned](https://github.com/OctopusDeploy/Architecture/blob/master/Steps/Concepts/Versioning.md) by the metadata's `version` property.
 
 Example Step Package structure:
 
@@ -85,7 +85,7 @@ The metadata has the following contents:
 
 ## Step API
 
-> Note: this section details our intentions for the Step API and monorepo / package structure. This is still a WIP.
+> Note: this section details our intentions for the Step API and monorepo / package structure. WIP.
 
 The [Step API](https://github.com/OctopusDeploy/step-api) is a npm package that contains a set of types that Step Packages must implement in order to present a conforming step.
 
@@ -99,7 +99,7 @@ These types form the API surface between Steps and Octopus Server. If your Step 
 
 The Executor is the part of the Step Package that does the work. It will consume the inputs configured by the Step UI, and do the work of the Step (i.e, deploy an application, upload a file, etc).
 
-The step function is a simple function that accepts a defined input type and an OctopusContext instance.
+The step function is a function that accepts a defined input type and an OctopusContext instance.
 
 ```ts
 const BlobStorageStepExecutor: Handler<BlobStorageStepInputs> = async (
@@ -110,7 +110,7 @@ const BlobStorageStepExecutor: Handler<BlobStorageStepInputs> = async (
 };
 ```
 
-By convention, the Executor should `export default` the `Handler` function. The bootstrapper relies on this convention to execute the function.
+By convention, the Executor must `export default` the `Handler` function. The bootstrapper relies on this convention to execute the function.
 
 ```ts
 export default BlobStorageStepExecutor;
@@ -118,7 +118,7 @@ export default BlobStorageStepExecutor;
 
 ## UI
 
-The [Step UI](https://github.com/OctopusDeploy/Architecture/blob/master/Steps/StepUI.md) within a Step Package is an object model that Octopus Server will consume to render our Step's UI via the Step UI Framework.
+The [Step UI](https://github.com/OctopusDeploy/Architecture/blob/master/Steps/StepUI.md) within a Step Package is a defined object that Octopus Server will consume to render our Step's UI via the Step UI Framework.
 
 ```ts
 export const BlobStorageStepUI: StepUI<BlobStorageStepInputs> = {
@@ -126,7 +126,7 @@ export const BlobStorageStepUI: StepUI<BlobStorageStepInputs> = {
 };
 ```
 
-By convention, the UI should `export default` the `StepUI` object.
+By convention, the UI must `export default` the `StepUI` object.
 
 ```ts
 export default BlobStorageStepUI;
@@ -136,7 +136,7 @@ export default BlobStorageStepUI;
 
 Step Packages define [Structured Inputs](https://github.com/OctopusDeploy/Architecture/blob/master/Steps/Concepts/InputsAndOutputs.md) that the Step's UI, Validator, and Executor will work with.
 
-By convention, the Inputs should `export default` the root input type that we expect the UI, validator, and executor to consume.
+By convention, the Inputs must `export default` the root input type that we expect the UI, validator, and executor to consume.
 
 ```ts
 export default interface BlobStorageStepInputs {
