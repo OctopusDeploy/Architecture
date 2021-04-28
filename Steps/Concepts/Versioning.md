@@ -60,7 +60,7 @@ Step packages have a version when they are built. When a step is added to a proc
 The version for the Step Package is included in its file name.
 
 **Step Package Manifest Schema Version**
-The component in Server that loads Step Packages cares about the the conventions adhered to within the Step Package, and the structure of the Step Package manifest file. This is an API surface between Server and Step Packages.
+The component in Server that loads Step Packages cares about the the conventions adhered to within the Step Package, and the structure of the Step Package manifest file. This is an API surface between Server and Step Packages, and is also relied upon by the [Step Package CLI](https://github.com/OctopusDeploy/Architecture/blob/master/Steps/Components/StepPackageCLI.md).
 
 The JSON schema for the Step Package manifest will set a version that represents the current set of conventions and structure of the manifest.
 

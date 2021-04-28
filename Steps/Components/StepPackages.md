@@ -18,9 +18,9 @@ DotNet will only be used for migrating existing Sashimi-based steps into Step Pa
 
 ## Conventions
 
-Step packages use a convention-based structure. This structure, along with the structure of the `metadata.json` file, is encoded within the metadata `version` property.
+Step Packages use a convention-based structure. This structure, along with the structure of the `metadata.json` file, is [versioned](https://github.com/OctopusDeploy/Architecture/blob/master/Steps/Concepts/Versioning.md) by the metadata `version` property.
 
-A Step Package has the following content structure:
+Example Step Package structure:
 
 ```
   |-- package.json
@@ -35,13 +35,13 @@ A Step Package has the following content structure:
   |-- stepB/...
 ```
 
-Step Packages can contain multiple steps. Each step's code should live in its own seperate folder. Each step is identified by locating it's `metadata.json` file, and then finding the required sibling files alongside it within the same folder.
+Step Packages can contain multiple steps. Each step's code should live in its own seperate folder. By convention, each logitcal step is identified by locating it's `metadata.json` file, and then finding the required sibling code files alongside it within the same folder.
 
-Each Step within a package must declare an `executor.ts`, `inputs.ts`, `logo.svg`, `metadata.json`, `validation.ts`, and `ui.ts`.
+Each Step within a package must declare the following code files: `executor.ts`, `inputs.ts`, `logo.svg`, `metadata.json`, `validation.ts`, and `ui.ts`.
 
-Steps are free to then arbitrarily break down their code beyond those files however suits the step developers, but the root files, and their expected `default exports`, must be in place.
+Steps are free to then arbitrarily break down their code beyond those files however suits the step's developers, but the root files, and their expected `default exports` (more on this below), must be in place.
 
-The [Step Package CLI](https://github.com/OctopusDeploy/Architecture/blob/master/Steps/Components/StepPackageCLI.md) will look for these files and expect them to exist to build a conformant Step Package
+The [Step Package CLI](https://github.com/OctopusDeploy/Architecture/blob/master/Steps/Components/StepPackageCLI.md) will look for these files and expect them to exist to build a conformant Step Package.
 
 ## Metadata
 
@@ -51,10 +51,11 @@ The metadata has the following contents:
 
 ```jsonc
 {
+  "version": "1.0",
   "type": "step",
   "id": null,
   "name": null,
-  "description" null,
+  "description": null,
   "categories": [],
   "canRunOnDeploymentTarget": false,
   "stepBasedVariableNameForAccountIds": [],
@@ -63,6 +64,8 @@ The metadata has the following contents:
 ```
 
 ### Properties
+
+**Version:** the version of the step package metadata schema and convention structure this package conforms to.
 
 **Type:** step packages contain steps, and deployment targets. The type field indicates which type of entity the metadata is describing.
 
@@ -88,9 +91,9 @@ The [Step API](https://github.com/OctopusDeploy/step-api) is a npm package that 
 
 > npm -i --save-dev @octopus/step-api
 
-These types cover the `executor`, `validation`, and `ui` concerns.
+These types cover the `executor`, `validation`, and `ui` components.
 
-These types form the API surface between Steps and Octopus Server. If your Step implements these types, it will be guaranteed to work with Octopus Server.
+These types form the API surface between Steps and Octopus Server. If your Step implements these types, it will be guaranteed to work with Octopus Server, taking into account [versioning](https://github.com/OctopusDeploy/Architecture/blob/master/Steps/Concepts/Versioning.md).
 
 ## Executor
 
@@ -115,7 +118,7 @@ export default BlobStorageStepExecutor;
 
 ## UI
 
-The [Step UI](https://github.com/OctopusDeploy/Architecture/blob/master/Steps/StepUI.md) within a Step Package is an object model that Octopus Server will consume to render our Step's UI.
+The [Step UI](https://github.com/OctopusDeploy/Architecture/blob/master/Steps/StepUI.md) within a Step Package is an object model that Octopus Server will consume to render our Step's UI via the Step UI Framework.
 
 ```ts
 export const BlobStorageStepUI: StepUI<BlobStorageStepInputs> = {
@@ -147,30 +150,6 @@ export default interface BlobStorageStepInputs {
 ## Validation
 
 TODO
-
-# Step Execution
-
-Step Packages are executed by [Calamari](https://github.com/octopusdeploy/Calamari).
-
-Calamari, upon recieving an `execute-manifest` command with an accompanying Execution Manifest and variables, will do the work of marshalling the execution of Step Functions.
-
-It does this by retrieving the correct LaunchTool specified within the Execution Manifest (which in turn was built from the manifest.json expressed by the Step Package), and running the correct Bootstrapper for the specified LaunchTool [example](https://github.com/OctopusDeploy/Calamari/blob/master/source/Calamari/Commands/ExecuteManifestCommand.cs).
-
-## Bootstrapper
-
-The Node Step Package Bootstrapper can be found in the [Octopus.StepPackages.Node](https://github.com/OctopusDeploy/Octopus.StepPackages.Node/) repository.
-
-It is responsible for:
-
-- Launching the Step Package function and providing it with its inputs
-- Providing an `OctopusContext` to the Step Package function as an additional input that provides ambient context about the deployment
-- Providing common step functions to read and set variables, to send messages back to Octopus Server, etc
-
-Each LaunchTool requires its own Bootstrapper.
-
-### DotNet
-
-The DotNet Step Package Bootstrapper is TBA.
 
 # Step Packages vs Community Step Templates
 
