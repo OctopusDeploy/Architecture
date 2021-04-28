@@ -8,12 +8,12 @@
 
 # Overview
 
-At the start of 2021, the Steps Team was established within Octopus.
+At the start of 2021, the _Steps Team_ was established within Octopus.
 
-The goals set out for the Steps Team are:
+The goals set out for the Steps Team are to ensure:
 
 - Steps can be delivered out of band of Octopus Server, creating an independent value stream
-- Steps are simple and easy to develop.
+- Steps are simple and easy to develop
 - Steps can be developed in a language other than C#/.NET
 
 Step Packages are Octopus Server's new development model for Steps, and are an integral part in helping the Steps Team achieve the above goals.
