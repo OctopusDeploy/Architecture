@@ -40,9 +40,9 @@ We have a step like `step-package-azurestorage.1.0.0` which is compiled against 
 
 A Step Package is a versioned component. It's version is denoted in its file name - `StepPackage.2.0.0.zip` would denote version `2.0.0` of the Step Package. The version will follow [SemVer 2.0.0](https://semver.org/)-like versioning semantics.
 
-Why _semver-like_? Patch and minor increment semantics will be exactly the same, but major increments are slightly different. For Step Packages, a major version increment will be required when any of the Steps it contains change in a way that requires user intervention for it to function correctly - this may be adding new information, or changing existing information.
-
 Over time, we may make changes to the contents of Step Packages, and increase their version number accordingly.
+
+Why _semver-like_? Patch and minor increment semantics will be exactly the same, but major increments are slightly different. For Step Packages, a major version increment will be required when any of the Steps it contains change in a way that requires user intervention for it to function correctly - this may be adding new information, or changing existing information.
 
 **Minor Version Increments:** Within Server, we will automatically retrieve the _latest version_ of the same major version a step was created with when working within any of the steps components - UI, validator, executor, etc. This means for all backwards-compatible feature additions and bug fixes, users will recieve these benefits immediately in their existing processes, without having to update anything.
 

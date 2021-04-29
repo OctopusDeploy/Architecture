@@ -16,7 +16,7 @@ Dotnet will only be used for migrating existing Sashimi-based steps into Step Pa
 
 ![Step Packages](https://github.com/OctopusDeploy/Architecture/blob/master/Steps/assets/building_blocks.png)
 
-For further detail on Step Packages, see the [Step Package documentation]() hosted on the `step-api` repository.
+For further implementation-level detail on Step Packages, see the [Step Package Documentation](https://github.com/OctopusDeploy/step-api).
 
 ## Conventions
 
@@ -24,7 +24,7 @@ Step Packages use a convention-based structure. These conventions are in place f
 
 ## Metadata
 
-At the top level, each Step within a Step Package has metadata, captured within `metadata.json`. This metadata provides a language-agnostic way for Step's to supply Octopus Server with information it needs to use the step - examples include it's name, and whether it can run on a deployment target.
+At the top level, each Step within a Step Package has metadata, captured within `metadata.json`. This metadata provides a language-agnostic way for Steps to supply Octopus Server with information it needs to use the Step - examples include it's name, and whether it can run on a deployment target.
 
 ## Step API
 
