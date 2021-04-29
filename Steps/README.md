@@ -25,10 +25,6 @@ Documentation for Step Packages has been broken down into four key areas:
 - Components
 - Concepts
 
-If you want to learn about Step Packages, and the _why_ behind their design, this is the place for you!
-
-If you want to develop a new Step Package, you should head over to [Getting Started](https://github.com/OctopusDeploy/Architecture/blob/master/Steps/GettingStarted.md).
-
 # Key Constraints
 
 **Independent**
