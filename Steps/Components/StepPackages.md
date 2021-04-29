@@ -21,8 +21,6 @@ Dotnet will only be used for migrating existing Sashimi-based steps into Step Pa
 Step Packages use a convention-based structure:
 
 ```
-  |-- package.json
-  |-- other node tooling configuration files
   |-- stepA/executor.ts
   |-- stepA/inputs.ts
   |-- stepA/logo.svg
@@ -150,6 +148,22 @@ export default interface BlobStorageStepInputs {
 ## Validation
 
 TODO
+
+## Step-Package.json
+
+Occasionally, your Step Package may need to supply additional configuration to the Step Package CLI on how to build it.
+
+The primary need for this arises when you have a transient dependency on a native node module. We would want to exclude the native node module, as it is unlikely to be used during step execution - the usual case is that the native node module will provide some sort of interactive functionality like login.
+
+To exclude the module in question from the Step Package CLI build, we would create a `step-package.json` file with the following contents:
+
+```
+{
+  "esbuild": {
+    "external": ["keytar"]
+  }
+}
+```
 
 # Step Packages vs Community Step Templates
 

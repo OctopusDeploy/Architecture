@@ -41,7 +41,7 @@ We could take a delcarative approach, where `Acquire Package` and `Substitute Va
 
 Another option would be to coordinate this functionality within the step handler code. The Step Executor would be supplied some sort of function it could call to acquire the package and substitute variables:
 
-```
+```ts
 var files = stepPackages.acquirePackage(packageName, packageVersion, feedId);
 stepPackages.substituteVariables(files, patterns, exclusions);
 azure.uploadToBlobStorage(files);
@@ -76,7 +76,7 @@ Some nice side-benefits we get by taking this approach:
 
 Steps from Step Packages are executed by [Calamari](https://github.com/octopusdeploy/Calamari).
 
-Calamari, upon recieving an `execute-manifest` command with an accompanying Execution Manifest and variables, will do the work of marshalling the execution of the step.
+Calamari, upon receiving an `execute-manifest` command with an accompanying Execution Manifest and variables, will do the work of marshalling the execution of the step.
 
 It does this by retrieving the correct `LaunchTool` specified within the supplied Execution Manifest (which in turn was built from the `manifest.json` expressed by the Step Package), and invoking this tool with any instructions supplied on the Execution Manifest [example](https://github.com/OctopusDeploy/Calamari/blob/master/source/Calamari/Commands/ExecuteManifestCommand.cs).
 
