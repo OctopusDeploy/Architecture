@@ -16,70 +16,15 @@ Dotnet will only be used for migrating existing Sashimi-based steps into Step Pa
 
 ![Step Packages](https://github.com/OctopusDeploy/Architecture/blob/master/Steps/assets/building_blocks.png)
 
+For further detail on Step Packages, see the [Step Package documentation]() hosted on the `step-api` repository.
+
 ## Conventions
 
-Step Packages use a convention-based structure:
-
-```
-  |-- stepA/executor.ts
-  |-- stepA/inputs.ts
-  |-- stepA/logo.svg
-  |-- stepA/metadata.json
-  |-- stepA/validation.ts
-  |-- stepA/ui.ts
-  |-- stepA/step-package.json <== OPTIONAL
-  |-- stepB/...
-```
-
-Step Packages can contain multiple steps. Each step's code should live in its own seperate folder. By convention, each logical step is identified by locating it's `metadata.json` file, and then finding the required sibling code files alongside it within the same folder.
-
-Each Step within a package must declare the following code files: `executor.ts`, `inputs.ts`, `logo.svg`, `metadata.json`, `validation.ts`, and `ui.ts`.
-
-Steps are free to then arbitrarily break down their code beyond those files however suits the step's developers, but the root files, and their expected `default exports` (more on this below), must be in place.
-
-The [Step Package CLI](https://github.com/OctopusDeploy/Architecture/blob/master/Steps/Components/StepPackageCLI.md) will look for these files and expect them to exist to build a conformant Step Package.
+Step Packages use a convention-based structure. These conventions are in place for _simplicity_ - they make locating components within Step Packages simple for the [Step Package CLI](https://github.com/OctopusDeploy/Architecture/blob/master/Steps/Components/StepPackageCLI.md), and for Octopus Server.
 
 ## Metadata
 
-At the top level, each Step within a Step Package has metadata, captured within `metadata.json`.
-
-The metadata has the following contents:
-
-```jsonc
-{
-  "version": "1.0",
-  "type": "step",
-  "id": null,
-  "name": null,
-  "description": null,
-  "categories": [],
-  "canRunOnDeploymentTarget": false,
-  "stepBasedVariableNameForAccountIds": [],
-  "launcher": "node"
-}
-```
-
-Step metadata influences the behaviour of Octopus Server when presenting and executing the Step.
-
-### Properties
-
-**Version:** the version of the Step metadata schema and convention structure this step conforms to.
-
-**Type:** Step Packages contain steps, and deployment targets. The type field indicates which type of entity the metadata is describing.
-
-**Id:** a unique identifier for this step. This must be unique across all steps that may be used by Octopus Server.
-
-**Name:** the name of the step, which will be used in the Octopus Server UI when displaying it to a user.
-
-**Description:** a description of what the step does, also presented to the user in the Octopus Server UI.
-
-**Categories:** the categories a step may be presented within. Must be one of **TODO**
-
-**CanRunOnDeploymentTarget:** a flag that controls whether this step can run on deployment targets via a role designation, or if it must run on Server or a Worker.
-
-**StepBasedVariableNameForAccountIds:** **TODO:** validate whether this is required or not
-
-**Launcher:** describes the Calamari LaunchTool that will coordinate the execution of this Step Package. This can currently be either _node_ for Node Step Packages, or _dotnet_ for dotnet based Step Packages.
+At the top level, each Step within a Step Package has metadata, captured within `metadata.json`. This metadata provides a language-agnostic way for Step's to supply Octopus Server with information it needs to use the step - examples include it's name, and whether it can run on a deployment target.
 
 ## Step API
 
@@ -87,83 +32,7 @@ Step metadata influences the behaviour of Octopus Server when presenting and exe
 
 The [Step API](https://github.com/OctopusDeploy/step-api) is a npm package that contains a set of types that Step Packages must implement in order to present a conforming step.
 
-> npm -i --save-dev @octopus/step-api
-
-These types cover the `executor`, `validation`, and `ui` components.
-
 These types form the API surface between Steps and Octopus Server. If your Step implements these types, it will be guaranteed to work with Octopus Server, taking into account [versioning](https://github.com/OctopusDeploy/Architecture/blob/master/Steps/Concepts/Versioning.md).
-
-## Executor
-
-The Executor is the part of the Step Package that does the work. It will consume the inputs configured by the Step UI, and do the work of the Step (i.e, deploy an application, upload a file, etc).
-
-The step function is a function that accepts a defined input type and an OctopusContext instance.
-
-```ts
-const BlobStorageStepExecutor: Handler<BlobStorageStepInputs> = async (
-  inputs: ExecutionInputs<BlobStorageStepInputs>,
-  context: OctopusContext
-) => {
-  /*Do the work*/
-};
-```
-
-By convention, the Executor must `export default` the `Handler` function. The bootstrapper relies on this convention to execute the function.
-
-```ts
-export default BlobStorageStepExecutor;
-```
-
-## UI
-
-The [Step UI](https://github.com/OctopusDeploy/Architecture/blob/master/Steps/StepUI.md) within a Step Package is a defined object that Octopus Server will consume to render our Step's UI via the Step UI Framework.
-
-```ts
-export const BlobStorageStepUI: StepUI<BlobStorageStepInputs> = {
-  /*Define UI*/
-};
-```
-
-By convention, the UI must `export default` the `StepUI` object.
-
-```ts
-export default BlobStorageStepUI;
-```
-
-## Inputs
-
-Step Packages define [Structured Inputs](https://github.com/OctopusDeploy/Architecture/blob/master/Steps/Concepts/InputsAndOutputs.md) that the Step's UI, Validator, and Executor will work with.
-
-By convention, the Inputs must `export default` the root input type that we expect the UI, validator, and executor to consume.
-
-```ts
-export default interface BlobStorageStepInputs {
-    ...
-    containerName: string;
-    package: PackageReference;
-    accountName: string;
-}
-```
-
-## Validation
-
-TODO
-
-## Step-Package.json
-
-Occasionally, your Step Package may need to supply additional configuration to the Step Package CLI on how to build it.
-
-The primary need for this arises when you have a transient dependency on a native node module. We would want to exclude the native node module, as it is unlikely to be used during step execution - the usual case is that the native node module will provide some sort of interactive functionality like login.
-
-To exclude the module in question from the Step Package CLI build, we would create a `step-package.json` file with the following contents:
-
-```
-{
-  "esbuild": {
-    "external": ["keytar"]
-  }
-}
-```
 
 # Step Packages vs Community Step Templates
 
