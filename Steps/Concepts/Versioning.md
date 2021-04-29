@@ -22,7 +22,7 @@ _Compatibility_ refers to the compatibility of various Step Package components w
 - We care about **versions** of Step Packages, and the **compatibility** of their components with Server components.
 - We would like to pursue a monorepo for the API (agree strongly with this) - we are already part way there since we have merged them into a single repo.
 - Compatibility surfaces include: manifest + conventions, UI API, input processing (both server and UI), validation (ditto), execution API.
-- We would like to embed version information for all compatibility surfaces into metadata.json (probably a job for the Step Package CLI
+- We would like to embed version information for all compatibility surfaces into metadata.json (probably a job for the Step Package CLI)
 - This information can be made available to the "other side" of the compatibility surfaces in a variety of ways.
 - We are still debating how to best support versions of Step Packages changing over time
 - We will use shims to support the versions of compatibility surfaces changing over time
