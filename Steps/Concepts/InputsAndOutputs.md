@@ -17,6 +17,8 @@
 
 To do their job, steps need to be given inputs that define all of their relevant contextual information - cloud service details, package details, Octopus environmental details, and more. These inputs are usually supplied by a user via the step's UI.
 
+For further detail on how the below decisions have been implemented, see the [Step Package Documentation]() hosted on the `step-api` repository.
+
 ## Problem
 
 Prior to Step Packages, Octopus provided no explicit schema definition for the inputs a given step needed defined to do its job - it used a Namespace-keyed state bag approach to supplying steps with their inputs.
@@ -31,19 +33,9 @@ The problems with this approach are:
 
 ## Solution: Structured Inputs and Input Schemas
 
-Steps will define structured types for their inputs. These types may reference types defined by the step itself, and types defined by Octopus Server, such as Package References and Sensitive Values.
+Steps will define structured types for their inputs. These types may reference types defined by the step itself, and types defined by Octopus Server, such as Package References and Sensitive Values. So that Octopus Server can interpret and consume these types, a language-agnostic representation of the inputs will be made avilable, using [JSON Schema](https://json-schema.org/).
 
-Here is an [example](https://github.com/OctopusDeploy/step-package-azurestorage/blob/main/steps/blob-storage-upload/src/inputs.ts) input type from the [Azure Storage](https://github.com/OctopusDeploy/step-package-azurestorage) Step Package.
-
-This input definition is used by the Step UI and Step Executor, and solves the problems identified above.
-
-When the Step UI contributes a set of inputs by sending it to the Octopus Server API, it is stored in Octopus Server as a JSON document on the `DeploymentAction` domain entity.
-
-So that Octopus Server can understand this document, a language-agnostic representation of the inputs needs to be made available - because Server does not speak TypeScript. At execution-time, Octopus Server needs to be able to identify and work with Package References, Senstive Variables, and other types that are defined and specific to Octopus Server, that might be referenced within a step's inputs.
-
-We have chosen [JSON Schema](https://json-schema.org/) as the format to provide this language-agnostic representation.
-
-The [Step Package CLI](https://github.com/OctopusDeploy/step-package-cli/blob/main/src/commands/SchemaGenerator.ts) is responsible for generating this schema from the `default export` of a given step's `inputs.ts` input declaration file. You can read more about the convention-based file structure used within Step Packages [here](https://github.com/OctopusDeploy/Architecture/blob/master/Steps/Components/StepPackages.md).
+By using structured types, inputs are defined in a single place, and it is simple to understand what inputs a Step expects.
 
 [Inputs Map](https://whimsical.com/steps-inputs-map-QyP5kQgsTtXSSStdDTAGVZ)
 
@@ -103,42 +95,7 @@ Each of these views is a _Bounded Context_ - it is an interpretation of a given 
 
 ## Solution: Type and Data Mapping
 
-In the above example, `PackageReference` is a type whose canonical representation is owned by Octopus Server.
-
-For the Step UI, we use a Branded Type to represent our package reference.
-
-The Branded Type is a specific typescript type whose contents cannot be set, but the type itself can be declared:
-
-```
-export type PackageReference = { readonly __packageReferenceBrand: unique symbol };
-```
-
-This allows step authors to designate which properties on their structured input model are package references, but to not be exposed or coupled to Server's representation of the canonical package reference type. The [Step UI Framework](https://github.com/OctopusDeploy/Architecture/blob/master/Steps/Components/StepUI.md), which lives in server, instead takes on the responsibility for rendering package selectors, and capturing the necessary information for package activities at execution time.
-
-For the Step Executor, we use a Mapped Type, and a corresponding Input Processor.
-
-[Mapped Types](https://www.typescriptlang.org/docs/handbook/2/mapped-types.html) are a typescript capability that allow us to emit a type that is based on another type. In this case, we can create a type mapping that takes the UI representation of a PackageReference, and substitute it for an Execution representation of it:
-
-```ts
-export type RuntimePackageReference = {
-  extractedToPath: string;
-};
-
-export type ExecutionInputs<Properties> = {
-  [Property in keyof Properties]: Properties[Property] extends PackageReference
-    ? RuntimePackageReference
-    : // eslint-disable-next-line @typescript-eslint/ban-types
-    Properties[Property] extends object
-    ? ExecutionInputs<Properties[Property]>
-    : Properties[Property];
-};
-```
-
-Within the Server Execution Pipeline, Server then maps the information declared by this type to the input document via a set of [Input Processors](https://github.com/OctopusDeploy/OctopusDeploy/blob/master/source/Octopus.Server/Orchestration/ServerTasks/Deploy/StepPackages/StepPackageInputProcessor.cs) - these processors are data mapping functions that use the step input schema to identify any package references (or other types of interest) on it, and map the information it has on-hand about them to the step inputs them being supplied to the Step Executor.
-
-When the step input document arrives at the Step Executor, its `PackageReference` properties have had their execution-time bounded-context-specific information mapped to them.
-
-> The fundamental idea underpinning the above is that the Step UI owns the canonical model for a step's inputs, and sometimes it will compose into that model other types whose canonical model is owned by Server (PackageReference in our example). When a canonical model needs to be used in another bounded context, we will employ a mixture of Type (Branded Types, Mapped Types) and Data Mapping to transform canonical types and their data into bounded-context specific projections.
+The Step UI will always own the canonical model for a step's inputs, and sometimes it will compose into that model other types whose canonical model is owned by Server (PackageReference in our example). When a canonical model needs to be used in another bounded context, we will employ a mixture of Type and Data Mapping to transform canonical types and their data into bounded-context specific projections, rather than attempting to extend the original types to cater for other contexts.
 
 # Bound Variables
 
