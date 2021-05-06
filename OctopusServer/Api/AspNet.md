@@ -108,6 +108,16 @@ For future migrations, implementors may want to consider the risk / complexity i
 
 We don't think additional performance testing for regression is required given our observed results during the Tenants migration, unless there is a particular reason to suspect performance might change as a result of the migration.
 
+### Deciding which tests to write
+
+If - post-migration - **a test won't actually hit the controller**, it is probably testing shared functionality (e.g. middleware, model binding) **so should not be written**.
+
+URL Examples include: `api/Spaces-foo/...`, `skip=foo&take=bar` and `skip=-1&take=-1`
+
+If the shared functionality is not already covered by a test, a Trello card should be raised to get this done.
+
+If a test is verifying **happy-path functionality of an endpoint**, including verifying that **a dependency is being used correctly** then it is useful and **should be written**.
+
 ### Migrating Legacy Responders (Legacy Nancy Request Processing)
 
 Legacy Responders will use one of the Responder registration methods declared on `OctopusNancyModule` (like `Load`, `Create`, or `Modify`), with responders implementing [Responder](https://github.com/OctopusDeploy/OctopusDeploy/blob/master/source/Octopus.Server/Web/Infrastructure/Api/Responder.cs), and may use `PersistenceRule`s to enforce validation or create other side-effects.
@@ -122,7 +132,7 @@ To migrate Custom Responders, the default recommendation is taking the `IRespond
 
 ### Considerations around `ResourceMapper`
 
-TODO
+In Nancy, we use a [`ResourceMapper`](https://github.com/OctopusDeploy/OctopusDeploy/blob/master/source/Octopus.Server/Web/Mapping/ResourceMapper.cs) to map between models and resources. We would eventually like to move away from this, but for the sake of scope and risk management we will keep using it for now, when migrating an endpoint to ASP.NET. 
 
 ### Routing Table Risks
 
@@ -148,6 +158,15 @@ A usage example would be:
 This means that while `GET /workers/foo` would be handled by this endpoint, `GET /workers/all` and `GET /workers/discover` would not be, and would instead fall through to Nancy for handling. As these routes are migrated to ASP.NET, the values `all` and `discover` should be removed from the attribute, and once both route are migrated to ASP.NET the `excludevalues` part should be removed altogether.
 
 Once the migration to ASP.NET is complete, the `ExcludeValuesRouteConstraint` will no longer be needed, and should be deleted.
+
+### ASP.NET Controller naming
+
+Controllers are named and organised by the name of the resource they return, rather than (for example) the parent resource
+
+`GET projects/{id}/channels`
+
+GetChannelsByProjectIdController
+
 
 ### Use of `CancellationToken` in ASP.NET Controllers
 
