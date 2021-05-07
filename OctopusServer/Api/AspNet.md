@@ -67,14 +67,6 @@ These attributes are **mandatory**, as they help our API be a first-class produc
 
 To help developers remember the parts they need to put in place for each Controller, we have established a suite of [Controller Conventions](https://github.com/OctopusDeploy/OctopusDeploy/blob/master/source/Octopus.Tests/Server/Web/Controllers/ControllerConventionsFixture.cs) that inspect all Controllers created and will not pass unless the required structures and attributes are in place.
 
-# Testing
-
-Before migrating an endpoint, we create Integration Tests that exercise the endpoint, using [Assent](https://www.nuget.org/packages/Assent/) to assert on the output. These have been shown to force us to do the (sometimes time-consuming) analysis of endpoints which is necessary for correct migration to ASP.NET. [dotCover](https://www.jetbrains.com/dotcover/) should be used to verify that the test cover all appropriate code paths in the relevant Nancy responder, rules and other related code.
-
-## Scrubbing
-
-Because certain values in an endpoint response (GUIDs, timestamps etc.) can change per invocation we scrub these values automatically before the output is checked. The scruber methods are all in [`ApprovalTestExtensions`](https://github.com/OctopusDeploy/OctopusDeploy/blob/master/source/Octopus.Tests.Common/Support/ApprovalTestExtensions.cs).
-
 ## Header Testing
 
 Our Assent-based testing approach by default includes HTTP headers. While our tests are not specifically concerned with headers, we've chosen to leave these in, scrubbing values as appropriate. We may in the future want to remove all of the headers from our tests, and extend [`HeadersFixture`](https://github.com/OctopusDeploy/OctopusDeploy/blob/master/source/Octopus.IntegrationTests/Server/Web/HeadersFixture.cs) to test all headers.
@@ -110,13 +102,13 @@ We don't think additional performance testing for regression is required given o
 
 ### Deciding which tests to write
 
-If - post-migration - **a test won't actually hit the controller**, it is probably testing shared functionality (e.g. middleware, model binding) **so should not be written**.
+Before migration, write [Integration Tests](https://github.com/OctopusDeploy/OctopusDeploy/blob/master/source/Octopus.IntegrationTests/README.md) to cover any behavior of the endpoint that will be observed when a request reaches the controller action.
 
-URL Examples include: `api/Spaces-foo/...`, `skip=foo&take=bar` and `skip=-1&take=-1`
+There's normally no need to add test cases that exercise shared functionality (e.g. implmented middleware, model binding). If you're writing new shared functionality that's required for your migration, accompany that with a separate test suite that exercises that new shared functionality.
 
-If the shared functionality is not already covered by a test, a Trello card should be raised to get this done.
+### Scrubbing
 
-If a test is verifying **happy-path functionality of an endpoint**, including verifying that **a dependency is being used correctly** then it is useful and **should be written**.
+Because certain values in an endpoint response (GUIDs, timestamps etc.) can change per invocation we scrub these values automatically before the output is checked. The scruber methods are all in [`ApprovalTestExtensions`](https://github.com/OctopusDeploy/OctopusDeploy/blob/master/source/Octopus.Tests.Common/Support/ApprovalTestExtensions.cs).
 
 ### Migrating Legacy Responders (Legacy Nancy Request Processing)
 
@@ -178,14 +170,6 @@ There are two ways to get hold of a `CancellationToken` in an ASP.NET Core contr
 These are [functionally identical](https://odetocode.com/blogs/scott/archive/2018/09/12/cancellationtokens-and-aborted-asp-net-core-requests.aspx), but we decided to mandate use of the `CancellationToken` parameter approach as this leads to easier unit testing of controllers in the future.
 
 A convention test - [`ControllerConventionsFixture.AllAsyncEndpointsMustTakeACancellationToken`](https://github.com/OctopusDeploy/OctopusDeploy/blob/master/source/Octopus.Tests/Server/Web/Controllers/ControllerConventionsFixture.cs#L86) - has been added to enforce this.
-
-### Design of builders
-
-To support the creation of test data for our endpoint Assent tests we have created a suite of **resource builders**. These live in the [`Octopus.IntegrationTests.Helpers.ResourceBuilders`](https://github.com/OctopusDeploy/OctopusDeploy/tree/master/source/Octopus.IntegrationTests/Helpers/ResourceBuilders) namespace.
-
-The resource builders are build on the principle that tests should own their own test data, which is set on a builder using `With...` methods. We have created just the methods we need for our tests, with the expectation that future developers can extend the builders as they see fit. If property value is not specified using a `With...` method then the builder will create a random (wherever possible) value for the property.
-
-All builders should have a `Build()` method which returns the resource, and also stores it in the appropriate context. Builders should be designed so that the `Build()` method can be called on a new builder, and a valid resource will be saved and returned.
 
 ## Data Sources
 
