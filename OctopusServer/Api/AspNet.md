@@ -67,10 +67,6 @@ These attributes are **mandatory**, as they help our API be a first-class produc
 
 To help developers remember the parts they need to put in place for each Controller, we have established a suite of [Controller Conventions](https://github.com/OctopusDeploy/OctopusDeploy/blob/master/source/Octopus.Tests/Server/Web/Controllers/ControllerConventionsFixture.cs) that inspect all Controllers created and will not pass unless the required structures and attributes are in place.
 
-## Header Testing
-
-Our Assent-based testing approach by default includes HTTP headers. While our tests are not specifically concerned with headers, we've chosen to leave these in, scrubbing values as appropriate. We may in the future want to remove all of the headers from our tests, and extend [`HeadersFixture`](https://github.com/OctopusDeploy/OctopusDeploy/blob/master/source/Octopus.IntegrationTests/Server/Web/HeadersFixture.cs) to test all headers.
-
 # Developing
 
 ## Creating New ASP.NET Controllers
@@ -105,10 +101,6 @@ We don't think additional performance testing for regression is required given o
 Before migration, write [Integration Tests](https://github.com/OctopusDeploy/OctopusDeploy/blob/master/source/Octopus.IntegrationTests/README.md) to cover any behavior of the endpoint that will be observed when a request reaches the controller action.
 
 There's normally no need to add test cases that exercise shared functionality (e.g. implmented middleware, model binding). If you're writing new shared functionality that's required for your migration, accompany that with a separate test suite that exercises that new shared functionality.
-
-### Scrubbing
-
-Because certain values in an endpoint response (GUIDs, timestamps etc.) can change per invocation we scrub these values automatically before the output is checked. The scruber methods are all in [`ApprovalTestExtensions`](https://github.com/OctopusDeploy/OctopusDeploy/blob/master/source/Octopus.Tests.Common/Support/ApprovalTestExtensions.cs).
 
 ### Migrating Legacy Responders (Legacy Nancy Request Processing)
 
