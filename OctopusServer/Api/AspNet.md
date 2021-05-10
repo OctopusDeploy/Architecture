@@ -94,6 +94,12 @@ For future migrations, implementors may want to consider the risk / complexity i
 
 We don't think additional performance testing for regression is required given our observed results during the Tenants migration, unless there is a particular reason to suspect performance might change as a result of the migration.
 
+### Deciding which tests to write
+
+Before migration, write [Integration Tests](https://github.com/OctopusDeploy/OctopusDeploy/blob/master/source/Octopus.IntegrationTests/README.md) to cover any behavior of the endpoint that will be observed when a request reaches the controller action.
+
+There's normally no need to add test cases that exercise shared functionality (e.g. implmented middleware, model binding). If you're writing new shared functionality that's required for your migration, accompany that with a separate test suite that exercises that new shared functionality.
+
 ### Migrating Legacy Responders (Legacy Nancy Request Processing)
 
 Legacy Responders will use one of the Responder registration methods declared on `OctopusNancyModule` (like `Load`, `Create`, or `Modify`), with responders implementing [Responder](https://github.com/OctopusDeploy/OctopusDeploy/blob/master/source/Octopus.Server/Web/Infrastructure/Api/Responder.cs), and may use `PersistenceRule`s to enforce validation or create other side-effects.
@@ -105,6 +111,55 @@ To migrate legacy responders, all `PersistenceRule` code should be re-implemente
 Custom Responders will use the `CustomAction` registration method on `OctopusNancyModule` and implement `Custom{Action/Create/Modify}Responder`. Rules utilized will implement `IResponderStep`, with a simple 'veto' pattern used for rule enforcement directly from the responder.
 
 To migrate Custom Responders, the default recommendation is taking the `IResponderStep` rules as dependencies to the Controller, and exercising them within the new Controller created.
+
+### Considerations around `ResourceMapper`
+
+In Nancy, we use a [`ResourceMapper`](https://github.com/OctopusDeploy/OctopusDeploy/blob/master/source/Octopus.Server/Web/Mapping/ResourceMapper.cs) to map between models and resources. We would eventually like to move away from this, but for the sake of scope and risk management we will keep using it for now, when migrating an endpoint to ASP.NET. 
+
+### Routing Table Risks
+
+Nancy and ASP.NET have separate routing tables, and incoming requests are handed to ASP.NET first, and then to Nancy if ASP.NET decides it did not have a route that could handle the request.
+
+This presents the opportunity for a bug, in the following scenario.
+
+```
+GET /resource/{id} // migrated to ASP.NET
+GET /resource/all // still in Nancy
+```
+
+A request to `GET /resource/all` would be mistakenly handled by ASP.NET, as this matches the pattern `GET /resource/all`.
+
+To workaround this issue, we created a custom ASP.NET [route constraint](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/routing?view=aspnetcore-5.0#route-constraint-reference), named [`ExcludeValuesRouteConstraint`](https://github.com/OctopusDeploy/OctopusDeploy/blob/master/source/Octopus.Server/Web/RouteConstraints/ExcludeValuesRouteConstraint.cs). This is used in the `HttpGet` (for example) attribute for an ASP.NET endpoint to let us specify values to "exclude" from handling by that ASP.NET endpoint.
+
+A usage example would be:
+
+```
+[HttpGet("workers/{id:excludevalues(all, discover)}")]
+```
+
+This means that while `GET /workers/foo` would be handled by this endpoint, `GET /workers/all` and `GET /workers/discover` would not be, and would instead fall through to Nancy for handling. As these routes are migrated to ASP.NET, the values `all` and `discover` should be removed from the attribute, and once both route are migrated to ASP.NET the `excludevalues` part should be removed altogether.
+
+Once the migration to ASP.NET is complete, the `ExcludeValuesRouteConstraint` will no longer be needed, and should be deleted.
+
+### ASP.NET Controller naming
+
+Controllers are named and organised by the name of the resource they return, rather than (for example) the parent resource
+
+`GET projects/{id}/channels`
+
+GetChannelsByProjectIdController
+
+
+### Use of `CancellationToken` in ASP.NET Controllers
+
+There are two ways to get hold of a `CancellationToken` in an ASP.NET Core controller.
+
+* Via the static `HttpContext.RequestAborted` property
+* By adding a `CancellationToken` argument to your async public action method(s).
+
+These are [functionally identical](https://odetocode.com/blogs/scott/archive/2018/09/12/cancellationtokens-and-aborted-asp-net-core-requests.aspx), but we decided to mandate use of the `CancellationToken` parameter approach as this leads to easier unit testing of controllers in the future.
+
+A convention test - [`ControllerConventionsFixture.AllAsyncEndpointsMustTakeACancellationToken`](https://github.com/OctopusDeploy/OctopusDeploy/blob/master/source/Octopus.Tests/Server/Web/Controllers/ControllerConventionsFixture.cs#L86) - has been added to enforce this.
 
 ## Data Sources
 
