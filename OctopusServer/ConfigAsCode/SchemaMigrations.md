@@ -23,28 +23,31 @@ Added To VCS  │ Added To VCS  │   From DB (& VCS)
 ```
 A few days later when they open their project in the portal, Octopus will see that their schema needs to upgrade to V3 and in doing so try and first migrate through V2. In doing so it will 💥 since the Channels entity no longer exists. 
 
-Although this scenario is a little artificial (since we would expect that V2 step at compile time to complain about the unknown entity type), it does provide a very clear demonstration of how the migration is dependant on the state of the database schema. A less obvious scenario invio
+Although this scenario is a little artificial (since we would expect that V2 step at compile time to complain about the unknown entity type), it does provide a very clear demonstration of how the migration is dependant on the state of the database schema. A less obvious scenario might involve renaming an entity property that plays a role in an intermediate step.
 
-##
+```
+   2021.1      │       2021.4      │      2022.1
+     V1  ──────┼─────►  V2   ──────┼──────►  V3
+               │                   │
+added entity   │    if "Disabled"  │    "Disabled" prop
+with property  │ then set new prop │      renamed
+date Disabled  │   IsDisabled=true │  date DisabledDate
+               
+```
 
-Scenarioes
-* Deleted Entities
-* Removed Properties
-* Updating Property Name
+## Approaches
 
-Options:
-* Strongly Typed
-* Serializtion Types
+### Deserialization
+Two different approaches were considered for handling the ocl deserialization, with an aim to strike a balance between reducing 
 
-Approach
-* Serialization Type
-* Chained Version Steps
+#### Strongly Typed Models
+One way to ensure that each migration step operates can perform it's operation with the correct assumptions of the previous state that it's operating on, is to create and store the entire object model for each version. In this scenario there would being a ChannelV1, ChannelV2, ChannelV3, etc created for each stage where the schema is changed. Each migration step uses the previous model schema to load the current state, and leaves the model in a state the represents it's versioned model.
 
-Takes place underneath transaction so it remains transparent to the consumer
-
-Convert to CVS will be treated as converting Version 0 To Version N.
-
-Chain 
+#### OCL Objects
+When loading content from the filesystem, the data is deserialized into OCL Objects and schema changes are applied to these objects before commiting. 
+ 
+### Execution Chain
+Two execution chains are proposed 
 V1 -> V2 -> V3
 vs
 V1->Vn, V2->Vn, V3->Vn
