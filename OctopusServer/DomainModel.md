@@ -13,7 +13,7 @@ To make Octopus's core functionality and model easier to reason about, Octopus S
 
 - all new endpoints created in Octopus Server will be ASP.NET Core controllers, and we will be actively migrating away from our legacy Nancy responder infrastructure. Nancy is no longer actively maintained, so this is a desirable direction for Octopus Server to take.
 
-## Principals
+## Principles
 
 - We want our core model to be simpler to reason about
 - We want our core model to be safer to interact with
@@ -34,7 +34,7 @@ Domain event infrastructure helps us create rich, decoupled domain models that c
 
 ## Overview
 
-[This PR](https://github.com/OctopusDeploy/OctopusDeploy/pull/6834) works through an end-to-end example of refactoring the `Tenants` `PUT` and `POST` endpoints to use new components that align with the above principals.
+[This PR](https://github.com/OctopusDeploy/OctopusDeploy/pull/6834) works through an end-to-end example of refactoring the `Tenants` `PUT` and `POST` endpoints to use new components that align with the above principles.
 
 Our objective is to have code that is more easily verified as being correct, and to reduce the number of invariants developers need to consider for any code path between our API surface and our database.
 
