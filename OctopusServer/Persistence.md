@@ -78,6 +78,16 @@ If you take a dependency on the appropriate `IDocumentStore<TDocument>` and simp
 
 If you really need control over a transactional boundary, please take a constructor dependency on an `IUnitOfWorkExecutor` and use that.
 
+## Is the unit of work atomic?
+
+Principle: "Code to the abstraction, and work hard to make the abstraction hold true."
+
+Without descending into distributed transaction silliness, the unit of work cannot be completely atomic. That said, we do our best to make it as robust as possible, and as easy
+as possible to recover from failure. To that end, we commit all the Git transactions first as they're the easiest to revert via `git revert`, and then commit the database transaction
+if and only if all the Git transactions have completed successfully.
+
+As far as day-to-day usage of the unit of work is concerned, it's safe to expect it to behave atomically except in extenuating circumstances.
+
 # History
 
 We have had numerous iterations of persistence, and you will still find older usages throughout the codebase.
