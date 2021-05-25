@@ -30,7 +30,7 @@ via aspects (filters, middleware etc.) and should not need to be addressed direc
 
 The `IDocumentStore<TDocument>` interfaces exposes a `.Query()` method which returns an `IQueryable<TDocument>`. The expected approach to writing a custom query is to use a LINQ expression against that `IQueryable<T>`. We have implementations of `IQueryable<T>` for both SQL and Git.
 
-Where a custom query is reused in multiple locations, we use an extension method class on the `IDocumentStore<TDocument>` interface. For example, we have a [reusable mechanism for loading a `Project` via its slug](https://github.com/OctopusDeploy/OctopusDeploy/blob/master/source/Octopus.Core/Features/Projects/ProjectDocumentStoreExtensionMethods.cs).
+Where a custom query is reused in multiple locations, we use an extension method class on the `IDocumentStore<TDocument>` interface. For example, we have a [reusable mechanism for loading a `Project` via its slug](https://github.com/OctopusDeploy/OctopusDeploy/blob/fb83083950a4bcac1d76ebcb6fc0b9250ba262b3/source/Octopus.Core/Features/Projects/ProjectDocumentStoreExtensionMethods.cs#L16).
 
 Where it is absolutely necessary to drop directly into SQL, there is a `.QuerySql()` method which provides a Nevermore `IQueryBuilder<T>`, which allows for raw SQL expressions to be constructed. This will obviously not work for Git, and may bypass several layers of decoration. **We strongly discourage use of this feature as much as is practical.**
 
