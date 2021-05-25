@@ -64,6 +64,10 @@ It is not necessary to resolve a document store directly from a container, begin
 
 Take a constructor-level dependency on an `IDocumentStore<Foo>`.
 
+At present, if you modify something, you'll still need to call `await fooDocumentStore.UpdateAsync(foo, cancellationToken);` to tell the store that you've changed something. This requirement will go away (along with the `.Update(...)` and `.UpdateAsync(...)` methods). The safe assumption for now is that if those methods exist you should call them, and when they cease to exist everything will just continue to work.
+
+**IMPORTANT:** Please don't modify an entity if you don't want your changes persisted. At some point, persistence of any mutations will happen automatically, so even if you're not currently calling `.UpdateAsync(...)` the behaviour will soon change so that your changes will be picked up anyway.
+
 ## I need both a Foo and a Bar. How do I do that?
 
 Take a constructor-level dependency on an `IDocumentStore<Foo>` and an `IDocumentStore<Bar>`.
