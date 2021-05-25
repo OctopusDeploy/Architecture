@@ -54,7 +54,7 @@ using (projectScope.Push(spaceId, projectPath))
     runbook.DoTheThing();
 }
 ```
-You can compose a `ProjectPath` from either just a `ProjectId` or a `ProjectId` and `GitBranch`.
+You can compose a `ProjectPath` from either just a `ProjectId` (if a database-only project) or a `ProjectId` and `GitBranch` (if version-controlled).
 
 It is not necessary to resolve a document store directly from a container, begin a child `ILifetimeScope` or do any other trickery to change the project scope - just use the existing `IDocumentStore<TDocument>` from within the `using (...)` block and it will use the correct project scope.
 
