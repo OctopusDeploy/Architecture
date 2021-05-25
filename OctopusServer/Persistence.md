@@ -45,6 +45,8 @@ You _are_ likely to encounter explicit knowledge of project scoping in the follo
 1. During background task execution; and
 1. In message bus event handlers (which implement `IEventuallyHandle<TEvent>`).
 
+Unless you're in one of these situations, we strongly recommend not changing the project scope as there are probably better ways to achieve what you're trying to achieve.
+
 In these situations, you'll need to make it clear which space and project path you mean when you ask, for instance, for an `IDocumentStore<Runbook>` to fetch a runbook. To do that, take a dependency on an `IProjectScope` and structure your code like this:
 
 ```
