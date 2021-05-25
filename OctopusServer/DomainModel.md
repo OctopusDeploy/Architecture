@@ -5,7 +5,7 @@
 
 # Executive Summary
 
-To make Octopus's core functionality and model easier to reason about, Octopus Server will leverage a combination of C#8 Nullable Reference Types, Tiny Types, Fluent Validation, and Domain Driven Design. These tools will allow us to express correctness, centralise and make explicit invariants, make testing critical functionality simpler, and ultimately reduce the number of bugs that arise from not being able to easily reason about core processes and application state.
+To make Octopus' core functionality and model easier to reason about, Octopus Server will leverage a combination of C#8 Nullable Reference Types, Tiny Types, Fluent Validation, and Domain Driven Design. These tools will allow us to express correctness, centralise and make explicit invariants, make testing critical functionality simpler, and ultimately reduce the number of bugs that arise from not being able to easily reason about core processes and application state.
 
 # Detail
 
@@ -17,7 +17,7 @@ To make Octopus's core functionality and model easier to reason about, Octopus S
 
 - We want our core model to be simpler to reason about
 - We want our core model to be safer to interact with
-- We want less bugs that were caused by misunderstanding of what state the core model might be in
+- We want fewer bugs that were caused by misunderstanding of what state the core model might be in
 - We want less magic in how operations flow from the API boundary to the database and back
 - We want it to take less time for new developers to be able to discover and understand server code paths
 

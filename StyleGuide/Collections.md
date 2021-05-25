@@ -3,10 +3,10 @@
 See also  [performance of collections](https://www.c-sharpcorner.com/UploadFile/0f68f2/comparative-analysis-of-list-hashset-and-sortedset/)
 
 In general:
-- Default to using the collection interfaces, they support a wider variety of concrete collection types. Exception `ReferenceCollection`.
-- When handling a set of IDs, use `ReferenceCollection` and `ReferenceCollection<>`
-- When accepting a collection, use the most generic collection interface that still captures the intent
-- When returning a collection, use the most specific collection interface that matches the contract you wish to provide
+- Default to using the collection interfaces. They support a wider variety of concrete collection types. Exception `ReferenceCollection`.
+- When handling a set of IDs, use `ReferenceCollection` and `ReferenceCollection<>`.
+- When accepting a collection, use the most generic collection interface that still captures the intent.
+- When returning a collection, use the most specific collection interface that matches the contract you wish to provide.
 - Default to the `ReadOnly` collection types. They indicate that the method will not modify the collection during it's execution or after it returns.
 
 ## Commonly Used
@@ -27,15 +27,15 @@ Lookups in `HashSets<>` are typically `O(1)`, so using `ReferenceCollection` wil
 
 ## ToArray/ToList
 
-For the most part collection sizes in octopus are in the order of `100,000` or less. The performance impact of creating collections of that size is negligible compared to data access. We prefer the known behaviour that comes from a copied collection over the risk that a collection might be modified elsewhere.
+For the most part collection sizes in octopus are in the order of `100,000` or fewer. The performance impact of creating collections of that size is negligible compared to data access. We prefer the known behaviour that comes from a copied collection over the risk that a collection might be modified elsewhere.
 
 Internally `ToArray` and `ToList` use `ICollection.Count` to optimise the copy.
 
-The performance of `ToArray` and `ToList` are similar at our scale. `ToList` does not have to do a double copy of `ICollection.Count` is not available, however `Array`s have faster indexing times.
+The performance of `ToArray` and `ToList` are similar at our scale. `ToList` does not have to do a double copy if `ICollection.Count` is not available, however `Array`s have faster indexing times.
 
 ## Any and None
 
-Internally `Any()` (and by extensions `None`) have `O(1)` performance if the underlying collection is `ICollection` even if the variable type is `IEnumerable`
+Internally `Any()` (and by extension `None`) have `O(1)` performance if the underlying collection is `ICollection` even if the variable type is `IEnumerable`
 
 ## IEnumerable
 
