@@ -2,7 +2,7 @@
 
 One of the selling points of Octopus is its neutrality. We aim to support all the most popular cloud native platforms, while retaining a consistent user experience and common best practices.
 
-To achieve this, all cloud steps in Octopus should aim to implement a consistent set of base functionality. This document provides guidelines for pitching steps that are consistent, implement the lessons we have learned over the years, and express our opinions on best practice deployments.
+To achieve this, all steps (which will typically be cloud steps) in Octopus should aim to implement a consistent set of base functionality. This document provides guidelines for pitching steps that are consistent, implement the lessons we have learned over the years, and express our opinions on best practice deployments.
 
 # Pitch guidelines
 
