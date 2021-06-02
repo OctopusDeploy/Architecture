@@ -17,9 +17,9 @@ To take advantage of this, pitches should be broken down into milestones. Each m
 
 ## Be opinionated
 
-We are leaders in the deployment space. We have years of experience and our tools have performed millions of deployments, and customers look to us to provide clear opinions on what best practice deployments look like. These values have been distilled into [https://octopus.com/blog/ten-pillars-of-pragmatic-deployments](https://octopus.com/blog/ten-pillars-of-pragmatic-deployments).
+We are leaders in the deployment space. We have years of experience and our tools have performed millions of deployments, and customers look to us to provide clear opinions on what best practice deployments look like. These values have been distilled into [The ten pillars of pragmatic deployments](https://octopus.com/blog/ten-pillars-of-pragmatic-deployments).
 
-The steps we deliver must have a clear vision for how they enable teams to deliver best practice deployments. Often this means combining, hiding, not supporting, or hard coding some features in the platforms we deploy to.
+The steps we deliver must have a clear vision for how they enable teams to deliver best practice deployments. Often this involves combining, hiding, not supporting, or hard coding some features in the platforms we deploy to.
 
 Where there is no clear decision on an opinion, refer to **Ship incrementally** for guidance.
 
@@ -58,7 +58,7 @@ A third layer service has a many to one relationship with the cloud provider, an
 
 ## Credentialless authentication
 
-All targets should support the ability to inherit credentials from the worker a deployment is executed from.
+All targets should support the ability to inherit credentials from the worker a deployment is executed from, and avoid the need for long lived credentials to be maintained by Octopus.
 
 ## Declarative over imperative
 
@@ -66,13 +66,15 @@ All cloud providers and modern orchestration platforms offer a template language
 
 Steps should prioritize the creation of resources through declarative templates rather than imperative CLI or SDK commands.
 
-## Define a path
+## Graduated path from opinionated to raw scripts
 
 Highly opinionated steps will fail some of our customers all of the time. To support those with advanced use cases, steps must provide a graduated path from opinionated (and often monolithic) steps, to granular and composable steps, to raw templates or scripts.
 
 This path allows us to express our opinions regarding best practice deployments with opinionated steps that will often merge many underlying platforms and resources. The granular steps provide the ability to compose deployments in unique ways, while still retaining the benefits of a UI driven approach. Raw templates or scripts provide the ultimate level of customization, free of the opinions baked into the specialized steps.
 
 # Pitch documents
+
+The pitch process generates a number of documents, each with it's own use case and audience. These are detailed below.
 
 ## RFC blog post
 
