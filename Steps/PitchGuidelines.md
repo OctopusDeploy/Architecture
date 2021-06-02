@@ -72,7 +72,7 @@ Second layer services are typically smaller targets i.e. there are likely to be 
 
 Third layer services may also have a way to partition deployments they hold. Examples include namespaces in Kubernetes clusters.
 
-We have found that exposing second layer service names and third layer nested partitioning values as default values on a target provides the most flexibility. Allowing taget values to be overridden on the steps gives customers the flexibility to lift all information about the deployment destination from the steps, while also performing many smaller deployments without an explosion of targets.
+We have found that exposing second layer service names and third layer nested partitioning values as default values on a target provides the most flexibility. Allowing target values to be overridden on the steps gives customers the flexibility to lift all information about the deployment destination from the steps, or to perform many smaller deployments without an explosion of targets.
 
 ## Credentialless authentication
 
@@ -90,7 +90,7 @@ The pitch process generates a number of documents, each with it's own use case a
 
 ## RFC blog post
 
-The first document is an Request For Comment (RFC) style blog post. The purpose of this post is to:
+The first document is a Request For Comment (RFC) style blog post. The purpose of this post is to:
 
 * Inform customers, partners, and other internal Octopus departments of the proposed new functionality.
 * Highlight the details of the new functionality, calling out how it expresses our vision of best practice deployments.
@@ -107,7 +107,7 @@ This document is structured with the following sections:
 * Executive Summary - two or three paragraphs outlining how this pitch aligns to the company's strategic goals, why this particular functionality is important, and a high level overview of the proposed solution.
 * Problem - A description of the problems faced by customers that this pitch will solve.
 * Constraints - Each pitch relates to a milestone, and milestones have been constrained to deliver the smallest unit of useful functionality. This section lists the constraints that exclude work to be done.
-* Proposed Scope - This is the opposite of the constraints, and provides an overview the features to be delivered. This section should link to the blog post and the UI table document.
+* Proposed Scope - This is the opposite of the constraints, and provides an overview of the features to be delivered. This section should link to the blog post and the UI table document.
 * Future Considerations - Most pitches expect to be followed up with another related pitch with the next milestone of work. This section provides a very high level list of features that might be considered in the next milestone.
 
 ## UI table
