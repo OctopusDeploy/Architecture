@@ -112,7 +112,7 @@ This document is structured with the following sections:
 
 ## UI table
 
-This document details the proposed UI structure of the new steps. This is useful when collaborating with the design team to find any unique UX patterns that may need to incorporated into Octopus.
+This document details the proposed UI structure of the new steps. This is useful when collaborating with the design team to find any unique UX patterns that may need to incorporated into Octopus:
 
 ![](assets/uimockup.png)
 
