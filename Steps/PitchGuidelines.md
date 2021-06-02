@@ -28,7 +28,7 @@ Where there is no clear decision on an opinion, refer to **Ship incrementally** 
 
 ## Graduated path from opinionated to raw scripts
 
-Highly opinionated steps will fail some of our customers all of the time. To support those with advanced use cases, steps must provide a graduated path from opinionated (and often monolithic) steps, to granular and composable steps, to raw templates or scripts.
+Highly opinionated steps will fail some of our customers all of the time. To support those with advanced use cases, steps should provide a graduated path from opinionated (and often monolithic) steps, to granular and composable steps, to raw templates or scripts.
 
 This path allows us to express our opinions regarding best practice deployments with opinionated steps that will often merge many underlying platforms and resources. The granular steps provide the ability to compose deployments in unique ways, while still retaining the benefits of a UI driven approach. Raw templates or scripts provide the ultimate level of customization, free of the opinions baked into the specialized steps.
 
@@ -40,7 +40,8 @@ Targets must be used to define where a deployment takes place. Targets should ca
 * The default worker a deployment will be performed on.
 * Cloud specific details like regions, projects, and resource groups.
 * The name of the service being deployed to for a third layer service.
-* The default name of the deployable artifact for a second later service. This name must be able to be overridden on the steps.
+* The default name of any deeper partitioning on a third layer service. This name must be able to be overridden on the steps.
+* The default name of the deployable artifact for a second layer service. This name must be able to be overridden on the steps.
 
 ### Second layer service
 
@@ -64,6 +65,14 @@ A third layer service has a many to one relationship with the cloud provider, an
 * AWS API Gateway
 
 ![](assets/thirdlayerservice.png)
+
+### Overriding target defaults
+
+Second layer services are typically smaller targets i.e. there are likely to be many small deployments. Examples include individual lambda functions or single cloud run containers.
+
+Third layer services may also have a way to partition deployments they hold. Examples include namespaces in Kubernetes clusters.
+
+We have found that exposing second layer service names and third layer nested partitioning values as default values on a target and allowing them to be overridden on the steps gives customers the flexibility to lift all information about the deployment destination from the steps, while also performing many smaller deployments without an explosion of targets.
 
 ## Credentialless authentication
 
