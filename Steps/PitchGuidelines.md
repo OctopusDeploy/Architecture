@@ -33,6 +33,29 @@ Targets must be used to define where a deployment takes place. Targets should ca
 * The name of the service being deployed to for a third layer service.
 * The default name of the deployable artifact for a second later service. This name must be able to be overridden on the steps.
 
+### Second layer service
+
+A second layer service has only one instance in a cloud provider, and a one to many relationship with the deployments it holds. Examples include:
+
+* AWS Lambdas
+* AWS App Runner
+* GCP App Engine
+* GCP Cloud Run
+
+![](assets/secondlayerservice.png)
+
+### Third layer service
+
+A third layer service has a many to one relationship with the cloud provider, and a one to many relationship with the deployments it holds. Examples include:
+
+* Azure web apps
+* Kubernetes clusters
+* ECS clusters
+* Service Fabric
+* AWS API Gateway
+
+![](assets/thirdlayerservice.png)
+
 ## Credentialless authentication
 
 All targets should support the ability to inherit credentials from the worker a deployment is executed from.
