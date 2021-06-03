@@ -102,6 +102,19 @@ In other cases two loosely coupled resources will combine to define a deployment
 
 Where two loosely coupled resource must exist side by side for a deployment to operate in a predictable manner, consider an opinionated step that deploys both. This will help customers fall into the pit of success.
 
+## Tags and labels
+
+A failed deployment will often leave a number of old resources laying around. Eventually these need to be cleaned up. To identify old resources, anything that can be tagged or labeled should include the following values by default:
+
+* `Octopus.Project.Id`: "projects-1"
+* `Octopus.Action.Id`: "8427fd24-17c8-4c7d-b32f-d2b8d51f2121"
+* `Octopus.Deployment.Id`: ""
+* `Octopus.RunbookRun.Id`: "runbookruns-86"
+* `Octopus.Step.Id`: "b6f8fd75-3acf-4186-a573-285a1aa11a9a"
+* `Octopus.Environment.Id`: "environments-4"
+* `Octopus.Deployment.Tenant.Id`: "untenanted"
+
+
 ## Documentation
 
 All new features must be documented. Ensure this is a required feature of any pitch being developed.
@@ -110,7 +123,6 @@ All new features must be documented. Ensure this is a required feature of any pi
 
 New steps and targets will need to be reflected in other projects:
 
-* Terraform provider - this will need to be updated with new targets. Ping #team-integrations when the target is available in master.
 * Octopus client - this may need to be updated with new target types.
 * Dynamic target scripts - the [docs](https://octopus.com/docs/infrastructure/deployment-targets/dynamic-infrastructure) will need to be updated with any new scripts.
 
@@ -156,6 +168,7 @@ There are a number of activities to perform once a new feature is made available
 * [Customer Solutions Product Feedback](https://trello.com/b/vZEB7drD/customer-solutions-product-feedback) - Add a note to any scenario that is now satisfied.
 * [Issues Repo](https://github.com/OctopusDeploy/Issues/issues) - Close any issues that have been solved.
 * [Feedback Repo](https://github.com/OctopusDeploy/StepsFeedback/issues) - Add a note to any feedback issue created for the milestone, and close the issue.
+* [Terraform provider](https://github.com/OctopusDeployLabs/terraform-provider-octopusdeploy) - this will need to be updated with new targets. Ping #team-integrations when the target is available in master.
 
 # References
 
