@@ -98,86 +98,6 @@ However, when configuring the UI, the value can still be undefined. To see why t
 
 # Solution
 
-## Rejected solutions
-
-### Mapped type: `Required`
-
-We could wrap types in a `Required` mapped type
-
-```ts
-type MyInputs = {
-    foo: Required<number>;
-}
-```
-
-Pros
-- It makes it even more explicit that a property is required.
-
-Cons
-- This is highly ambiguous. If you omit this `Required` mapped type and just left it as `number`, what would this mean? I would guess this means it is optional because it is not required. How does this differ from `number | undefined` or `foo?: number`?
-- It doesn't really solve the problem of distinguishing between the two flavours of optional types (optional at execution time, or optional at UI configuration time).
-
-### Mapped type: `Optional`
-
-We could wrap types in an `Optional` mapped type
-
-```ts
-type MyInputs = {
-    foo: Optional<number>;
-}
-```
-
-Pros
-- Compared to `Required` this makes the distinction between required and optional types clearer: If it is lacking the `Optional` attribute, then it is a required type
-
-Cons
-- How do you distinguish between the two flavours of optional types (optional at executoin time, or optional at UI configuration time)? One idea might be using two different mapped types, like `OptionalDuringExecution<T>` and `OptionalDuringConfiguration<T>`.
-- There still appears to be multiple ways of doing things. e.g. what is the difference between `Optional<number>` and `number | undefined`? Perhaps `number | undefined` should represent "optional during execution" while `Optional<number>` should only represent "optional during UI configuration". This still feels a bit confusing.
-- What does it mean to do things like this: `Optional<number | undefined>`? Is the `| undefined` part redundant, or does it mean something?
-
-### Separate execution and configuration inputs
-
-Instead of having a single source of truth for our inputs that we map to our different bounded contexts, we could require step authors to provide different represenations of their inputs for different bounded contexts. For example
-
-```ts
-type UIInputs = {
-    foo?: number;
-}
-
-type ExecutionInputs = {
-    foo: number;
-}
-```
-
-This feels like a non-starter because of the additional friction involved in authoring steps (which violates our fundamental goal of making step authoring simple), and other infrastructural pieces that might be needed (eg asserting at build time that the two types are compatible with each other).
-
-### Parsing instead of validating
-
-Instead of having a set of validators, we could have a set of parsers, following the [Parse, don't validate](https://lexi-lambda.github.io/blog/2019/11/05/parse-don-t-validate/) pattern.
-
-
-For this set of inputs:
-
-```ts
-type UIInputs = {
-    foo?: number;
-}
-```
-This might look like
-
-```ts
-const parsers = (parse) => ({
-    foo: parse((foo) => {
-        if (foo === undefined) throw new Error("foo must be defined");
-        return foo; // the type here has been narrowed to `number`
-    })
-})
-```
-
-We could then somehow infer (using mapped types and [ReturnType](https://www.typescriptlang.org/docs/handbook/utility-types.html#returntypetype)) the type of the execution and API configuration inputs based on the parsers.
-
-We think this option is also a non-starter because of the massive increase in complexity (particularly when it comes to dealing with union types), the extra difficulty with implementing parsers, and the lack of explicitness about what the execution inputs will look like.
-
 ## Preferred solution
 
 For cases where the input value is required, or an input value is optional in all bounded contexts (including execution time), we will rely on typescript to represents this as follows
@@ -272,3 +192,83 @@ createInitialInputs: () => ({
     foo: "empty initial value";
 })
 ```
+
+## Rejected solutions
+
+### Mapped type: `Required`
+
+We could wrap types in a `Required` mapped type
+
+```ts
+type MyInputs = {
+    foo: Required<number>;
+}
+```
+
+Pros
+- It makes it even more explicit that a property is required.
+
+Cons
+- This is highly ambiguous. If you omit this `Required` mapped type and just left it as `number`, what would this mean? I would guess this means it is optional because it is not required. How does this differ from `number | undefined` or `foo?: number`?
+- It doesn't really solve the problem of distinguishing between the two flavours of optional types (optional at execution time, or optional at UI configuration time).
+
+### Mapped type: `Optional`
+
+We could wrap types in an `Optional` mapped type
+
+```ts
+type MyInputs = {
+    foo: Optional<number>;
+}
+```
+
+Pros
+- Compared to `Required` this makes the distinction between required and optional types clearer: If it is lacking the `Optional` attribute, then it is a required type
+
+Cons
+- How do you distinguish between the two flavours of optional types (optional at executoin time, or optional at UI configuration time)? One idea might be using two different mapped types, like `OptionalDuringExecution<T>` and `OptionalDuringConfiguration<T>`.
+- There still appears to be multiple ways of doing things. e.g. what is the difference between `Optional<number>` and `number | undefined`? Perhaps `number | undefined` should represent "optional during execution" while `Optional<number>` should only represent "optional during UI configuration". This still feels a bit confusing.
+- What does it mean to do things like this: `Optional<number | undefined>`? Is the `| undefined` part redundant, or does it mean something?
+
+### Separate execution and configuration inputs
+
+Instead of having a single source of truth for our inputs that we map to our different bounded contexts, we could require step authors to provide different represenations of their inputs for different bounded contexts. For example
+
+```ts
+type UIInputs = {
+    foo?: number;
+}
+
+type ExecutionInputs = {
+    foo: number;
+}
+```
+
+This feels like a non-starter because of the additional friction involved in authoring steps (which violates our fundamental goal of making step authoring simple), and other infrastructural pieces that might be needed (eg asserting at build time that the two types are compatible with each other).
+
+### Parsing instead of validating
+
+Instead of having a set of validators, we could have a set of parsers, following the [Parse, don't validate](https://lexi-lambda.github.io/blog/2019/11/05/parse-don-t-validate/) pattern.
+
+
+For this set of inputs:
+
+```ts
+type UIInputs = {
+    foo?: number;
+}
+```
+This might look like
+
+```ts
+const parsers = (parse) => ({
+    foo: parse((foo) => {
+        if (foo === undefined) throw new Error("foo must be defined");
+        return foo; // the type here has been narrowed to `number`
+    })
+})
+```
+
+We could then somehow infer (using mapped types and [ReturnType](https://www.typescriptlang.org/docs/handbook/utility-types.html#returntypetype)) the type of the execution and API configuration inputs based on the parsers.
+
+We think this option is also a non-starter because of the massive increase in complexity (particularly when it comes to dealing with union types), the extra difficulty with implementing parsers, and the lack of explicitness about what the execution inputs will look like.
