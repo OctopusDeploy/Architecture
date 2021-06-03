@@ -151,6 +151,7 @@ There are a number of activities to perform once a new feature is made available
 * [Uservoice](https://octopusdeploy.uservoice.com/) - Close any suggestions that have now been satisfied.
 * [Customer Solutions Product Feedback](https://trello.com/b/vZEB7drD/customer-solutions-product-feedback) - Add a note to any scenario that is now satisfied.
 * [Issues Repo](https://github.com/OctopusDeploy/Issues/issues) - Close any issues that have been solved.
+* [Feedback Repo](https://github.com/OctopusDeploy/StepsFeedback/issues) - Add a note to any feedback issue created for the milestone, and close the issue.
 
 # References
 
@@ -161,3 +162,4 @@ There are a number of activities to perform once a new feature is made available
 * [Customer Solutions Product Feedback](https://trello.com/b/vZEB7drD/customer-solutions-product-feedback) - A trello board capturing customer feedback on Octopus.
 * [Uservoice](https://octopusdeploy.uservoice.com/)
 * [Issues Repo](https://github.com/OctopusDeploy/Issues/issues)
+* [Feedback Repo](https://github.com/OctopusDeploy/StepsFeedback/issues)
