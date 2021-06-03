@@ -87,7 +87,7 @@ Steps should prioritize the creation of resources through declarative templates 
 
 ## Advanced deployment patterns
 
-Many cloud native platforms have built in support for blue/green or canary deployments. If so, we want to expose these as part of an Octopus deployment where it makes sense.
+Many cloud native platforms have built in support for blue/green or canary deployments. If so, we want to expose these as part of an Octopus deployment where it makes sense. This speaks to the [seamless deployments](https://octopus.com/blog/ten-pillars-of-pragmatic-deployments#seamless-deployments) pillar.
 
 We also want to provide support for other deployment scenarios like hotfixes and feature branches. These are often not natively supported by the target platforms.
 
