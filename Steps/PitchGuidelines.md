@@ -33,7 +33,9 @@ This path allows us to express our opinions regarding best practice deployments 
 
 ## Use targets
 
-Targets must be used to define where a deployment takes place. Targets should capture:
+Targets must be used to define where a deployment takes place. They help ensure deployment steps are decoupled from their final deployment destination, which speaks to the [repeatable deployment](https://octopus.com/blog/ten-pillars-of-pragmatic-deployments#repeatable-deployments) pillar.
+
+Targets should capture:
 
 * The credentials required to perform a deployment.
 * The default worker a deployment will be performed on.
