@@ -72,7 +72,7 @@ Second layer services are typically smaller targets i.e. there are likely to be 
 
 Third layer services may also have a way to partition deployments they hold. Examples include namespaces in Kubernetes clusters.
 
-We have found that exposing second layer service names and third layer nested partitioning values as default values on a target provides the most flexibility. Allowing target values to be overridden on the steps gives customers the flexibility to lift all information about the deployment destination from the steps, or to perform many smaller deployments without an explosion of targets.
+We have found that exposing second layer service names and third layer nested partitioning values as overridable default values on a target provides the most flexibility. Allowing target values to be overridden on the steps gives customers the flexibility to lift all information about the deployment destination from the steps, or to perform many smaller deployments without an explosion of targets.
 
 ## Credentialless authentication
 
