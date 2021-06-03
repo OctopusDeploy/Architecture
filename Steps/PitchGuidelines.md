@@ -102,6 +102,14 @@ In other cases two loosely coupled resources will combine to define a deployment
 
 Where two loosely coupled resource must exist side by side for a deployment to operate in a predictable manner, consider an opinionated step that deploys both. This will help customers fall into the pit of success.
 
+## Remember to update associated projects
+
+New steps and targets will need to be reflected in other projects:
+
+* Terraform provider - this will need to be updated with new targets. Ping #team-integrations when the target is available in master.
+* Octopus client - this may need to be updated with new target types.
+* Dynamic target scripts - the [docs](https://octopus.com/docs/infrastructure/deployment-targets/dynamic-infrastructure) will need to be updated with any new scripts.
+
 # Pitch documents
 
 The pitch process generates a number of documents, each with it's own use case and audience. These are detailed below.
