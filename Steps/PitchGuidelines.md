@@ -75,6 +75,16 @@ Third layer services may also have a way to partition deployments they hold. Exa
 
 We have found that exposing second layer service names and third layer nested partitioning values as overridable default values on a target provides the most flexibility. It allows target values to be overridden on the steps giving customers the flexibility to lift all information about the deployment destination into multiple specialized targets, or to perform many smaller deployments by overriding a shared target.
 
+## Watch for changing variables
+
+Octopus allows variables to be updated in an existing release:
+
+![](variable-updates.png "width=500")
+
+That means that [recoverable deployments](https://octopus.com/blog/ten-pillars-of-pragmatic-deployments#recoverable-deployments) must take into account the fact that any resources may need to be recreated with new variables.
+
+Deployments can not assume immutable resources can be reused with a redeployment.
+
 ## Credentialless authentication
 
 All targets should support the ability to inherit credentials from the worker a deployment is executed from, and avoid the need for long lived credentials to be maintained by Octopus.
