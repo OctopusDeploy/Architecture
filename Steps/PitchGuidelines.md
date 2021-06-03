@@ -114,6 +114,8 @@ A failed deployment will often leave a number of old resources laying around. Ev
 * `Octopus.Environment.Id`: "environments-4"
 * `Octopus.Deployment.Tenant.Id`: "untenanted"
 
+These tags have proven useful for identifying resources related to previous deployments, regardless of environments, tenants etc.
+
 ## Output variables
 
 Many deployments will create resources that need to be consumed by subsequent steps. The following are guidelines for output variables:
