@@ -105,7 +105,9 @@ Where two loosely coupled resources must exist side by side for a deployment to 
 
 ## Tags and labels
 
-A failed deployment will often leave a number of old resources laying around. Eventually these need to be cleaned up. To identify old resources, anything that can be tagged or labeled should include the following values by default:
+A failed deployment will often leave a number of old resources laying around. Eventually these need to be cleaned up. This speaks directly to the [auditable deployments](https://octopus.com/blog/ten-pillars-of-pragmatic-deployments#auditable-deployments) pillar.
+
+To identify old resources, anything that can be tagged or labeled should include the following values by default:
 
 * `Octopus.Project.Id`: "projects-1"
 * `Octopus.Action.Id`: "8427fd24-17c8-4c7d-b32f-d2b8d51f2121"
@@ -121,7 +123,7 @@ These tags have proven useful for identifying resources related to previous depl
 
 Many deployments will create resources that need to be consumed by subsequent steps. The following are guidelines for output variables:
 
-* Links to any resources accessible via a URL. This helps with testing.
+* Links to any resources accessible via a URL. This helps with testing, and speaks to the [verifiable deployments](https://octopus.com/blog/ten-pillars-of-pragmatic-deployments#verifiable-deployments) pillar.
 * Names of any generated resource identifiers.
 * Details of any generated revision numbers.
 
