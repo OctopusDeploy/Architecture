@@ -2,6 +2,14 @@
 
 When defining our inputs, we need a way of expressing whether an input is optional or required.
 
+- [Background](#Background)
+- [Scenarios](#Scenarios)
+  - [Required values](#required-values)
+  - [Optional values](#optional-values)
+- [Solutions](#Solutions)
+  - [Preferred Solution](#preferred-solution)
+  - [Rejected Solutions](#rejected-solutions)
+
 # Background
 
 ## Schema Validation
@@ -32,6 +40,7 @@ There are a few useful bounded contexts to consider for this problem
 - **Execution Inputs**: The inputs used by the step executor
 
 # Scenarios
+
 ## Required values
 
 For these inputs
@@ -96,7 +105,7 @@ However, when configuring the UI, the value can still be undefined. To see why t
 1. A step has a set of radio buttons, but none of these make sense to be selected by default. If the user tries to save the step, they will receive a validation error because they have not yet picked a value for this radio button group. The initial value of the underlying input field should reflect that "nothing is selected".
 2. A deployment target has a reference to an account. There is no value that makes sense to be selected by default for this account, so the Select control is initially empty. If the user tries to save the deployment target without selecting an account, they would receive a validation error. The initial value of the underlying input field should reflect that "nothing is selected".
 
-# Solution
+# Solutions
 
 ## Preferred solution
 
