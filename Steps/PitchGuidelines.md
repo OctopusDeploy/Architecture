@@ -102,6 +102,10 @@ In other cases two loosely coupled resources will combine to define a deployment
 
 Where two loosely coupled resource must exist side by side for a deployment to operate in a predictable manner, consider an opinionated step that deploys both. This will help customers fall into the pit of success.
 
+## Documentation
+
+All new features must be documented. Ensure this is a required feature of any pitch being developed.
+
 ## Remember to update associated projects
 
 New steps and targets will need to be reflected in other projects:
