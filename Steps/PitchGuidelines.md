@@ -144,6 +144,13 @@ This document details the proposed UI structure of the new steps. This is useful
 
 An example of this document can be found [here](https://docs.google.com/document/d/13jZVn_L6U3_iFEy8W12NO2TochPEu_g_ZNEjo8R652o/edit).
 
+# Post release tasks
+
+There are a number of activities to perform once a new feature is made available:
+
+* [Uservoice](https://octopusdeploy.uservoice.com/) - Close any suggestions that have now been satisfied.
+* [Customer Solutions Product Feedback](https://trello.com/b/vZEB7drD/customer-solutions-product-feedback) - Add a note to any scenario that is not satisfied.
+
 # References
 
 * [Steps pitch process proposal](https://docs.google.com/document/d/1b94WXWKuGkocP8krgBhjv-mZEWOi2xTNJH_GnZbn360/edit) - A discussion around the limitations of a single pitch document.
@@ -151,3 +158,4 @@ An example of this document can be found [here](https://docs.google.com/document
 * [Shape Up](https://basecamp.com/shapeup/webbook)
 * [The ten pillars of pragmatic deployments](https://octopus.com/blog/ten-pillars-of-pragmatic-deployments)
 * [Customer Solutions Product Feedback](https://trello.com/b/vZEB7drD/customer-solutions-product-feedback) - A trello board capturing customer feedback on Octopus.
+* [Uservoice](https://octopusdeploy.uservoice.com/)
