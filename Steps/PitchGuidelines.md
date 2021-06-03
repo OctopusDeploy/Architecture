@@ -92,7 +92,7 @@ We also want to provide support for other deployment scenarios liek hotfixes and
 
 Where a target platform has functionality that prevent advanced deployment patterns, we'd likely offer an opinionated step that does not use the conflicting functionality so as to promote deployments that enable advanced deployment patterns. An example of this is [AWS API Gateway](https://octopus.com/blog/deploying-lambdas#why-limit-ourselves-to-one-stage-per-environment), whose stages prevent hotfixes and feature branches.
 
-## Merge loosely coupled externalized configuration
+## Combine loosely coupled externalized configuration with the deployment
 
 Deployments will often rely on externalized configuration. 
 
