@@ -81,6 +81,8 @@ Octopus allows variables to be updated in an existing release:
 
 ![](variable-updates.png "width=500")
 
+Also not all variables are included in a snapshot. Specifically [tenant variables are not snapshotted](https://octopus.com/blog/defining-variable-templates).
+
 That means that [recoverable deployments](https://octopus.com/blog/ten-pillars-of-pragmatic-deployments#recoverable-deployments) must take into account the fact that any resources may need to be recreated with new variables.
 
 Deployments can not assume immutable resources can be reused with a redeployment.
