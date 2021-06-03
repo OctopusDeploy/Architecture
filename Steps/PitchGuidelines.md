@@ -15,8 +15,7 @@ Team steps has devoted a great deal of effort to building a framework that allow
 To take advantage of this, pitches should be broken down into milestones. Each milestone should:
 
 * Deliver enough value to be useful for our customers.
-* Deliver or build on an opinionated deployment process.
-* Lean towards delivering simple solutions that provide a easy migration path should more complexity be required in future milestones.
+* Lean towards delivering simple solutions that provide a easy migration path should more complexity or additional opinions be required in future milestones.
 
 ## Be opinionated
 
@@ -100,7 +99,7 @@ In some cases the configuration is tightly bound to the deployment. For example,
 
 In other cases two loosely coupled resources will combine to define a deployment. For example, a Kubernetes Pod may reference a ConfigMap for environment variables.
 
-Where two loosely coupled resource must exist side by side for a deployment to operate in a predictable manner, consider an opinionated step that deploys both. This will help customers fall into the pit of success.
+Where two loosely coupled resources must exist side by side for a deployment to operate in a predictable manner, consider an opinionated step that deploys both. This will help customers fall into the pit of success.
 
 ## Tags and labels
 
@@ -163,7 +162,7 @@ This document is structured with the following sections:
 
 ## UI table
 
-This document details the proposed UI structure of the new steps. This is useful when collaborating with the design team to find any unique UX patterns that may need to incorporated into Octopus:
+This document details the proposed UI structure of the new steps. This is useful when collaborating with the design team to find any unique UX patterns that may need to be incorporated into Octopus:
 
 ![](assets/uimockup.png)
 
