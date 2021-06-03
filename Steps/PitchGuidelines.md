@@ -92,6 +92,16 @@ We also want to provide support for other deployment scenarios liek hotfixes and
 
 Where a target platform has functionality that prevent advanced deployment patterns, we'd likely offer an opinionated step that does not use the conflicting functionality so as to promote deployments that enable advanced deployment patterns. An example of this is [AWS API Gateway](https://octopus.com/blog/deploying-lambdas#why-limit-ourselves-to-one-stage-per-environment), whose stages prevent hotfixes and feature branches.
 
+## Merge loosely coupled externalized configuration
+
+Deployments will often rely on externalized configuration. 
+
+In some cases the configuration is tightly bound to the deployment. For example, environment variables are often defined as part of a deployment, and tightly bound to the application they are configured against.
+
+In other cases two loosely coupled resources will combine to define a deployment. For example, a Kubernetes Pod may reference a ConfigMap for environment variables.
+
+Where two loosely coupled resource must exist side by side for a deployment to operate in a predictable manner, consider an opinionated step that deploys both. This will help customers fall into the pit of success.
+
 # Pitch documents
 
 The pitch process generates a number of documents, each with it's own use case and audience. These are detailed below.
