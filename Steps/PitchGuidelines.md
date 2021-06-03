@@ -88,7 +88,7 @@ Steps should prioritize the creation of resources through declarative templates 
 
 Many cloud native platforms have built in support for blue/green or canary deployments. If so, we want to expose these as part of an Octopus deployment where it makes sense.
 
-We also want to provide support for other deployment scenarios liek hotfixes and feature branches. These are often not natively supported by the target platforms.
+We also want to provide support for other deployment scenarios like hotfixes and feature branches. These are often not natively supported by the target platforms.
 
 Where a target platform has functionality that prevent advanced deployment patterns, we'd likely offer an opinionated step that does not use the conflicting functionality so as to promote deployments that enable advanced deployment patterns. An example of this is [AWS API Gateway](https://octopus.com/blog/deploying-lambdas#why-limit-ourselves-to-one-stage-per-environment), whose stages prevent hotfixes and feature branches.
 
