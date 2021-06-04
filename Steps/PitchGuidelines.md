@@ -91,7 +91,7 @@ Deployments can not assume immutable resources can be reused with a redeployment
 
 All targets should support the ability to inherit credentials from the worker a deployment is executed from, and avoid the need for long lived credentials to be maintained by Octopus.
 
-Examples include [AWS EC2 IAM roles](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/iam-roles-for-amazon-ec2.html), [Azure Managed Service Identity](https://docs.microsoft.com/en-us/azure/active-directory/managed-identities-azure-resources/overview), and [Google inherited service accounts](https://cloud.google.com/compute/docs/access/create-enable-service-accounts-for-instances).
+Examples include [AWS EC2 IAM roles](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/iam-roles-for-amazon-ec2.html), [Azure Managed Service Identity](https://docs.microsoft.com/en-us/azure/active-directory/managed-identities-azure-resources/overview), [Google inherited service accounts](https://cloud.google.com/compute/docs/access/create-enable-service-accounts-for-instances), and [Kubernetes pod service accounts](https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/).
 
 ## Declarative over imperative
 
@@ -103,9 +103,37 @@ Steps should prioritize the creation of resources through declarative templates 
 
 Many cloud native platforms have built in support for blue/green or canary deployments. If so, we want to expose these as part of an Octopus deployment where it makes sense. This speaks to the [seamless deployments](https://octopus.com/blog/ten-pillars-of-pragmatic-deployments#seamless-deployments) pillar.
 
+### Prioritize seamless deployments over platform limitations 
+
 We also want to provide support for other deployment scenarios like hotfixes and feature branches. These are often not natively supported by the target platforms.
 
 Where a target platform has functionality that prevent advanced deployment patterns, we'd likely offer an opinionated step that does not use the conflicting functionality so as to promote deployments that enable advanced deployment patterns. An example of this is [AWS API Gateway](https://octopus.com/blog/deploying-lambdas#why-limit-ourselves-to-one-stage-per-environment), whose stages prevent hotfixes and feature branches.
+
+### Calculating networking rules
+
+Watch for platforms that require knowing the current state of network rules against previous deployments. For example, many network rules use relative weights for directing traffic e.g. service1 has a traffic weight of 10, service2 has a traffic weight of 20. If we deploy a service3, any weighted value is entirely relative to the weights of the other services, and the outcome is not repeatable.
+
+We should aim to express network traffic as percentages. This may mean translating a percentage into the appropriate weight at deployment time. A psudeocode algorithm for this is:
+
+```
+if (new version traffic is not set to 100%) {
+
+    const existingTotal = weights assigned to other versions combined
+    const newVersionWeight = existingTotal /
+        (1 - new version traffic as decimal) -
+        existingTotal
+
+    cloudcli set-traffic servicename \
+            --splits=<new version>=newVersionWeight, \
+                    <old version 1>=<old version 1 weight>,\
+                    <old version 2>=<old version 2 weight>,\
+                    ...,\
+                    <old version n>=<old version n weight>
+} else {
+    // there are no other versions, or new version takes 100%
+    cloudcli set-traffic servicename --splits=<new version>=1
+}
+```
 
 ## Combine loosely coupled externalized configuration with the deployment
 
