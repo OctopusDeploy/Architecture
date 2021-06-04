@@ -79,7 +79,7 @@ We have found that exposing second layer service names and third layer nested pa
 
 Octopus allows variables to be updated in an existing release:
 
-![](variable-updates.png "width=500")
+![](assets/variable-updates.png "width=500")
 
 Also not all variables are included in a snapshot. Specifically [tenant variables are not snapshotted](https://octopus.com/blog/defining-variable-templates).
 
