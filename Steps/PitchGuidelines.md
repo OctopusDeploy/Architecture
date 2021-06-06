@@ -157,7 +157,7 @@ In some cases the configuration is tightly bound to the deployment. For example,
 
 In other cases two loosely coupled resources will combine to define a deployment. For example, a Kubernetes Pod may reference a ConfigMap for environment variables.
 
-Where two loosely coupled resources must exist side by side for a deployment to operate in a predictable manner, consider an opinionated step that deploys both. This will help customers fall into the pit of success.
+Where two loosely coupled resources must exist side by side for a deployment to operate in a predictable manner, consider an opinionated step that deploys both. This will help customers fall into the pit of success regardless of whether they are using advanced deployment patterns like canary or rolling deployments, or performing a rollback.
 
 ## Tags and labels
 
