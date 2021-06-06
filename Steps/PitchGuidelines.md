@@ -75,6 +75,7 @@ A second layer service has only one instance in a cloud provider, and a one to m
 * AWS App Runner
 * GCP App Engine
 * GCP Cloud Run
+* Azure container instances
 
 ![](assets/secondlayerservice.png)
 
@@ -82,7 +83,6 @@ A second layer service has only one instance in a cloud provider, and a one to m
 
 A third layer service has a many to one relationship with the cloud provider, and a one to many relationship with the deployments it holds. Examples include:
 
-* Azure web apps
 * Kubernetes clusters
 * ECS clusters
 * Service Fabric
@@ -98,7 +98,7 @@ Octopus allows variables to be updated in an existing release:
 
 Also, not all variables are included in a snapshot. Specifically [tenant variables are not snapshotted](https://octopus.com/blog/defining-variable-templates).
 
-That means that [recoverable deployments](https://octopus.com/blog/ten-pillars-of-pragmatic-deployments#recoverable-deployments) must take into account the fact that any resources may need to be recreated with new variables.
+That means that [recoverable deployments](https://octopus.com/blog/ten-pillars-of-pragmatic-deployments#recoverable-deployments) must take into account the fact that all resources may need to be recreated with new variables.
 
 Deployments can not assume immutable resources can be reused with a redeployment.
 
@@ -122,11 +122,11 @@ Many cloud native platforms have built in support for blue/green or canary deplo
 
 We also want to provide support for other deployment scenarios like hotfixes and feature branches. These are often not natively supported by the target platforms.
 
-Where a target platform has functionality that prevent advanced deployment patterns, we'd likely offer an opinionated step that does not use the conflicting functionality so as to promote deployments that enable advanced deployment patterns. An example of this is [AWS API Gateway](https://octopus.com/blog/deploying-lambdas#why-limit-ourselves-to-one-stage-per-environment), whose stages prevent hotfixes and feature branches.
+Where a target platform has functionality that prevents advanced deployment patterns, we'd likely offer an opinionated step that does not use the conflicting functionality so as to promote deployments that enable advanced patterns. An example of this is [AWS API Gateway](https://octopus.com/blog/deploying-lambdas#why-limit-ourselves-to-one-stage-per-environment), whose stages prevent hotfixes and feature branches.
 
 ### Calculating networking rules
 
-Watch for platforms that require knowing the current state of network rules against previous deployments. For example, many network rules use relative weights for directing traffic e.g. service1 has a traffic weight of 10, service2 has a traffic weight of 20. If we deploy a service3, any weighted value is entirely relative to the weights of the other services, and the outcome is not repeatable.
+Watch for platforms that require knowing the current state of network rules configured with previous deployments. For example, many network rules use relative weights for directing traffic e.g. service1 has a traffic weight of 10, service2 has a traffic weight of 20. If we deploy a service3, any weighted value is entirely relative to the weights assigned to the other services, and the outcome is not repeatable.
 
 We should aim to express network traffic as percentages. This may mean translating a percentage into the appropriate weight at deployment time. A psudeocode algorithm for this is:
 
@@ -164,11 +164,11 @@ Where two loosely coupled resources must exist side by side for a deployment to 
 
 A failed deployment will often leave a number of old resources laying around. Eventually these need to be cleaned up. This speaks directly to the [auditable deployments](https://octopus.com/blog/ten-pillars-of-pragmatic-deployments#auditable-deployments) pillar.
 
-To identify old resources, anything that can be tagged or labeled should include the following values by default:
+To identify old resources, anything that can be tagged or labeled should include the following keys (example values are also shown) by default:
 
 * `Octopus.Project.Id`: "projects-1"
 * `Octopus.Action.Id`: "8427fd24-17c8-4c7d-b32f-d2b8d51f2121"
-* `Octopus.Deployment.Id`: ""
+* `Octopus.Deployment.Id`: "8427fd24-17c8-4c7d-b32f-d2b8d51f2121"
 * `Octopus.RunbookRun.Id`: "runbookruns-86"
 * `Octopus.Step.Id`: "b6f8fd75-3acf-4186-a573-285a1aa11a9a"
 * `Octopus.Environment.Id`: "environments-4"
@@ -192,7 +192,7 @@ All new features must be documented. Ensure this is a required feature of any pi
 
 New steps and targets will need to be reflected in other projects:
 
-* Octopus client - this may need to be updated with new target types.
+* Octopus client - this may need to be updated with new target types. This requirement may be removed with step packages.
 * Dynamic target scripts - the [docs](https://octopus.com/docs/infrastructure/deployment-targets/dynamic-infrastructure) will need to be updated with any new scripts.
 
 # Pitch documents
