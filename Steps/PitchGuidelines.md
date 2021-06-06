@@ -68,7 +68,7 @@ Here are some guidelines:
 
 ### Second layer service
 
-A second layer service has only one instance in a cloud provider, and a one to many relationship with the deployments it holds. Examples include:
+A second layer service has only one instance in a logical partition in a cloud provider (i.e. one per region, one per project), and a one to many relationship with the deployments it holds. Examples include:
 
 * AWS Lambdas
 * AWS App Runner
