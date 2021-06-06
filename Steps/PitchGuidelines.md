@@ -50,7 +50,7 @@ We aim to strike a balance between the flexibility of allowing target fields to 
 
 Targets provide the ability to lift deployment destination details out of the steps, and represent a security boundary within Octopus. For those teams that require a high level of control or a clear distinction between deployment processes and the infrastructure they are deployed to, the solution is to lift all details about the deployment destination into a target.
 
-However, without the ability to override target details on a step, common deployment scenarios like feature branching and microsevice deployments will result in an explosion of targets, where the individual targets provide little benefit. In these situations it is useful to consider which target fields must be overridable to support these deployment patterns.
+However, without the ability to override target details on a step, common deployment scenarios like feature branching and microservice deployments will result in an explosion of targets, where the individual targets provide little benefit. In these situations it is useful to consider which target fields must be overridable in steps to support these deployment patterns.
 
 Here are some guidelines:
 
@@ -63,9 +63,9 @@ Here are some guidelines:
     * Are teams likely to deploy related microservices in separate Kubernetes namespaces? This is likely.
     * Are teams likely to deploy a feature branch to a web app slot? This is likely.
     * Are microservices for a related service likely to be deployed in many regions or availably zones? This is likely for high availability. But is this better moddeled as a single step with multiple targets, or a duplicated step with overridden AZ fields? Clearly duplicating steps to override one field will result in a mess, and multiple targets are a better choice here.
-    * Are teams likely to deploy a feature branch to new GCP project? This is likely given project scoped resources like GAE routing rules.
-* The names of services, such as a Lambda function name, an Azure Container instance name, or a Google Cloud Run instance, will typilcally be overridable. Feature branch deployments will almost certainly require renaming these values on a step.
-* There is no way to get the union of two targets. For example, the deployment of a Lambda exposed by an API gateway instance can not combine the details of a Lambda target and an API gateway target. Where a deployment logically takes place to two services that could be targets in their own right, consider how a single target can lift those combined details from a step.
+    * Are teams likely to deploy a feature branch to new a GCP project? This is likely given project scoped resources like GAE routing rules.
+* The names of services, such as a Lambda function name, an Azure Container Instance name, or a Google Cloud Run instance, will typically be overridable. Feature branch deployments will almost certainly require renaming these values on a step.
+* There is no way to get the union of two targets. For example, the deployment of a Lambda exposed by an API gateway instance can not combine the details of a Lambda target and an API Gateway target. Where a deployment takes place to two services that could be targets in their own right, consider how a single target can lift those combined details from a step.
 
 ### Second layer service
 
