@@ -64,7 +64,7 @@ Here are some guidelines:
     * Are microservices for a related service likely to be deployed in many regions or availability zones? This is likely for high availability. But is this better modeled as a single step with multiple targets, or a duplicated step with overridden AZ fields? Clearly duplicating steps to override one field will result in a mess, and multiple targets are a better choice here.
     * Are teams likely to deploy a feature branch to a new GCP project? This is likely given project scoped resources like GAE routing rules.
 * The names of services, such as a Lambda function name, an Azure Container Instance name, or a Google Cloud Run instance, will typically be overridable. Feature branch deployments will almost certainly require renaming these values on a step.
-* There is no way to get the union of two targets. For example, the deployment of a Lambda exposed by an API gateway instance can not combine the details of a Lambda target and an API Gateway target. Where a deployment takes place to two services that could be targets in their own right, consider how a single target can lift those combined details from a step.
+* There is no way to get the union of two targets. For example, the deployment of a Lambda exposed by an API Gateway instance can not combine the details of a Lambda target and an API Gateway target. Where a deployment takes place to two services that could be targets in their own right, consider how a single target can lift those combined details from a step.
 
 ### Second layer service
 
