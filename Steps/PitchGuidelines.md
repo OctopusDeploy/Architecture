@@ -10,16 +10,16 @@ The following guidelines capture the functionality and opinions that we should a
 
 ## Ship incrementally
 
-Team steps has devoted a great deal of effort to building a framework that allows features to be shipped independently of the main Octopus code base. This allows us to ship features more frequently, and respond to user feedback more quickly.
+Team steps has devoted a great deal of effort to building a framework allowing features to be shipped independently of the main Octopus code base. This allows us to ship features more frequently, and respond to user feedback more quickly.
 
 To take advantage of this, pitches should be broken down into milestones. Each milestone should:
 
 * Deliver enough value to be useful for our customers.
-* Lean towards delivering simple solutions that provide a easy migration path should more complexity or additional opinions be required in future milestones.
+* Lean towards delivering simple solutions that provide an easy migration path should more complexity or additional opinions be required in future milestones.
 
 ## Be opinionated
 
-We are leaders in the deployment space. We have years of experience and our tools have performed millions of deployments, and customers look to us to provide clear opinions on what best practice deployments look like. These values have been distilled into [The ten pillars of pragmatic deployments](https://octopus.com/blog/ten-pillars-of-pragmatic-deployments).
+We are leaders in the deployment space. We have years of experience and our tools have performed millions of deployments, so customers look to us to provide clear opinions on what best practice deployments look like. These values have been distilled into [The ten pillars of pragmatic deployments](https://octopus.com/blog/ten-pillars-of-pragmatic-deployments).
 
 The steps we deliver must have a clear vision for how they enable teams to deliver best practice deployments. Often this involves combining, hiding, not supporting, or hard coding some features in the platforms we deploy to.
 
@@ -33,7 +33,7 @@ This path allows us to express our opinions regarding best practice deployments 
 
 ## Use targets
 
-Targets must be used to define where a deployment takes place. They help ensure deployment steps are decoupled from their final deployment destination, which speaks to the [repeatable deployment](https://octopus.com/blog/ten-pillars-of-pragmatic-deployments#repeatable-deployments) pillar.
+Targets must be used to define where a deployment takes place. They help ensure deployment steps are decoupled from their final destination, which speaks to the [repeatable deployment](https://octopus.com/blog/ten-pillars-of-pragmatic-deployments#repeatable-deployments) pillar.
 
 Targets should capture:
 
@@ -43,6 +43,29 @@ Targets should capture:
 * The name of the service being deployed to for a third layer service.
 * The default name of any deeper partitioning on a third layer service. This name must be able to be overridden on the steps.
 * The default name of the deployable artifact for a second layer service. This name must be able to be overridden on the steps.
+
+### Overrideable and non-overridable fields
+
+We aim to strike a balance between the flexibility of allowing target fields to be overridden on steps, and the pragmatism of encouraging target use as the foundation of repeatable deployments. This is often subjective, so there is no hard and fast rule here.
+
+Targets provide the ability to lift deployment destination details out of the steps, and represent a security boundary within Octopus. For those teams that require a high level of control or a clear distinction between deployment processes and the infrastructure they are deployed to, the solution is to lift all details about the deployment destination into a target.
+
+However, without the ability to override target details on a step, common deployment scenarios like feature branching and microsevice deployments will result in an explosion of targets, where the individual targets provide little benefit. In these situations it is useful to consider which target fields must be overridable to support these deployment patterns.
+
+Here are some guidelines:
+
+* When in doubt, assume targets describe the **where** and the **who**. Steps define the **what** and the **how**.
+* When in doubt, refer to **Ship incrementally** for guidance. It is easy to override a field in a step, but hard to remove a field once it has been exposed.
+* Target accounts should not be overridable. If a target is used to deploy to a wide surface area, the account on the target must have enough permissions to do so.
+* Cloud and platform partitions like regions, zones, projects, and namespaces, and individual service partitions like web app slots, should be considered in the context of a feature branch deployment or the deployment of many related microservices:
+    * Are teams likely to deploy a feature branch in a new AWS region? Probably not.
+    * Are teams likely to deploy a feature branch in a new Kubernetes namespace? This is likely.
+    * Are teams likely to deploy related microservices in separate Kubernetes namespaces? This is likely.
+    * Are teams likely to deploy a feature branch to a web app slot? This is likely.
+    * Are microservices for a related service likely to be deployed in many regions or availably zones? This is likely for high availability. But is this better moddeled as a single step with multiple targets, or a duplicated step with overridden AZ fields? Clearly duplicating steps to override one field will result in a mess, and multiple targets are a better choice here.
+    * Are teams likely to deploy a feature branch to new GCP project? This is likely given project scoped resources like GAE routing rules.
+* The names of services, such as a Lambda function name, an Azure Container instance name, or a Google Cloud Run instance, will typilcally be overridable. Feature branch deployments will almost certainly require renaming these values on a step.
+* There is no way to get the union of two targets. For example, the deployment of a Lambda exposed by an API gateway instance can not combine the details of a Lambda target and an API gateway target. Where a deployment logically takes place to two services that could be targets in their own right, consider how a single target can lift those combined details from a step.
 
 ### Second layer service
 
@@ -66,14 +89,6 @@ A third layer service has a many to one relationship with the cloud provider, an
 * AWS API Gateway
 
 ![](assets/thirdlayerservice.png)
-
-### Overriding target defaults
-
-Second layer services are typically smaller targets i.e. there are likely to be many small deployments. Examples include individual lambda functions or single cloud run containers.
-
-Third layer services may also have a way to partition deployments they hold. Examples include namespaces in Kubernetes clusters.
-
-We have found that exposing second layer service names and third layer nested partitioning values as overridable default values on a target provides the most flexibility. It allows target values to be overridden on the steps giving customers the flexibility to lift all information about the deployment destination into multiple specialized targets, or to perform many smaller deployments by overriding a shared target.
 
 ## Watch for changing variables
 
