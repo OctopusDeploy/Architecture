@@ -40,9 +40,8 @@ Targets should capture:
 * The credentials required to perform a deployment.
 * The default worker a deployment will be performed on.
 * Cloud specific details like regions, projects, and resource groups.
-* The name of the service being deployed to for a third layer service.
-* The default name of any deeper partitioning on a third layer service. This name must be able to be overridden on the steps.
-* The default name of the deployable artifact for a second layer service. This name must be able to be overridden on the steps.
+* The name of the service being deployed to e.g. the name of a ECS cluster, an Azure Web App, a Lambda function etc.
+* The name of any nested partitioning e.g. namespaces, slots etc.
 
 ### Overrideable and non-overridable fields
 
