@@ -173,6 +173,21 @@ To identify old resources, anything that can be tagged or labeled should include
 * `Octopus.Environment.Id`: "environments-4"
 * `Octopus.Deployment.Tenant.Id`: "untenanted"
 
+The following are human readable names that allow a resource to be tracked back to a deployment:
+
+* `Octopus.Deployment.Name`: "Deploy to Production"
+* `Octopus.Deployment.Tenant.Name`: "Acme Corp"
+* `Octopus.Environment.Name`: "Production"
+* `Octopus.Project.Name`: "My Project"
+* `Octopus.Release.Channel.Name`: "My Channel"
+* `Octopus.Space.Name`: "My Space"
+* `Octopus.Action.Name`: "Deploy my thing"
+* `Octopus.Step.Name`: "Deploy my thing"
+* `Octopus.Runbook.Name`: "My runbook"
+* `Octopus.RunbookRun.Name`: "My runbook run"
+* `Octopus.RunbookSnapshot.Name`: "My snapshot name"
+* `Octopus.Machine.Name`: "My target name"
+
 These tags have proven useful for identifying resources related to previous deployments, regardless of environments, tenants etc.
 
 ## Output variables
