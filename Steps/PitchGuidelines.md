@@ -92,11 +92,11 @@ Services like Azure web or function apps do not create the underlying resources 
 
 The following table provides guidelines for including resource names on targets:
 
-| Knowable    | Instantiable  | Target field type |
-|-------------|---------------|-------------------|
-| Yes  | Yes  | Optional value that can select existing resource. |
-| Yes  | No   | Mandatory value that must select existing resource. |
-| No   | -    | Not shown on target. The steps will define these values. |
+| Knowable    | Instantiable  | Target field type | Health Check |
+|-------------|---------------|-------------------|--------------|
+| Yes  | Yes  | Optional value that can select existing resource. | Verify credentials, don't assume resource exists. |
+| Yes  | No   | Mandatory value that must select existing resource. | Verify credentials and verify resource exists. |
+| No   | -    | Not shown on target. The steps will define these values. | Verify credentials. |
 
 #### Overridable and uninstantiable target values
 
