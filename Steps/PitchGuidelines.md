@@ -104,7 +104,7 @@ Where a target field references a resource that is uninstantiable, it usually me
 
 Where a target field can be overridden by a step, it usually means that deployment patterns like feature branches benefit from deploying to a new resource.
 
-Where a field references a uninstantiable resource that can be overidden on a step, consider how such resources can be created as part of a deployment. It may be a case of documenting a Terraform, CloudFormation, or ARM Template that creates the necessary resources. Or it may be worth provding custom steps that create these resources.
+Where a field references a uninstantiable resource that can be overidden on a step, consider how such resources can be created as part of a deployment. It may be a case of documenting a Terraform, CloudFormation, or ARM Template that creates the necessary resources. Or it may be worth providing custom steps that create these resources.
 
 ## Watch for changing variables
 
