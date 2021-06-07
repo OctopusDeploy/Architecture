@@ -66,28 +66,37 @@ Here are some guidelines:
 * The names of services, such as a Lambda function name, an Azure Container Instance name, or a Google Cloud Run instance, will typically be overridable. Feature branch deployments will almost certainly require renaming these values on a step.
 * There is no way to get the union of two targets. For example, the deployment of a Lambda exposed by an API Gateway instance can not combine the details of a Lambda target and an API Gateway target. Where a deployment takes place to two services that could be targets in their own right, consider how a single target can lift those combined details from a step.
 
-### Second layer service
+### Types of target fields
 
-A second layer service has only one instance in a logical partition in a cloud provider (i.e. one per region, one per project), and a one to many relationship with the deployments it holds. Examples include:
+There are two ways to classify fields that we might consider placing on targets.
 
-* AWS Lambdas
-* AWS App Runner
-* GCP App Engine
-* GCP Cloud Run
-* Azure container instances
+#### Knowable
 
-![](assets/secondlayerservice.png)
+The first classification is whether the resources are **knowable**. These are resource names that we know will be used by steps. This might sound obvious at first, but there are reasons why we would not know the resource names used by steps.
 
-### Third layer service
+The Kubernetes target is a prime example. A single deployment may include one or more configmaps, secrets, persistent volume claims etc. It is impossible to know how many resources to provide default names for. 
 
-A third layer service has a many to one relationship with the cloud provider, and a one to many relationship with the deployments it holds. Examples include:
+Also, with Custom Resource Definitions (CRDs), it is impossible for a target to know the types of resources it is providing default names for.
 
-* Kubernetes clusters
-* ECS clusters
-* Service Fabric
-* AWS API Gateway
+Supplying default names in a Kubernetes target would involve supplying arrays of default values and custom key/value pairs naming the custom resource that the default value applies to. This is not useful, and so a Kubernetes target does not define such resource names.
 
-![](assets/thirdlayerservice.png)
+#### Instantiable
+
+The second classification is whether the resources are **instantiable**. A resource is instantiable if the act of deploying an application usually also creates the resource that hosts it. Or, in other words, instantiable resources are self contained.
+
+Many resources are instantiable. For example, providing a name for a Kubernetes resource, AWS Lambda, AWS App Runner service, Google App Engine service, or Google Cloud Runner service, along with the values usually supplied while deploying the application, is all that is required for that resource to be created during a deployment if it does not exist.
+
+Services like Azure web or function apps do not create the underlying resources with a name. An app service needs a resource group, networking, service plan etc. So simply supplying a name, along with the details usually associated with an application deployment, can not create a web app instance if it doesn't exist.
+
+#### Target values
+
+The following table provides guidelines for including resource names on targets:
+
+| Knowable    | Instantiable  | Target field type |
+|-------------|---------------|-------------------|
+| Yes  | Yes  | Optional value that can select existing resource. |
+| Yes  | No   | Mandatory value that must select existing resource. |
+| No   | -    | Not shown on target. The steps will define these values. |
 
 ## Watch for changing variables
 
