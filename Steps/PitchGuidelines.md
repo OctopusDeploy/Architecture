@@ -127,7 +127,7 @@ Where a target platform has functionality that prevents advanced deployment patt
 
 Watch for platforms that require knowing the current state of network rules configured with previous deployments. For example, many network rules use relative weights for directing traffic e.g. service1 has a traffic weight of 10, service2 has a traffic weight of 20. If we deploy a service3, any weighted value is entirely relative to the weights assigned to the other services, and the outcome is not repeatable.
 
-We should aim to express network traffic as percentages. This may mean translating a percentage into the appropriate weight at deployment time. A psudeocode algorithm for this is:
+We should aim to express network traffic as percentages. This may mean translating a percentage into the appropriate weight at deployment time. A pseudocode algorithm for this is:
 
 ```
 if (new version traffic is not set to 100%) {
