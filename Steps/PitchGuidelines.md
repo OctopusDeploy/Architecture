@@ -220,6 +220,7 @@ The first document is a Request For Comment (RFC) style blog post. The purpose o
 * Inform customers, partners, and other internal Octopus departments of the proposed new functionality.
 * Highlight the details of the new functionality, calling out how it expresses our vision of best practice deployments.
 * Include enough UI mockups to provide a sense of what the feature looks like.
+* List the constrains that are being used to shape the milestone, and call out which ones are likely to be delivered in future milestones.
 * Provide a link to a [GitHub issue](https://github.com/OctopusDeploy/StepsFeedback/issues) where people can provide feedback.
 * But never promise to deliver any specific feature. Always call out that the feature has not been committed to, and that there is no release date.
 
