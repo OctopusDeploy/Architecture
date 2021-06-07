@@ -100,7 +100,7 @@ The following table provides guidelines for including resource names on targets:
 
 #### Overridable and uninstantiable target values
 
-Where a target field references a resource that is not instantiable, it usually means it is a non-trivial task to create a new instance.
+Where a target field references a resource that is uninstantiable, it usually means it is a non-trivial task to create a new instance.
 
 Where a target field can be overridden by a step, it usually means that deployment patterns like feature branches benefit from deploying to a new resource.
 
