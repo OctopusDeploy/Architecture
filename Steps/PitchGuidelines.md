@@ -211,7 +211,7 @@ New steps and targets will need to be reflected in other projects:
 
 # Pitch documents
 
-The pitch process generates a number of documents, each with it's own use case and audience. These are detailed below.
+The pitch process generates a number of documents, each with its own use case and audience. These are detailed below.
 
 ## RFC blog post
 
