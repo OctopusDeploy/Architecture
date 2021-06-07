@@ -98,13 +98,13 @@ The following table provides guidelines for including resource names on targets:
 | Yes  | No   | Mandatory value that must select existing resource. |
 | No   | -    | Not shown on target. The steps will define these values. |
 
-#### Overridable and non-instantiable target values
+#### Overridable and uninstantiable target values
 
 Where a target field references a resource that is not instantiable, it usually means it is a non-trivial task to create a new instance.
 
 Where a target field can be overridden by a step, it usually means that deployment patterns like feature branches benefit from deploying to a new resource.
 
-Where a field references a non-instantiable resource that can be overidden on a step, consider how such resources can be created as part of a deployment. It may be a case of documenting a Terraform, CloudFormation, or ARM Template that creates the necessary resources. Or it may be worth provding custom steps that create these resources.
+Where a field references a uninstantiable resource that can be overidden on a step, consider how such resources can be created as part of a deployment. It may be a case of documenting a Terraform, CloudFormation, or ARM Template that creates the necessary resources. Or it may be worth provding custom steps that create these resources.
 
 ## Watch for changing variables
 
