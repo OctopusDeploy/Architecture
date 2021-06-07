@@ -176,6 +176,8 @@ In other cases two loosely coupled resources will combine to define a deployment
 
 Where two loosely coupled resources must exist side by side for a deployment to operate in a predictable manner, consider an opinionated step that deploys both. This will help customers fall into the pit of success regardless of whether they are using advanced deployment patterns like canary or rolling deployments, or performing a rollback.
 
+Note that it is usually only convenient to create multiple **instantiable** resources within a single step. See the **Use targets** section for a definition of instantiable resources.
+
 ## Tags and labels
 
 A failed deployment will often leave a number of old resources laying around. Eventually these need to be cleaned up. This speaks directly to the [auditable deployments](https://octopus.com/blog/ten-pillars-of-pragmatic-deployments#auditable-deployments) pillar.
