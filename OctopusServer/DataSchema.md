@@ -17,18 +17,18 @@ The impliment an instance of the  `IDocumentRestrictionDefinition` class to allo
 ### Legacy Upgrade scripts
 Previously this was done in [Octopus.Core](https://github.com/OctopusDeploy/OctopusDeploy/tree/master/source/Octopus.Core/UpgradeScripts) however to allow migrations to work with Bento the upgades have now moved to a seperate project with enhanced capabilities to cater for running migrations on data being imported.
 
-### Upgrade scripts
+### New Upgrade scripts
 Add your new upgrade script with an incrimenting prefix in the name to the [UpgradeScripts](https://github.com/OctopusDeploy/OctopusDeploy/tree/master/source/Octopus.Upgraders/UpgradeScripts) directory in `Octopus.Upgraders`. When a new instance is created, an instance is updated or an import via Bento takes place, these migration steps will run in the prefix order. 
 Typically two methods should be implimented
 * `UpgradeSql` - The SQL statements to provide that actually upgrades the database and performs any data migrations. 
 * `UpgradeExportSet` - C# logic to perform when Bento imports entities. Since this could be taking place on external data from any database version, your code should be reasonably permissive of the data coming in. Since it could be running on an Octopus Server of any version (as these migration steps in theory will continue to run in future Octopus Server instances), you should not rely on any data models for serialization or deserialization. Using raw JObjects is the safest approach to load data.
 
-### Tests
+#### Tests
 For most scenarios, the previously added class should warrant a unit test. These are added to `Octopus.IntegrationTests.Core.UpgradeScripts` and should cover both SQL and Document entity upgrades. As an example take a look at [Script0274FixReleaseVersionsFixture.cs]`https://github.com/OctopusDeploy/OctopusDeploy/blob/master/source/Octopus.IntegrationTests/Core/UpgradeScripts/Script0274FixReleaseVersions/Script0274FixReleaseVersionsFixture.cs`. There is a setup and verification method that should be implimented for both the SQL upgrade (emulating an Octopus instance with data migrating to this version for the first time) and the ExportSet upgrade (emulating entities from a version of Octopus _prior_ to this version being imported into an Octopus instance where the schema is expected to be in the new shape). Obviously for some scenarios, such as adding an entity & table for the first time, these tests may not be as relevant.
 
 
-## Import\Export (Bento)
+### Import\Export (Bento)
 The [DocumentSourceFixture](https://github.com/OctopusDeploy/OctopusDeploy/blob/master/source/Octopus.Tests/ImportExport/DocumentSourceFixture.cs) class verifies that a DocumentSource has been defined for every entity that impliments `IId` (all `IDocument` entities). If this class should not have an exporter, an exception for the new class will need to be added.
 
-## Git Schema
+### Git Schema
 _comming soon..._
