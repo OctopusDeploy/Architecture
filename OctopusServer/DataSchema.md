@@ -1,5 +1,5 @@
 # Octopus Data Schema Migrations
-The following provides some helpful tests, classes and considerations when changing the schema by adding entities or properties. Check some of the existing implimentations for each of these areas for further ideas on how it all fits together.
+The following provides some helpful tests, classes and considerations when changing the schema by adding entities or properties. Check some of the existing implimentations for each of these areas for further ideas on how it all fits together. Some or all of the following areas might be relevant depending on the type and scope of your change.
 
 ## Core
 ### Model
@@ -11,6 +11,11 @@ The impliment an instance of the  `IDocumentRestrictionDefinition` class to allo
 * [SchemaHasNotChangedFixture](https://github.com/OctopusDeploy/OctopusDeploy/blob/master/source/Octopus.IntegrationTests/Server/Orchestration/SystemIntegrityCheck/SchemaHasNotChangedFixture.cs) - Compares the full list of approved DB objects such as indexes, tables and views
 * [IndexesHaveNotChangedFixture](https://github.com/OctopusDeploy/OctopusDeploy/blob/master/source/Octopus.IntegrationTests/Server/Orchestration/SystemIntegrityCheck/IndexesHaveNotChangedFixture.cs) - Checks the validity of all historically _possible_ indexes that may have existed on an instance. 
 * [LostMasterKeyCommandFixture](https://github.com/OctopusDeploy/OctopusDeploy/blob/master/source/Octopus.Tests/Server/Commands/LostMasterKeyCommandFixture.AllTypesRequiringEncryption_AreProcessedForEncryptedData.approved.txt) - Ensures that all entities which could have encrypted data are either explicitly exluded or the appropriate properties are marked for encryption.
+
+### Resources
+#### Mapping
+#### Swagger
+#### HTTP Approvals
 
 ## Upgrade\Migration Scripts
 
