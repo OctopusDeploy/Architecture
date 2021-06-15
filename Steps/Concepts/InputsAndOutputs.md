@@ -1,16 +1,29 @@
 # Index
 
+- [Index](#index)
 - [Inputs](#inputs)
   - [Problem](#problem)
-  - [Solution: Input and Output Schemas](#solution-structured-inputs-and-input-schemas)
+  - [Solution: Structured Inputs and Input Schemas](#solution-structured-inputs-and-input-schemas)
 - [Bounded Contexts](#bounded-contexts)
   - [Problem](#problem-1)
-  - [Solution: Mapped Types](#solution-type-and-data-mapping)
+  - [Solution: Type and Data Mapping](#solution-type-and-data-mapping)
 - [Bound Variables](#bound-variables)
   - [Problem](#problem-2)
   - [Constraints](#constraints)
   - [Design](#design)
+    - [Guiding principle](#guiding-principle)
+      - [Why?](#why)
+    - [Our Step API should be unaware of bound variables when](#our-step-api-should-be-unaware-of-bound-variables-when)
+    - [Our step API will need to be aware of bound variables when](#our-step-api-will-need-to-be-aware-of-bound-variables-when)
+  - [Resources](#resources)
 - [Validation](#validation)
+  - [Problem](#problem-3)
+  - [Solution](#solution)
+    - [Configuration time validation](#configuration-time-validation)
+      - [Schema-based validation](#schema-based-validation)
+      - [Execution environment](#execution-environment)
+    - [Execution time validation](#execution-time-validation)
+    - [Validation Rules](#validation-rules)
 - [Outputs](#outputs)
 
 # Inputs
@@ -160,7 +173,90 @@ The next best thing we can do is remove knowledge of bound variables from the pl
 
 # Validation
 
-TBA
+## Problem
+
+The types available for step authors to use to model their inputs are very broad (e.g. `string`), meanwhile the set of values that are valid for each input property may be more constrained (e.g. an email input might only accept `string`s that are also valid inputs).
+
+We want to
+- Give users feedback when they have provided an invalid value for an input property
+- Give step authors confidence that by the time a step executor function is invoked, the inputs are valid
+- Make it simple and easy for step authors to express validation rules
+- Allow step authors to write debuggable and testable code using tools they are familiar with for their validation rules (e.g. not just regular expresions, not a DSL).
+
+## Solution
+
+Step authors will express validation rules using a validation framework.
+
+There are two times at which we will validate inputs
+- Configuration time
+- Execution time
+
+### Configuration time validation
+
+At configuration time, we want to give users feedback if they have provided invalid values, as this is gives them the nicest experience and shortest feedback loop. 
+
+The unique part about configuration time inputs is tha some of the values may be bound to variable expressions. The final resolved values of these expressions can't be known until execution time.
+
+While we could allow step authors to possibly validate these inputs when they are bound, this would
+- Add extra complexity when writing validation rules
+- Add extra boilerplate (every validation rule needs to handle the case when it can be bound)
+- Introduces sources of inconsistency - as a step author, how do I validate an input when it is bound?
+
+For the reasons specified in the [Bound Variables - Design](#design) section, we instead don't want to expose knowledge of bound values to validation rule authors. Validation rule authors should only need to write validation rules for the case where an input value is _not_ bound.
+
+If we try to validate an input property, and that property is currently bound to a variable expression, then we will skip any custom validation checks and assume the value is valid.
+
+#### Schema-based validation
+
+At configuration time, we will also run schema-based validation to ensure that the values provided match up with the expected types.
+
+For example, if the inputs are
+
+```typescript
+type MyInputs = { someProperty: string; }
+```
+
+And as part of an API request, the following inputs were provided:
+
+```json
+{
+  someProperty: undefined
+}
+```
+
+Then because `undefined` is not assingable to the `string` type, we should receive a validation error.
+
+However, if the type of `someProperty` was `string | undefined`, then this input would have been valid.
+
+This type information is captured in the input schema, so this kind of validation will be performed automatically by the validation framework, based on the input schema.
+
+#### Execution environment
+
+Configuration time validation runs on Octopus Server, so that any API requests that are received (including those that don't come from our UI) can be validated.
+
+We use [jint](https://github.com/sebastienros/jint) as the execution engine that invokes the javascript validation code included in the step package.
+
+While using an environment like [node.js](https://nodejs.org/en/) would give us a more standard and consistent execution environment (this is the same environment within which our step executors run), there are some concerns with using it:
+- It would introduce some additional complexities, like needing to bundle node with Octopus Server, store scripts on disk, and perform IPC
+- There are security concerns with allowing step packages to execute javascript code on the machine hosting Octopus Server. This concerns may become more important if we allow third parties to develop step packages.
+
+In contrast, most of the complexity from using jint comes from
+- Marshalling data into and out of the jint execution engine
+- Ensure we bundle validation code in a way that is compatible with jint
+
+### Execution time validation
+
+At execution time, we will have inputs in which all bound variable expressions have been resolved to values. At this point, we want to run our validation rules against these same inputs, and only if the inputs are valid should we invoke our step executor with these inputs.
+
+This gives a step author a nice assumption: **The inputs will only be passed to the step executor function if they are valid**.
+
+### Validation Rules
+
+When step authors are specifying their validation rules, they need to specify:
+- Which input property they want to validate
+- A typescript function that accepts non-bound values and returns whether the input value is valid, or an error message if it is invalid
+
+This same set of validation rules drives both the configuration time execution time validation. The main difference is that only some of these rules might be run at configuration time (because some of the inputs might have bound variable expressions), while they should all run at execution time.
 
 # Outputs
 
