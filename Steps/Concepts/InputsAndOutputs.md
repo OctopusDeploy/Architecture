@@ -200,7 +200,7 @@ There are two times at which we will validate inputs
 
 At configuration time, we want to give users feedback if they have provided invalid values, as this is gives them the nicest experience and shortest feedback loop. 
 
-The unique part about configuration time inputs is tha some of the values may be bound to variable expressions. The final resolved values of these expressions can't be known until execution time.
+The unique part about configuration time inputs is that some of the values may be bound to variable expressions. The final resolved values of these expressions can't be known until execution time.
 
 While we could allow step authors to possibly validate these inputs when they are bound, this would
 - Add extra complexity when writing validation rules
