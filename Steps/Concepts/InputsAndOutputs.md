@@ -24,6 +24,7 @@
       - [Execution environment](#execution-environment)
     - [Execution time validation](#execution-time-validation)
     - [Validation Rules](#validation-rules)
+- [Optional values](#optional-values)
 - [Outputs](#outputs)
 
 # Inputs
@@ -257,6 +258,10 @@ When step authors are specifying their validation rules, they need to specify:
 - A typescript function that accepts non-bound values and returns whether the input value is valid, or an error message if it is invalid
 
 This same set of validation rules drives both the configuration time execution time validation. The main difference is that only some of these rules might be run at configuration time (because some of the inputs might have bound variable expressions), while they should all run at execution time.
+
+# Optional values
+
+There are some special cases to consider when modelling [optional values](./Inputs-OptionalValues.md).
 
 # Outputs
 
