@@ -25,6 +25,10 @@
     - [Execution time validation](#execution-time-validation)
     - [Validation Rules](#validation-rules)
 - [Optional values](#optional-values)
+- [Input Paths](#input-paths)
+  - [Problem](#problem-4)
+  - [Solution](#solution-1)
+    - [Union types](#union-types)
 - [Outputs](#outputs)
 
 # Inputs
@@ -262,6 +266,192 @@ This same set of validation rules drives both the configuration time execution t
 # Optional values
 
 There are some special cases to consider when modelling [optional values](./Inputs-OptionalValues.md).
+
+# Input Paths
+
+## Problem
+
+When declaring a UI, a naive approach might look something like a react component
+
+```typescript
+
+interface MyInputs {
+  myProperty: number | undefined;
+}
+
+number({
+  value: inputs.myProperty === undefined ?? 0,
+  onChange: (newValue) => setInputs({...inputs, myProperty: newValue})
+  errorKey: "myProperty"
+  ...
+})
+```
+
+This has a few downsides
+- There is repetitive boilerplate: The value, onChange and errorKey functions need to be provided
+- Each of these properties (value, onChange and errorKey) need to point to the same input property, but this is hard to enforce (particularly for the "errorKey")
+- For nested inputs, the errorKey is hard to get right (imagine something like `"foo.bar[1].baz[3].myProperty"`)
+- The "runtime" values of these inputs are bound. In this example, the actual runtime type might be `number | undefined | BoundValue`. This means a step author needs to be able to handle the cases where the value is bound.
+
+A similar problem might arise for a naive validation function
+
+```typescript
+const validate: Validation<MyInputs> = (inputs) {
+    if (!isBound(inputs.myProperty)) {
+      if (inputs.myProperty !== undefined || inputs.myProperty > 5) {
+        return { property: "myProperty"; error: "myProperty must be greater than 5" };
+      }
+    }
+};
+```
+
+There is additional boilerplate here in needing to check whether `myProperty` is bound, and also needing to include the property name as part of the return value.
+
+## Solution
+
+We construct a mapped type from the Inputs object that allows step authors to provide us "paths" to each property in a type safe way.
+
+Definition: An *input path* is an array that contains all of the indexers that need to be applied to reach a property within some structured inputs.
+
+Example: 
+
+```typescript
+interface MyInputs {
+  foo: {
+    bar: Array<{
+      baz: number;
+    }>
+  }
+}
+
+// "1" here refers to the index of a specific item in the array
+const inputPath = ["foo", "bar", 1, "baz"];
+```
+
+At runtime, we create an object that looks like this:
+
+```typescript
+type InputPaths<MyInputs> = {
+  foo: {
+    __pathToInput: ["foo"],
+    bar: { __pathToInput: ["foo", "bar"] & [
+      {
+        __pathToInput: ["foo", "bar", 0],
+        baz: { __pathToInput: ["foo", "bar", 0, "baz"] }
+      },
+      {
+        __pathToInput: ["foo", "bar", 1],
+        baz: { __pathToInput: ["foo", "bar", 1, "baz"] }
+      }
+    ]
+  }
+}
+```
+
+By using a mapped type, step authors can get a nice developer experience with this input paths object, allowing them to easily provide paths to input values like this:
+
+```typescript
+const inputs: InputPaths<MyInputs>;
+number({
+  input: inputs.foo.bar[1].baz,
+  ...
+})
+```
+
+Based on this input path, the step UI framework can generate the value, onChange and errorKey properties. Similarly, the validation framework can automatically handle the case where the value is bound, and include the property name in the error result object.
+
+### Union types
+
+When part of the UI changes based on the value of another input, we describe this content as being "dynamic". This is usually modelled in the inputs as a union type:
+
+```typescript
+interface MyInputs {
+  scriptSource: PackageScriptSource | InlineScriptSource;
+}
+```
+
+In this case we want to switch between two different UIs depending on which of the two types we currently have selected.
+
+```typescript
+const inputs: InputPaths<MyInputs>;
+if (isPackageScriptSource(inputs.scriptSource)) {
+  return packageScriptSourceUI(inputs.scriptSource);
+}
+return inlineScriptSourceUI(inputs.scriptSource);
+```
+
+The question is: How do we implement `isPackageScriptSource`, given that the `InputPaths<T>` replaces all types with `{ __pathToInput: PathToInput }` instead of the underlying value? How can we test what the current value of anything is, in order to narrow the type?
+
+The answer is that we have special types which are mapped differently, called `Discriminator`s.
+
+```typescript
+interface PackageScriptSource {
+  type: Discriminator<"package">;
+  package: PackageReference;
+}
+
+interface InlineScriptSource {
+  type: Discriminator<"inline">;
+  script: string;
+}
+```
+
+Discriminators are unique in that they cannot be bound. This also enforces our [Bound Variables - Constraints](#constraints) requirements for fields that branch the control flow of the step.
+
+Discriminators are also unique in that their value is preserved after they have been mapped through `InputPaths`. This allows us to use them to narrow our types
+
+```typescript
+
+const inputs: InputPaths<MyInputs> = {
+  scriptSource: {
+    __pathToInput: ["scriptSource"],
+    type: "package",
+    package: { __pathToInput: ["scriptSource", "package" ]}
+  }
+}
+
+if (inputs.scriptSource.type === "package") {
+  // in this branch, inputs.scriptSource has been narrowed to PackageScriptSource
+  return packageScriptSourceUI(inputs.scriptSource);
+}
+return inlineScriptSourceUI(inputs.scriptSource);
+```
+
+This adds an extra roadblock when it comes to defining a way to select (e.g. radio buttons) one of these two options. You can't do this
+
+```typescript
+radioButtons({
+  input: inputs.scriptSource.type,
+  ...
+})
+```
+
+because `input.scriptSource.type` does not map to an input path, so it cannot be used to bind this input to a component.
+
+However, by thinking about it slightly differently you can imagine this radio button as being bound to the parent object (the union type), which is possible:
+
+```typescript
+radioButtons({
+  input: inputs.scriptSource,
+  options: [{
+    label: "From a package",
+    newValueWhenSelected: {
+      type: "package",
+      package: emptyPackageReference()
+    }
+  },
+  {
+    label: "From a script",
+    newValueWhenSelected: {
+      type: "inline",
+      script: ""
+    }
+  }]
+  ...
+})
+```
+
+This makes sense because when you pick a new option, it is the whole object (`scriptSource`) that gets replaced with a new value. We can also work out which label to currently show as selected based on which of the two values of `newValueWhenSelected` has the same *discriminator values* as the current value of the `scriptSource` object.
 
 # Outputs
 
