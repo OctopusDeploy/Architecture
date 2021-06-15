@@ -243,7 +243,7 @@ We use [jint](https://github.com/sebastienros/jint) as the execution engine that
 
 While using an environment like [node.js](https://nodejs.org/en/) would give us a more standard and consistent execution environment (this is the same environment within which our step executors run), there are some concerns with using it:
 - It would introduce some additional complexities, like needing to bundle node with Octopus Server, store scripts on disk, and perform IPC
-- There are security concerns with allowing step packages to execute javascript code on the machine hosting Octopus Server. This concerns may become more important if we allow third parties to develop step packages.
+- There are security concerns with allowing step packages to execute javascript code on the machine hosting Octopus Server. These concerns may become more important if we allow third parties to develop step packages.
 
 In contrast, most of the complexity from using jint comes from
 - Marshalling data into and out of the jint execution engine
