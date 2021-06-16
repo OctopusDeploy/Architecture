@@ -242,7 +242,7 @@ Configuration time validation runs on Octopus Server, so that any API requests t
 We use [jint](https://github.com/sebastienros/jint) as the execution engine that invokes the javascript validation code included in the step package.
 
 While using an environment like [node.js](https://nodejs.org/en/) would give us a more standard and consistent execution environment (this is the same environment within which our step executors run), there are some concerns with using it:
-- It would introduce some additional complexities, like needing to bundle node with Octopus Server, store scripts on disk, and perform IPC
+- It would introduce some additional complexities related to running a separate node process, like needing to bundle node with Octopus Server, storing scripts on disk, managing IPC, and dealing with potential performance implications of starting and communicating with other processes
 - There are security concerns with allowing step packages to execute javascript code on the machine hosting Octopus Server. These concerns may become more important if we allow third parties to develop step packages.
 
 In contrast, most of the complexity from using jint comes from
