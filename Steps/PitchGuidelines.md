@@ -43,7 +43,7 @@ Targets should capture:
 * The credentials required to perform a deployment.
 * The default worker a deployment will be performed on.
 * Cloud specific details that locate the target like regions, projects, and resource groups.
-* The name of the service being deployed to e.g. the name of a ECS cluster, an Azure Web App, a Lambda function etc.
+* The identifier of the service being deployed to e.g. the name of a ECS cluster, an Azure Web App, a Lambda function etc.
 * The name of any nested partitioning e.g. namespaces, slots etc.
 
 ### Overrideable and non-overridable fields
