@@ -109,7 +109,7 @@ Where a target field can be overridden by a step, it usually means that deployme
 
 Where a field references a uninstantiable resource that can be overidden on a step, consider how such resources can be created as part of a deployment. It may be a case of documenting a Terraform, CloudFormation, or ARM Template that creates the necessary resources. Or it may be worth providing custom steps that create these resources.
 
-## Watch for changing variables
+## Immutable resources and re-use
 
 Octopus allows variables to be updated in an existing release:
 
