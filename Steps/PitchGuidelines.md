@@ -17,6 +17,7 @@ The Steps team has devoted a great deal of effort to building the Step Package a
 To take advantage of this, pitches should be broken down into milestones. Each milestone should:
 
 * Deliver enough value to be useful for our customers.
+* Be shippable in 4 weeks or less.
 * Lean towards delivering simple solutions that provide an easy migration path should more complexity or additional opinions be required in future milestones.
 
 ## Be opinionated
