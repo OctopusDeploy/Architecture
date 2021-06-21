@@ -147,27 +147,7 @@ Where a target platform has functionality that prevents advanced deployment patt
 
 Watch for platforms that require knowing the current state of network rules configured with previous deployments. For example, many network rules use relative weights for directing traffic e.g. service1 has a traffic weight of 10, service2 has a traffic weight of 20. If we deploy a service3, any weighted value is entirely relative to the weights assigned to the other services, and the outcome is not repeatable.
 
-We should aim to express network traffic as percentages. This may mean translating a percentage into the appropriate weight at deployment time. A pseudocode algorithm for this is:
-
-```
-if (new version traffic is not set to 100%) {
-
-    const existingTotal = weights assigned to other versions combined
-    const newVersionWeight = existingTotal /
-        (1 - new version traffic as decimal) -
-        existingTotal
-
-    cloudcli set-traffic servicename \
-            --splits=<new version>=newVersionWeight, \
-                    <old version 1>=<old version 1 weight>,\
-                    <old version 2>=<old version 2 weight>,\
-                    ...,\
-                    <old version n>=<old version n weight>
-} else {
-    // there are no other versions, or new version takes 100%
-    cloudcli set-traffic servicename --splits=<new version>=1
-}
-```
+We should aim to express network traffic as percentages. This may mean translating a percentage into the appropriate weight at deployment time.
 
 ## Combine loosely coupled externalized configuration with the deployment
 
