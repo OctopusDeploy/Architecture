@@ -56,7 +56,7 @@ However, without the ability to override target details on a step, common deploy
 
 Here are some guidelines:
 
-* When in doubt, assume targets describe the **where** and the **who**. Steps define the **what** and the **how**.
+* When in doubt, assume targets describe the **where** (e.g. service names, regions) and the **who** (e.g. credentials). Steps define the **what** (e.g. packages, app configuration) and the **how** (e.g. building templates, running scripts).
 * When in doubt, refer to **Ship incrementally** for guidance. It is easy to override a field in a step, but hard to remove a field once it has been exposed.
 * Target accounts should not be overridable. If a target is used to deploy to a wide surface area, the account on the target must have enough permissions to do so.
 * Cloud and platform partitions like regions, zones, projects, and namespaces, and individual service partitions like web app slots, should be considered in the context of a feature branch deployment or the deployment of many related microservices:
