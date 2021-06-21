@@ -91,7 +91,7 @@ Many resources are instantiable. For example, providing a name for a Kubernetes 
 
 Services like Azure web or function apps do not create the underlying resources with a name. An app service needs a resource group, networking, service plan etc. So simply supplying a name, along with the details usually associated with an application deployment, can not create a web app instance if it doesn't exist.
 
-#### Target values
+#### Target fields
 
 The following table provides guidelines for including resource names on targets:
 
