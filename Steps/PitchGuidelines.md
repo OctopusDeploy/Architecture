@@ -54,6 +54,8 @@ Targets provide the ability to lift deployment destination details out of the st
 
 However, without the ability to override target details on a step, common deployment scenarios like feature branching and microservice deployments will result in an explosion of targets, where the individual targets provide little benefit. In these situations it is useful to consider which target fields must be overridable in steps to support these deployment patterns.
 
+We do expect targets to become more flexible and expose more functionality in future. [Dynamic Environments](https://docs.google.com/document/d/1My5ZLdLeslUq29sQR6xSyEa0UfpwsQxPrXp2dVKZSi4/edit), [Project Groups](https://docs.google.com/document/d/1Yp4dBzGEMVcWWLytjGLMoawjOi0a6hV5yV62MmKWxh4/edit), and [Pipelines](https://docs.google.com/document/d/184_iYwPtctj5X3a44DdFC-T71dc2nO0vHp1GEtdpbxw/edit) provide some insight into the future direction.
+
 Here are some guidelines:
 
 * When in doubt, assume targets describe the **where** (e.g. service names, regions) and the **who** (e.g. credentials). Steps define the **what** (e.g. packages, app configuration) and the **how** (e.g. building templates, running scripts).
@@ -254,6 +256,7 @@ There are a number of activities to perform once a new feature is made available
 * [Account selection for steps](https://docs.google.com/document/d/1MNgIGoE8Jponw9JknGlZylkNThMwd45IOsdkKf8pOok/edit#heading=h.bpy38qfq9mw9) - Why we use targets instead of accounts in steps.
 * [Dynamic Environments](https://docs.google.com/document/d/1My5ZLdLeslUq29sQR6xSyEa0UfpwsQxPrXp2dVKZSi4/edit) - Some early thoughts on how dynamic environments might work.
 * [Project Groups](https://docs.google.com/document/d/1Yp4dBzGEMVcWWLytjGLMoawjOi0a6hV5yV62MmKWxh4/edit) - Some early thoughts on how project groups might be expanded in future.
+* [Pipelines](https://docs.google.com/document/d/184_iYwPtctj5X3a44DdFC-T71dc2nO0vHp1GEtdpbxw/edit) - Early thoughts on how projects can be redesigned to support more complex deployments.
 * [Shape Up](https://basecamp.com/shapeup/webbook)
 * [The ten pillars of pragmatic deployments](https://octopus.com/blog/ten-pillars-of-pragmatic-deployments)
 * [Customer Solutions Product Feedback](https://trello.com/b/vZEB7drD/customer-solutions-product-feedback) - A trello board capturing customer feedback on Octopus.
