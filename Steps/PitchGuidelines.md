@@ -1,6 +1,6 @@
 # Introduction
 
-Neutrality is one of the selling points of Octopus. We aim to support all the most popular cloud native platforms, while retaining a consistent user experience and common best practices. To achieve this, all new steps (which will typically be cloud steps) in Octopus should aim to implement a consistent set of base functionality. 
+Neutrality is one of the selling points of Octopus. We aim to support all the most popular cloud native platforms, while providing a consistent user experience and common best practices. To achieve this, all new steps in Octopus should aim to implement a consistent set of base functionality. 
 
 This document: 
 - Provides guidelines for pitching steps that are consistent and express our opinions on best practice deployments
