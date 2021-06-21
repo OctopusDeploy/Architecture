@@ -69,7 +69,7 @@ Here are some guidelines:
 * The names of services, such as a Lambda function name, an Azure Container Instance name, or a Google Cloud Run instance, will typically be overridable. Feature branch deployments will almost certainly require renaming these values on a step.
 * There is no way to get the union of two targets. For example, the deployment of a Lambda exposed by an API Gateway instance can not combine the details of a Lambda target and an API Gateway target. Where a deployment takes place to two services that could be targets in their own right, consider how a single target can lift those combined details from a step.
 
-### Types of target fields
+### Target identification
 
 The fields on targets exist for us to identify a specific target we want to act upon during a deployment. There are two ways to classify fields that we might consider placing on targets.
 
