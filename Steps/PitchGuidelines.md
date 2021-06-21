@@ -131,7 +131,7 @@ Examples include [AWS EC2 IAM roles](https://docs.aws.amazon.com/AWSEC2/latest/U
 
 All cloud providers and modern orchestration platforms offer a template language for defining resources. They also provide a great deal of tooling and reporting for these "managed" resources. This speaks directly to the [auditable deployments](https://octopus.com/blog/ten-pillars-of-pragmatic-deployments#auditable-deployments) pillar.
 
-Steps should prioritize the creation of resources through declarative templates rather than imperative CLI or SDK commands.
+Steps should prioritize the creation of resources through declarative templates rather than imperative CLI or SDK commands. This also supports the graduated path from opinionated steps to raw scripts.
 
 ## Advanced deployment patterns
 
