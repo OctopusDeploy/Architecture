@@ -28,7 +28,7 @@ The steps we deliver must have a clear vision for how they enable teams to deliv
 
 Where there is no clear decision on an opinion, refer to **Ship incrementally** for guidance.
 
-## Graduated path from opinionated to raw scripts
+## Graduated path from opinionated steps to raw scripts
 
 Highly opinionated steps will fail some of our customers all of the time. To support those with advanced use cases, steps should provide a graduated path from opinionated (and often monolithic) steps, to granular and composable steps, to raw templates or scripts.
 
