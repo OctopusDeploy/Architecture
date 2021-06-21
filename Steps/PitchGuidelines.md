@@ -12,7 +12,7 @@ The following guidelines capture the functionality and opinions that we should a
 
 ## Ship incrementally
 
-Team steps has devoted a great deal of effort to building a framework allowing features to be shipped independently of the main Octopus code base. This allows us to ship features more frequently, and respond to user feedback more quickly.
+The Steps team has devoted a great deal of effort to building the Step Package architecture, which allows features to be shipped independently of the main Octopus Server code base. This allows us to ship features more frequently, and respond to user feedback more quickly.
 
 To take advantage of this, pitches should be broken down into milestones. Each milestone should:
 
