@@ -200,17 +200,6 @@ Many deployments will create resources that need to be consumed by subsequent st
 * Names of any generated resource identifiers.
 * Details of any generated revision numbers.
 
-## Documentation
-
-All new features must be documented. Ensure this is a required feature of any pitch being developed.
-
-## Remember to update associated projects
-
-New steps and targets will need to be reflected in other projects:
-
-* Octopus client - this may need to be updated with new target types. This requirement may be removed with step packages.
-* Dynamic target scripts - the [docs](https://octopus.com/docs/infrastructure/deployment-targets/dynamic-infrastructure) will need to be updated with any new scripts.
-
 # Pitch documents
 
 The pitch process generates a number of documents, each with its own use case and audience. These are detailed below.
@@ -250,11 +239,14 @@ An example of this document can be found [here](https://docs.google.com/document
 
 There are a number of activities to perform once a new feature is made available:
 
+* [Update Documentation](https://github.com/OctopusDeploy/docs) - Ensure the documentation reflect the new functionality exposed by the steps and targets.
+* [Dynamic target scripts](https://octopus.com/docs/infrastructure/deployment-targets/dynamic-infrastructure) - Docs will need to be updated with any new scripts.
 * [Uservoice](https://octopusdeploy.uservoice.com/) - Close any suggestions that have now been satisfied.
 * [Customer Solutions Product Feedback](https://trello.com/b/vZEB7drD/customer-solutions-product-feedback) - Add a note to any scenario that is now satisfied.
 * [Issues Repo](https://github.com/OctopusDeploy/Issues/issues) - Close any issues that have been solved.
 * [Feedback Repo](https://github.com/OctopusDeploy/StepsFeedback/issues) - Add a note to any feedback issue created for the milestone, and close the issue.
 * [Terraform provider](https://github.com/OctopusDeployLabs/terraform-provider-octopusdeploy) - this will need to be updated with new targets. Ping #team-integrations when the target is available in master.
+* [Octopus client](https://github.com/OctopusDeploy/OctopusClients) - this may need to be updated with new target types. This requirement may be removed with step packages.
 
 # References
 
