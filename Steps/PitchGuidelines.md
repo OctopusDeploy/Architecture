@@ -71,7 +71,7 @@ Here are some guidelines:
 
 ### Types of target fields
 
-There are two ways to classify fields that we might consider placing on targets.
+The fields on targets exist for us to identify a specific target we want to act upon during a deployment. There are two ways to classify fields that we might consider placing on targets.
 
 #### Knowable
 
