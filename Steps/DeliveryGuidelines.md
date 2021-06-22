@@ -6,7 +6,7 @@ We expect this process to evolve over time, and so this document should be treat
 
 # Pitch guidelines
 
-The Steps team has devoted a great deal of effort to building the Step Package architecture, which allows features to be shipped independently of the main Octopus Server code base. This allows us to ship features more frequently, and respond to user feedback more quickly.
+The Steps team has devoted a great deal of effort to building the [Step Package architecture](https://github.com/OctopusDeploy/Architecture/tree/main/Steps), which allows features to be shipped independently of the main Octopus Server code base. This allows us to ship features more frequently, and respond to user feedback more quickly.
 
 To take advantage of this, pitches should be broken down into milestones. Each milestone should:
 
