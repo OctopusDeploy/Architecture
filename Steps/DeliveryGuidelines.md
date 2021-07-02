@@ -37,7 +37,7 @@ The pitch document is based on the [Shape Up](https://basecamp.com/shapeup/webbo
 
 This document is structured with the following sections:
 
-* Executive Summary - two or three paragraphs outlining how this pitch aligns to the company's strategic goals, why this particular functionality is important, and a high level overview of the proposed solution.
+* Executive Summary - two or three paragraphs outlining how this pitch aligns to the company's strategic goals, why this particular functionality is important, and a high level overview of the proposed solution. This may also include [relevant statistics](https://docs.google.com/spreadsheets/d/13pds7XUXxU_WpzzmhkfOtQVbg5fNvBHgJtjebFI9CUU/edit?usp=sharing).
 * Problem - A description of the problems faced by customers that this pitch will solve.
 * Constraints - Each pitch relates to a milestone, and milestones have been constrained to deliver the smallest unit of useful functionality. This section lists the constraints that exclude work to be done.
 * Proposed Scope - This is the opposite of the constraints, and provides an overview of the features to be delivered. This section should link to the blog post and the UI table document.
