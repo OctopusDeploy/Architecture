@@ -66,7 +66,7 @@ There are a number of activities to perform once a new feature is made available
 
 # References
 
-* [Industry Surveys](https://docs.google.com/spreadsheets/d/13pds7XUXxU_WpzzmhkfOtQVbg5fNvBHgJtjebFI9CUU/edit?usp=sharing)
+* [Industry Surveys](https://docs.google.com/spreadsheets/d/13pds7XUXxU_WpzzmhkfOtQVbg5fNvBHgJtjebFI9CUU/edit?usp=sharing) - A collection of industry surveys and reports relavant to the steps team.
 * [Steps pitch process proposal](https://docs.google.com/document/d/1b94WXWKuGkocP8krgBhjv-mZEWOi2xTNJH_GnZbn360/edit) - A discussion around the limitations of a single pitch document.
 * [Account selection for steps](https://docs.google.com/document/d/1MNgIGoE8Jponw9JknGlZylkNThMwd45IOsdkKf8pOok/edit#heading=h.bpy38qfq9mw9) - Why we use targets instead of accounts in steps.
 * [Dynamic Environments](https://docs.google.com/document/d/1My5ZLdLeslUq29sQR6xSyEa0UfpwsQxPrXp2dVKZSi4/edit) - Some early thoughts on how dynamic environments might work.
